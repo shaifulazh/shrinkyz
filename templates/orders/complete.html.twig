@@ -1,0 +1,136 @@
+{% extends '/orders/step.html.twig' %}
+
+{% block title %}Order Completed
+{% endblock %}
+
+{% block main %}
+
+    {# form #}
+
+    <div class="my-3 border p-3">
+
+        <div>
+            <div class="my-3 p-3">
+                <div class="row">
+                    <div class="col-lg-6 col-xs-12 border rounded">
+                        <div class="m-2">
+                            <h4>
+                                Customer Infomation
+                            </h4>
+                            <div class="row">
+                                Email :
+                                {{carts[0].customer.email}}
+                            </div>
+                            <div class="row">
+                                First Name :
+                                {{carts[0].customer.firstname}}
+                            </div>
+                            <div class="row">
+                                Last Name :
+                                {{carts[0].customer.lastname}}
+                            </div>
+                            <div class="row">
+                                Payment Type :
+                                {{payment}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-xs-12 border rounded">
+                        <div class="m-2">
+                            <h4>
+                                Shipping Address
+                            </h4>
+                            <div class="row">
+
+                                {{address.firstName}}
+                                {{address.lastName}}
+                            </div>
+
+                            <div class="row">
+                                {{address.address}}
+                            </div>
+                            <div class="row">
+                                {{address.city}}
+                            </div>
+                            <div class="row">
+                                {{address.postcode}}
+                            </div>
+                            <div class="row">
+                                {{address.country}}
+                            </div>
+                            <div class="row">
+                                Contact No :
+                                {{address.phoneNumber}}
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="my-3 border rounded p-3">
+            <h5>Item</h5>
+            <table class="table hover">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+
+                {% set total = 0 %}
+                {% for product in carts %}
+                    <tbody>
+                        <tr>
+                            <td><img height="70" width="70" src="{{ asset( '/images/' ~ product.product.getProductImage) }}"></td>
+                            <td>{{product.product.getProductName}}</td>
+                            <td>
+                                {{product.qty}}
+                            </td>
+                            <td>Price :
+                                                                                                                                                                                                                                                                                                                                                                                                                              RM
+                                {{product.product.getProductPrice |number_format(2, '.', ',')}}</td>
+
+                            <td>
+                                RM
+                                {{(product.product.getProductPrice * product.qty )| number_format(2, '.', ',')}}
+                            </td>
+                        </tr>
+                    </tbody>
+
+
+                    {% set total = total + (product.product.getProductPrice * product.qty) %}
+                {% endfor %}
+
+                <td></td>
+                <td></td>
+                <td></td>
+                <th>Total</th>
+                <th>RM
+                    {{total |number_format(2, '.', ',')}}</th>
+            </table>
+
+
+        </div>
+        <div class="row">
+            <div class="col">
+                <a href="{{path('check_payment')}}" class="btn btn-primary">
+                    <i class="fas fa-chevron-circle-left"></i>
+                    Back to Payment</a>
+            </div>
+            <div class="col">
+                <div class="d-flex justify-content-end">
+                    <a class="btn btn-warning" href="{{path('confirm_order')}}">
+                        <i class="fas fa-clipboard-check"></i>
+                        CONFIRM ORDER</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

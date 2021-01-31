@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <br>
+        <h3>Register Admin</h3>
+        <div class="col-6 border p-3">
+            {% if form_errors(form.email) %}
+                <div class="container alert alert-warning">
+                    {{ form_errors(form.email) }}
+                </div>
+            {% endif %}
+            {% if form_errors(form.password.first) %}
+                <div class="container alert alert-warning">
+                    {{ form_errors(form.password.first) }}
+                </div>
+            {% endif %}
+            {{ form_start(form) }}
+            {{form_row(form.firstName, {'attr' : {'class' : 'form-control', 'placeholder':'Firstname', 'required': 'required','style': 'width : 20em'}}) }}
+            {{form_row(form.lastName, {'attr' : {'class' : 'form-control', 'placeholder':'Lastname', 'required': 'required','style': 'width : 20em'}}) }}
+            {{ form_label(form.email)}}
+            {{ form_widget(form.email,{'attr' : {'class' : 'form-control','placeholder': 'Email','style': 'width : 15em'}}) }}
+            {{ form_label(form.password.first)}}
+            {{form_widget(form.password.first, {'attr' : {'class' : 'form-control', 'placeholder':'Password', 'required': 'required','style': 'width : 10em'}}) }}
+            {{ form_label(form.password.second)}}
+            {{form_widget(form.password.second, {'attr' : {'class' : 'form-control', 'placeholder':'Confirm Password', 'required': 'required','style': 'width : 10em'}}) }}
+            <br>
+            <label for="">Enter Correct Super Password</label>
+            {{form_widget(form.superpassword, {'attr' : {'class' : 'form-control', 'placeholder':'Super Password', 'required': 'required','style': 'width : 10em'}}) }}
+            <label for="">* Please refer web developer for super password.</label>
+
+            <p class=""></p>
+            <button class="btn btn-primary">Register</button>
+            {{ form_end(form ) }}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Registration{% endblock %}
+
+{% block body %}
+<div class="container">
+
+<div class="row">
+<div class="col-lg-6 col-sm-12 border">
+<div class="container-float">
+
+{{form_start(form)}}
+{{form_row(form.first_name, {'attr' : { 'class' : 'form-control'}})}}
+{{form_row(form.last_name, {'attr' : { 'class' : 'form-control'}})}}
+{{form_row(form.address, {'attr' : { 'class' : 'form-control', 'style' : 'height : 15em'}})}}
+{{form_row(form.contact, {'attr' : { 'class' : 'form-control'}})}}
+
+<button class="btn btn-primary">Save</button>
+{{form_end(form)}}
+</div>
+</div>
+<div class="col-lg-6 col-sm-12 border">
+col baru
+</div>
+
+</div>
+
+</div>
+{% endblock %}

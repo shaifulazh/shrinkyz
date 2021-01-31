@@ -1,0 +1,93 @@
+{% extends "base.html.twig" %}
+
+{% block  title %}Order list
+{% endblock %}
+
+{% block body %}
+
+
+    <div class="container">
+        {% if orders %}
+            <br>
+            {% for order in orders %}
+                <table class="table border">
+                    <thead>
+                        <tr>
+                            <h4>Order No:
+                                {{order.id}}
+                                Order Total : RM
+                                {{order.total|number_format(2, '.', ',')}}
+
+                            </h4>
+                            <th>Product</th>
+                            <th>Image</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    {% for product in order.orderDetails %}
+                        <tbody>
+                            <tr>
+                                <td>{{product.productName}}</td>
+                                <td><img height="70" width="70" src="{{ asset('/images/' ~ product.productImage) }}"></td>
+                                <td>RM :
+                                    {{product.productPrice|number_format(2, '.', ',')}}</td>
+                                <td>{{product.qty}}</td>
+                                <td>RM :
+                                    {{(product.productPrice * product.qty)|number_format(2, '.', ',')}}</td>
+                            </tr>
+
+                        {% endfor %}
+
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>Total</th>
+                            <th>RM :
+                                {{order.total|number_format(2, '.', ',')}}</th>
+                        </tr>
+                        <tr>
+
+                            <th>
+                                <h5>Order Status</h5>
+                            </th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>Payment Type</th>
+                            <th>Status</th>
+                            <th>Date Ordered</th>
+                            <th></th>
+                            <th></th>
+
+                        </tr>
+                        <tr>
+
+                            <td>{{order.paymentMethod}}</td>
+                            <th>
+                                <p style="color:red;">{{order.status}}
+                                </p>
+                            </th>
+                            <td>
+                                {{order.getCreatedAt|date('d M Y') }}</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                <br>
+            {% endfor %}
+        {% else %}
+            <h4>You dont have any Order.</h4>
+        {% endif %}
+    </div>
+{% endblock body %}

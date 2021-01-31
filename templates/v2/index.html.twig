@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard!{% endblock %}
+
+{% block stylesheets %}
+
+{{ parent() }}
+   {{ encore_entry_link_tags('email') }}
+
+
+{% endblock %}
+
+
+{% block body %}
+
+<div class="container">
+<div class="row justify-content-md-center">
+<div class="col-md-6 m-3">
+<div class="d-flex justify-content-center">
+  <p><i class="fas fa-wrench fa-10x"></i></p>
+</div>
+</div>
+<div class="col-md-6 m-3">
+
+<h2><p>We are Sorry Site Under Construction!! </p>
+Thank you for visiting. For more info visit us at instagram <a href="https://www.instagram.com/shrinkyz/">
+          <i class="fab fa-instagram"></i>SHRINYKZ</a></p>
+          </h2>
+</div>
+<pre>
+  {{ dump(data) }}
+</pre>
+</div>
+</div>
+
+{% block javascript %}
+
+    {{ parent() }}
+
+
+
+{% endblock %}
+{% endblock %}

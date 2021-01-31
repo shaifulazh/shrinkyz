@@ -1,0 +1,108 @@
+<?php
+
+namespace App\Controller;
+
+use App\Entity\User;
+use App\Form\RegistrationFormType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use App\Form\AdminFormType;
+
+class RegistrationControllers extends AbstractController
+{
+    /**
+     * @Route("/register", name="app_register")
+     */
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    {
+        $user = new User();
+        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // encode the plain password
+            $user->setPassword(
+                $passwordEncoder->encodePassword(
+                    $user,
+                    $form->get('password')->getData()
+                )
+            );
+
+
+            $roles = ["ROLE_USER"];
+            $user->setRoles($roles);
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Registration Success. Login to Continue.');
+
+            return $this->redirectToRoute('app_login');
+        }
+
+
+
+
+        return $this->render('registration/register.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+
+    /**
+     * @Route("/registeradmin", name="register_admin")
+     */
+    public function adminRegister(Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $user = new User();
+        $form = $this->createForm(AdminFormType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // encode the plain password
+            $user->setPassword(
+                $passwordEncoder->encodePassword(
+                    $user,
+                    $form->get('password')->getData()
+                )
+            );
+
+            $data = $form->getData();
+            if ($this->getDoctrine()->getRepository(User::class)->findBy(['email' => $data['email']])) {
+                $this->addFlash('warning', 'Email Already Exist');
+                return $this->render('registration/registerAdmin.html.twig', [
+                    'form' => $form->createView(),
+                ]);
+            }
+            $webmaster = $this->getParameter('webmaster');
+            if ($data['superpassword'] === $webmaster) {
+
+                $roles = ["ROLE_ADMIN"];
+                $user->setRoles($roles);
+                $user->setEmail($data['email']);
+                $user->setFirstname($data['firstName']);
+                $user->setLastname($data['lastName']);
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
+                $this->addFlash('success', 'Admin Registration Success. Login Admin Account to Continue.');
+                return $this->redirectToRoute('dashboard');
+            } else {
+                $this->addFlash('warning', 'Super Password False. Please Enter Right Password. Refer to Web developer.');
+            }
+        }
+
+
+        return $this->render('registration/registerAdmin.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+}

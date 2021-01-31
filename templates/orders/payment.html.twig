@@ -1,0 +1,53 @@
+{% extends '/orders/step.html.twig' %}
+
+{% block title %}Payment Method
+{% endblock %}
+
+{% block main %}
+      
+       {# form #}
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-lg-8">
+                <div class="my-3 border">
+                    <div class="p-3">
+                        <h5>Payment Method</h5>
+                        {{form_start(form)}}
+                        <div class="form-check">
+                        {{form_widget(form.payment_type.0,{'attr' : {'class' : 'form-check-input'}} )}}
+                        {{form_label(form.payment_type.0,null, {'label_attr': {'class': 'form-check-label'}})}}
+                        </div>
+                        <div class="form-check">
+                        {{form_widget(form.payment_type.1,{'attr' : {'class' : 'form-check-input'}} )}}
+                        {{form_label(form.payment_type.1,null, {'label_attr': {'class': 'form-check-label'}})}}
+                        </div>
+                        
+                        <br>
+    
+
+        <div class="row">
+                    <div class="col">
+                    <a href="{{path('check_out')}}" class="btn btn-primary" ><i class="fas fa-chevron-circle-left"></i> Back to Address</a>
+                    </div>
+                    <div class="col">
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-primary" type="submit "><i class="fas fa-chevron-circle-right"></i> Next</button>
+                </div>
+                    </div>
+                    </div>
+
+                        {{form_end(form)}}
+               
+                        <hr>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-lg-4">
+                <div class="my-3 border rounded">
+                    <div class="p-3">
+                    {{render(controller('App\\Controller\\OrdersController::miniCart'))}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+{% endblock %}

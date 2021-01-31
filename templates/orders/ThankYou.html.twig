@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Thank You
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="jumbotron">
+            <h1 class="display-3">Thank You For Your Purchase</h1>
+            <p class="lead">We are currently processing your oder and will notify you with in your email later.</p>
+            <hr class="my-4">
+            <p>Your order ID :
+                {{order.id}}
+            </p>
+            <p>To view your order Purchase click Order List view below.</p>
+            <p class="lead">
+                <a class="btn btn-primary btn-lg" href="{{path('user_orders')}}" role="button">Order List</a>
+            </p>
+        </div>
+    </div>
+
+
+{% endblock %}

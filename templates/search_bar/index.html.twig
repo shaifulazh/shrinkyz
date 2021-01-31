@@ -1,0 +1,5 @@
+{{ form_start(form, { 'attr': {'action' :  path('searching') , 'class' : 'form-inline my-2 my-lg-0 collapse navbar-collapse'  }  })}}
+{{ form_widget(form.text,{'attr' : {'class': 'form-control form-control-sm ', 'placeholder' : 'Search Product','style': 'width : 12em'}})}}
+{{form_widget(form.search,{ 'attr': {'class' : 'btn btn-secondary my-2 ml-2 my-sm-0 d-none'}})}}
+
+{{form_end(form)}}

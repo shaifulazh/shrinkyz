@@ -1,0 +1,27 @@
+# app_lucky_number:
+#    path: /
+#    controller: App\Controller\LuckyController::number
+
+admin_api:
+  type: rest
+  resource: App\Controller\AdminApiController
+  prefix: api/admin
+
+product_admin_api:
+  type: rest
+  resource: App\Controller\ApiAdminProductController
+  prefix: api/admin
+
+test_api:
+  type: rest
+  resource: App\Controller\ApiAdminTestController
+  prefix: api/admin/test
+
+# user_api:
+#   type: rest
+#   resource: App\Controller\UserApiController
+#   prefix: api/user
+
+user_:
+  resource: App\Controller\UserController
+  prefix: user

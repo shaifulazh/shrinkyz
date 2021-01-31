@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}View
+{% endblock %}
+
+
+{% block head %}
+    {{ parent() }}
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+
+    <style>
+        .btn-info {
+            background-color: #808B96;
+        }
+
+        .btn-info:hover {
+            background-color: #ABB2B9;
+        }
+        body {
+            font-family: 'Montserrat';
+        }
+    </style>
+
+{% endblock %}
+
+{% block body %}
+    <div class="container ">
+        <div class="row">
+            <div class="col-10 mx-auto my-5 text-uppercase text-center">
+                <h2>{{product.ProductName}}</h2>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6 mb-3">
+                <div class="">
+                    <div class=h"border " style="">
+                        <img class="h-100"  style='height: 100%; width: 100%; object-fit: contain' src="{{ asset('/images/' ~ product.getProductImage) }}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+
+                <h4>{{product.getProductName}}
+                </h4>
+                <div class="my-3">
+                    {{product.productDesc}}
+                </div >
+                
+                <p><span style="color:black;font-weight:bold" > MATERIAL : </span> Material<br>
+                <span style="color:black;font-weight:bold"> LENGTH : </span> Length<br>
+                <span style="color:black;font-weight:bold"> WIDTH : </span>Width<br></p>
+                <h5>
+                    Price : RM{{product.getProductPrice|number_format(2, '.', ',')}}
+                </h5>
+                <h6>
+                    {% if product.getProductStock > 2 %}
+
+                   <span style="color:black;font-style:italic"> {{product.getProductStock}} stocks left!  </span>
+                  
+                    {% elseif product.getProductStock == 1  %}
+
+                    <span style="color:black;font-style:italic"> Only {{product.getProductStock}} stock left!  </span>
+                  
+                    {% elseif product.getProductStock < 1 %}
+
+                    <span style="color:black;font-style:italic">No stocks left  </span>
+                  
+                    {% endif %}
+                </h6>
+
+                
+                <br>
+                <div class="row">
+                {% if product.getProductStock > 0 %}
+
+                    <div class="col-6 mx-auto">
+                       <div class="d-flex justify-content-centre">
+                        <a href="{{path('add_cart', {id: product.getId})}}" class="btn btn-primary btn-block">Add To Cart</a>
+                       </div>
+                    </div>
+
+                {% endif %}
+<style>
+
+</style>
+                    <div class="col-6 mx-auto">
+                    <div class="d-flex justify-content-centre">
+                        <a class="btn btn-info btn-block" href="{{path('index')}}">Continue Shopping</a>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

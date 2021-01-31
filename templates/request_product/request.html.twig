@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard!{% endblock %}
+
+{% block stylesheets %}
+
+{{ parent() }}
+
+
+{% endblock %}
+
+
+{% block body %}
+
+
+{{dump(message)}}
+
+{% block javascript %}
+
+    {{ parent() }}
+
+    {{ encore_entry_script_tags('email') }}
+
+{% endblock %}
+{% endblock %}

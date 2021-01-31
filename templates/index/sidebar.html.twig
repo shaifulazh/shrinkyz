@@ -1,0 +1,15 @@
+{# <div class="bg-primary " id="sidebar-wrapper"> #}
+<div class="bg-light  " id="sidebar-wrapper">
+    <div class="list-group list-group-flush">
+
+            {% for category in categories %}
+            <a class="list-group-item list-group-item-action {{active == category.id ? 'active'}} " href="{{path('link_category', {id: category.id})}}">
+                <h6 class="text-capitalize">
+                    {{category.name}}
+                </h6>
+            </a>
+
+        {% endfor %}
+
+    </div>
+</div>

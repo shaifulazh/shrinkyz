@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}View
+{% endblock %}
+
+{% block body %}
+    <div class="container ">
+        <div class="row">
+            <div class="col-10 mx-auto my-5 text-uppercase text-center">
+                <h3>{{product.ProductName}}</h3>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-10 mx-auto col-md-6 my-3 text-capitalize">
+                <img class="img-fluid img-thumbnail" src="{{ asset('/images/' ~ product.getProductImage) }}">
+            </div>
+
+            <div class="col-10 mx-auto col-md-6 my-3 text-capitalize">
+
+                <h3>{{product.getProductName}}
+                </h3>
+                Price RM :{{product.getProductPrice}}
+
+                <div>
+                    {{product.productDesc}}
+                </div>
+                <div>
+                    <a href="{{path('add_cart', {id: product.getId})}}" class="btn btn-primary">Add To Cart</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

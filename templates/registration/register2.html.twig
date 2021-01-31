@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <br>
+        <div class="row justify-content-md-center">
+        <div class="col-xl-6 col-sm-6 col-lg-6 py-4 px-4">
+        <h3>SIGN UP / REGISTRATION</h3>
+    
+            {% if form_errors(form.email) %}
+                <div class="container alert alert-warning">
+                    {{ form_errors(form.email) }}
+                </div>
+            {% endif %}
+            {% if form_errors(form.password.first) %}
+                <div class="container alert alert-warning">
+                    {{ form_errors(form.password.first) }}
+                </div>
+            {% endif %}
+            {{ form_start(form) }}
+            {{form_row(form.firstName, {'attr' : {'class' : 'form-control', 'placeholder':'Firstname', 'required': 'required','style': 'width : 20em'}}) }}
+            {{form_row(form.lastName, {'attr' : {'class' : 'form-control', 'placeholder':'Lastname', 'required': 'required','style': 'width : 20em'}}) }}
+            {{ form_label(form.email)}}
+            {{ form_widget(form.email,{'attr' : {'class' : 'form-control','placeholder': 'Email','style': 'width : 15em'}}) }}
+            {{ form_label(form.password.first)}}
+            {{form_widget(form.password.first, {'attr' : {'class' : 'form-control', 'placeholder':'Password', 'required': 'required','style': 'width : 13em'}}) }}
+            {{ form_label(form.password.second)}}
+            {{form_widget(form.password.second, {'attr' : {'class' : 'form-control', 'placeholder':'Confirm Password', 'required': 'required','style': 'width : 13em'}}) }}
+
+            <p class=""></p>
+            <button class="btn btn-primary">Register</button>
+            {{ form_end(form ) }}
+        </div>
+        </div>
+    </div>
+{% endblock %}
