@@ -51,7 +51,7 @@ export default class Categories extends Component {
       .catch(error => console.log(error));
   };
   render() {
-    console.log(this.state);
+
     const { data, show, categoryData } = this.state;
     return (
       <div>

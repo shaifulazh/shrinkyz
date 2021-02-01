@@ -17,13 +17,6 @@ class ProductDetails
      */
     private $id;
 
-
-
-    /**
-     * @ORM\OneToOne(targetEntity=ProductModel::class, inversedBy="productDetails", cascade={"persist", "remove"})
-     */
-    private $product;
-
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
@@ -34,23 +27,14 @@ class ProductDetails
      */
     private $datadesc;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=ProductModel::class, inversedBy="productDetailss")
+     */
+    private $product;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-
-
-    public function getProduct(): ?ProductModel
-    {
-        return $this->product;
-    }
-
-    public function setProduct(?ProductModel $product): self
-    {
-        $this->product = $product;
-
-        return $this;
     }
 
     public function getDetailname(): ?string
@@ -76,4 +60,17 @@ class ProductDetails
 
         return $this;
     }
+
+    public function getProduct(): ?ProductModel
+    {
+        return $this->product;
+    }
+
+    public function setProduct(?ProductModel $product): self
+    {
+        $this->product = $product;
+
+        return $this;
+    }
+
 }

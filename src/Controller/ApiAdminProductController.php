@@ -17,6 +17,7 @@ use App\Entity\OrderDetails;
 use App\Entity\Category;
 use App\Entity\ImageFile;
 use App\Entity\User;
+use App\Entity\ProductDetails;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -99,6 +100,7 @@ class ApiAdminProductController extends AbstractFOSRestController
      * 
      * @Rest\RequestParam(name="desc", description="product description", nullable=false)
      * 
+     * @Rest\RequestParam(name="details", description="product details", nullable=true)
 
      * @param ParamFetcher $paramFetcher
      */
@@ -121,6 +123,28 @@ class ApiAdminProductController extends AbstractFOSRestController
 
         $em->persist($product);
         $em->flush();
+        $details = $paramFetcher->get('details');
+        if ($details)
+        {             
+            foreach ($details as $detail) {
+                # code...
+                $prodetails = new ProductDetails();
+                $prodetails->setProduct($product);
+                $obj = (Object)$detail;
+                if ($obj->detailname) {
+                    # code...
+                    $prodetails->setDetailName($obj->detailname);
+                }
+                if ($obj->datadesc)
+                {
+                     $prodetails->setDatadesc($obj->datadesc);
+                }
+                $em->persist($prodetails);
+                $em->flush();
+
+                
+            }
+        }
 
 
 
@@ -228,6 +252,8 @@ class ApiAdminProductController extends AbstractFOSRestController
      * 
      * @Rest\RequestParam(name="category", description="product category description", nullable=true)
      * 
+     * @Rest\RequestParam(name="details", description="product  details", nullable=true)
+     * 
      * @param ParamFetcher $paramFetcher
      */
     public function putProductAction(ProductModel $productModel, ParamFetcher $paramFetcher)
@@ -247,6 +273,52 @@ class ApiAdminProductController extends AbstractFOSRestController
         }
         $this->entityManager->persist($productModel);
         $this->entityManager->flush();
+
+        $em = $this->entityManager;
+
+
+        $details = $paramFetcher->get('details');
+        if ($details)
+        {             
+            $id = 0;
+            foreach ($details as $detail) {
+                $obj = (Object)$detail;
+                if(isset($obj->id)){
+                    $found[$id] = $this->entityManager->getRepository(ProductDetails::class)->find($obj->id);
+                }
+                if ($found[$id]){
+                    //if product detail found
+                    $found[$id]->setDetailName($obj->detailname);
+                    $found[$id]->setDatadesc($obj->datadesc);
+                    $em->persist($found[$id]);
+                    $em->flush();
+                    
+                }
+                if (!$found[$id]){
+                    //if product details is new
+                    $prodetails = new ProductDetails();
+                    $prodetails->setProduct($productModel);
+                    if ($obj->detailname) {
+                        # code...
+                        $prodetails->setDetailName($obj->detailname);
+                    }
+                    if ($obj->datadesc)
+                    {
+                        $prodetails->setDatadesc($obj->datadesc);
+                    }
+                    $em->persist($prodetails);
+                    $em->flush();
+                    
+
+                }
+                $id++;
+
+                
+            }
+        }
+
+
+
 
         return $this->view($productModel, Response::HTTP_OK);
     }

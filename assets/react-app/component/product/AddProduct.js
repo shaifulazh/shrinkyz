@@ -18,11 +18,14 @@ export default class AddProduct extends Component {
       categoryId: null,
       imageid: null,
       desc: null,
+      details : []
     };
   }
 
   handleAddProduct = () => {
-    const { imageid, name, price, stock, categoryId, desc } = this.state;
+
+    console.log(this.state.details)
+    const { imageid, name, price, stock, categoryId, desc , details} = this.state;
     if (imageid && name && price && stock && categoryId && desc) {
       Axios({
         method: "POST",
@@ -33,8 +36,9 @@ export default class AddProduct extends Component {
           stock: stock,
           imageid: imageid,
           desc: desc,
+          details : details
         },
-      })
+      },()=>{console.log('sending data to server....')})
         .then((e) => {
           if (this.mounted) {
             console.log(e);
@@ -124,6 +128,17 @@ export default class AddProduct extends Component {
       });
   };
 
+  handleDetailName = e => {
+    // console.log("from ProductDetails.js DetailName: ", e)
+    this.setState({ details : e })
+    
+  }
+
+  // handleDetailDesc = e =>{
+  //   console.log("from ProductDetails.js DetailDesc: ", e)
+  //   this.setState({ details : e })
+  // }
+
   render() {
     const {
       imageid,
@@ -134,6 +149,7 @@ export default class AddProduct extends Component {
       price,
       stock,
       desc,
+      
     } = this.state;
 
     return (
@@ -181,7 +197,7 @@ export default class AddProduct extends Component {
                   style={{ width: "30em", height: "5em" }}
                 />
 
-                  <ProductDetails  />
+                  <ProductDetails detailname={this.handleDetailName} />
               </div>
             </div>
           </div>
