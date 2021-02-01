@@ -11,6 +11,7 @@ import Cropping from "./Cropping";
 import Order from "./component/order/Order";
 import CategoryEdit from "./component/product/CategoryEdit";
 import FormRedux from "./component/product/reduxForm/FormRedux";
+import ProductDetails from "./component/product/ProductDetails";
 
 export default class App extends Component {
   constructor(props) {
@@ -59,7 +60,7 @@ export default class App extends Component {
           />
           <Route path="/vieworder" render={(props) => <Order {...props} />} />
           <Route path="/edit" render={(props) => <Editing {...props} />} />
-          <Route path="/formredux" render={(props) => <FormRedux {...props} />} />
+          {/* <Route path="/formredux" render={(props) => <ProductDetails {...props} />} /> */}
         </Switch>
         <Cropping
           showCrop={this.state.showCrop}

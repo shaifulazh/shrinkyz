@@ -43,6 +43,8 @@ Use CMD or power shell and go to source file directory
 
 		php bin/console doctrine:schema:update --force
 
+                php bin/console make:entity --regenerate
+
 		npm run build
 
 5. Run the webserver by 

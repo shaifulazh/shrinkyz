@@ -7,6 +7,8 @@ import Upload from "./Upload";
 import ImageList from "./ImageList";
 import CropDialog from "./CropDialog";
 import { Table, Spinner, Pagination } from "react-bootstrap";
+import EditProductDetails from "./EditProductDetails";
+import ProductDetails from "./ProductDetails";
 
 export default class Editing extends Component {
   constructor(props) {
@@ -19,7 +21,9 @@ export default class Editing extends Component {
       desc: null,
       categoryId: null,
       image: null,
-      message: null
+      message: null,
+      details: null,
+      gotnulldata : false,
     };
   }
 
@@ -36,7 +40,11 @@ export default class Editing extends Component {
         name: data.productName,
         price: data.productPrice,
         stock: data.productStock,
-        desc: data.productDesc
+        desc: data.productDesc,
+        details : data.productDetailss,
+        gotnulldata : true,
+
+
       });
       if (data.category) {
         this.setState({
@@ -68,14 +76,13 @@ export default class Editing extends Component {
       }
     })
       .then(response => {
-        // console.log(response);
         this.setState({ image: null });
       })
       .catch(error => console.log(error));
   };
 
   handleSave() {
-    const { data, name, price, stock, desc, categoryId, image } = this.state;
+    const { data, name, price, stock, desc, categoryId, image , details} = this.state;
     console.log(data);
 
     if(name == null)
@@ -84,20 +91,21 @@ export default class Editing extends Component {
     }
     if(price == null)
     {
-      name = data.productPrice;
+      price = data.productPrice;
     }
     if(stock == null)
     {
-      name = data.productStock;
+      stock = data.productStock;
     }
     if(desc == null)
     {
-      name = data.productDesc;
+      desc = data.productDesc;
     }
+    
+ 
 
 
     if (name && price && stock && desc) {
-      // console.log("saving...");
 
       Axios({
         method: "PUT",
@@ -108,7 +116,9 @@ export default class Editing extends Component {
           stock: stock,
           desc: desc,
           image: image,
-          category: categoryId
+          category: categoryId,
+          details : details
+          
         }
       })
         .then(res => {
@@ -135,13 +145,22 @@ export default class Editing extends Component {
     }
   };
 
+  handleDetailsNull = e => {
+    
+    
+    this.setState({ details : e , gotnulldata : false})
+  }
+  handleDetailChange = e => {
+    
+    this.setState({ details : e, gotnulldata : true })
+  }
+
   handleAddImage = e => {
     // console.log(e);
     this.setState({ imageid: e.id, image: e.image, showAddImage: false });
   };
   render() {
-    console.log(this.state);
-    const { data, message, categoryId, image } = this.state;
+    const { data, message, categoryId, image, details, gotnulldata } = this.state;
 
     return (
       <div className="container" style={{ flex: 1, padding: "20px" }}>
@@ -212,6 +231,10 @@ export default class Editing extends Component {
                       defaultValue={data.productDesc}
                       onChange={e => this.setState({ desc: e.target.value })}
                     />
+
+                   { (details && gotnulldata) ? <EditProductDetails fordetails={details} datachange={this.handleDetailChange}/>  : <ProductDetails detailname={this.handleDetailsNull} /> }            
+
+
                   </div>
                 </div>
               </div>

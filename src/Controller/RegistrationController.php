@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Form\AdminFormType;
 use App\Security\EmailVerifier;
 use App\Security\LoginFormAuthAuthenticator;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -97,5 +98,77 @@ class RegistrationController extends AbstractController
         $this->addFlash('success', 'Your email address has been verified.');
 
         return $this->redirectToRoute('app_register');
+    }
+
+
+    /**
+     * @Route("/registeradmin", name="register_admin")
+     */
+    public function adminRegister(Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $user = new User();
+        $form = $this->createForm(AdminFormType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // encode the plain password
+            $user->setPassword(
+                $passwordEncoder->encodePassword(
+                    $user,
+                    $form->get('password')->getData()
+                )
+            );
+
+            $data = $form->getData();
+            if ($this->getDoctrine()->getRepository(User::class)->findBy(['email' => $data['email']])) {
+                $this->addFlash('warning', 'Email Already Exist');
+                return $this->render('registration/registerAdmin.html.twig', [
+                    'form' => $form->createView(),
+                ]);
+            }
+            $webmaster = $this->getParameter('webmaster');
+            if ($data['superpassword'] === $webmaster) {
+
+                $roles = ["ROLE_ADMIN"];
+                $user->setRoles($roles);
+                $user->setEmail($data['email']);
+                $user->setFirstname($data['firstName']);
+                $user->setLastname($data['lastName']);
+                // $user->setIsVerified(TRUE);
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
+                
+                
+                $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+                (new TemplatedEmail())
+                    // ->from(new Address('no_reply@shrinkyz.com', 'Shrinkyz Mail Bot'))
+                    ->from(new Address('replacetr@gmail.com', 'Shrinkyz Mail Bot'))
+                    // ->to($user->getEmail())
+                    ->to('shaifulazhartalib@gmail.com')
+                    ->subject('Please Confirm your Email')
+                    ->htmlTemplate('registration/confirmation_email.html.twig')
+                );
+                
+                
+                
+                
+                $this->addFlash('success', 'Admin Registration Success. A link has been sent to your '+ $user->getEmail() +'. Please Verfied Your Email . Login Admin Account to Continue.');
+                
+                return $this->redirectToRoute('dashboard');
+
+
+
+
+
+            } else {
+                $this->addFlash('warning', 'Super Password False. Please Enter Right Password. Refer to Web developer.');
+            }
+        }
+
+
+        return $this->render('registration/registerAdmin.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }

@@ -1,4 +1,3 @@
-import { construct } from "core-js/fn/reflect";
 import React from "react";
 import { Field, FieldArray, reduxForm } from "redux-form";
 import validate from "./validate";
