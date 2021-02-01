@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Table, Spinner, Pagination } from "react-bootstrap";
 import Axios from "axios";
-import ModalCat from "../product/ModalCat";
+import ModalCat from "../Old/ModalCat";
 
 export default class CategoryEdit extends Component {
   constructor(props) {
