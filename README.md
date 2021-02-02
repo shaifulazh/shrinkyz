@@ -2,10 +2,10 @@ Setup
 1. Installing PHP 7.4 zip file  https://windows.php.net/downloads/releases/php-7.4.13-nts-Win32-vc15-x64.zip
 	1.1 Extract php on C:\php
         1.2 save path "c:\php" in system variable notes: see this tutorial how to set up path https://john-dugan.com/add-php-windows-path-variable/
-        1.3 Download and Install Visual C++ Redistributable for visual studio 2015 - https://aka.ms/vs/16/release/VC_redist.x64.exe for x64 or 							https://aka.ms/vs/16/release/VC_redist.x86.exe for x86
+        1.3 Download and Install Visual C++ Redistributable for visual studio 2015 - https://aka.ms/vs/16/release/VC_redist.x644.exe for x64 or 							https://aka.ms/vs/16/release/VC_redist.x86.exe for x86
         1.4 Add file php.ini in "C:\php" with the lines setting below
 
-            extension_dir = "ext"
+            extension_dir="ext"
             extension=php_gd2.dll
             extension=php_curl.dll
             extension=php_mbstring.dll

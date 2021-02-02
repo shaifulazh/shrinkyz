@@ -88,9 +88,17 @@ class LoginFormAuthAuthenticator extends AbstractFormLoginAuthenticator
             return new RedirectResponse($targetPath);
         }
 
+        
+
         $this->flash->add('success', 'Login Success! ');
 
-        return new RedirectResponse($this->urlGenerator->generate('index'));
+
+
+
+
+
+
+        return new RedirectResponse($this->urlGenerator->generate('app_home'));
     }
 
 

@@ -17,6 +17,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use App\Repository\UserRepository;
 
 class RegistrationController extends AbstractController
 {
@@ -46,7 +47,6 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
-
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
@@ -56,15 +56,17 @@ class RegistrationController extends AbstractController
                 (new TemplatedEmail())
                     // ->from(new Address('no_reply@shrinkyz.com', 'Shrinkyz Mail Bot'))
                     ->from(new Address('replacetr@gmail.com', 'Shrinkyz Mail Bot'))
-                    // ->to($user->getEmail())
-                    ->to('shaifulazhartalib@gmail.com')
+                    ->to($user->getEmail())
+                    // ->to('shaifulazhartalib@gmail.com')
                     ->subject('Please Confirm your Email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
             // do anything else you need here, like send an email
 
-            
-
+            $this->addFlash('success', 'U have Register Success. A link has been sent to your '. $user->getEmail() .'. Please Verified Your email to confirm registration. Link will expired in 30 minutes.');
+                
+            return $this->redirectToRoute('index');
+            // <---this original from make registration --->
             // return $guardHandler->authenticateUserAndHandleSuccess(
             //     $user,
             //     $request,
@@ -81,9 +83,25 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/verify/email", name="app_verify_email")
      */
-    public function verifyUserEmail(Request $request): Response
+    public function verifyUserEmail(Request $request, UserRepository $userRepository): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $id = $request->get('id'); // retrieve the user id from the url
+
+       // Verify the user id exists and is not null
+       if (null === $id) {
+           return $this->redirectToRoute('app_home');
+       }
+
+       $user = $userRepository->find($id);
+
+       // Ensure the user exists in persistence
+       if (null === $user) {
+           return $this->redirectToRoute('app_home');
+       }
+
+
+
+
 
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
@@ -97,7 +115,7 @@ class RegistrationController extends AbstractController
         // @TODO Change the redirect on success and handle or remove the flash message in your templates
         $this->addFlash('success', 'Your email address has been verified.');
 
-        return $this->redirectToRoute('app_register');
+        return $this->redirectToRoute('app_login');
     }
 
 
@@ -134,7 +152,7 @@ class RegistrationController extends AbstractController
                 $user->setEmail($data['email']);
                 $user->setFirstname($data['firstName']);
                 $user->setLastname($data['lastName']);
-                // $user->setIsVerified(TRUE);
+                $user->setIsVerified(TRUE);
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($user);
                 $entityManager->flush();
@@ -153,7 +171,7 @@ class RegistrationController extends AbstractController
                 
                 
                 
-                $this->addFlash('success', 'Admin Registration Success. A link has been sent to your '+ $user->getEmail() +'. Please Verfied Your Email . Login Admin Account to Continue.');
+                $this->addFlash('success', 'Admin Registration Success. A link has been sent to your '. $user->getEmail() .'. Please Verfied Your Email . Login Admin Account to Continue.');
                 
                 return $this->redirectToRoute('dashboard');
 

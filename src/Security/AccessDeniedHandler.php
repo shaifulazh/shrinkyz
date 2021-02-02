@@ -26,6 +26,6 @@ class AccessDeniedHandler implements AccessDeniedHandlerInterface
         
         $this->flashBag->add('warning', 'Access Denied, Please Logout and Login with Admin Account');
 
-        return new RedirectResponse($this->urlGenerator->generate('index'));
+        return new RedirectResponse($this->urlGenerator->generate('app_home'));
     }
 }

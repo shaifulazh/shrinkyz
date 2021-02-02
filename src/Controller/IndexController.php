@@ -31,7 +31,7 @@ class IndexController extends AbstractController
         $this->session = $session;
     }
     /**
-     * @Route("/", name="index")
+     * @Route("/", name="app_home")
      */
     public function index(Request $request)
     {
