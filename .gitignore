@@ -4,6 +4,9 @@
 /.env.*.local
 /var
 /vendor
+/database/db
+/maksabal.gete
+/public/build/
 
 
 
