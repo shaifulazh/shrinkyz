@@ -63,7 +63,7 @@
                 <th>RM
                     {{total |number_format(2, '.', ',')}}</th>
             </table>
-            <a class="btn btn-info " href="{{path('index')}}">
+            <a class="btn btn-info " href="{{path('app_home')}}">
                 <i class="fas fa-chevron-circle-left"></i>
                 Continue Shopping</a>
             {% if (notEnoughStock == 0 ) %}
@@ -76,7 +76,7 @@
 
                 <strong>Your Cart Empty!</strong>
             </div>
-            <a class="btn btn-info" href="{{path('index')}}">Continue Shopping</a>
+            <a class="btn btn-info" href="{{path('app_home')}}">Continue Shopping</a>
         {% endif %}
     </div>
 {% endblock %}

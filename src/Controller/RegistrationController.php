@@ -65,7 +65,7 @@ class RegistrationController extends AbstractController
 
             $this->addFlash('success', 'U have Register Success. A link has been sent to your '. $user->getEmail() .'. Please Verified Your email to confirm registration. Link will expired in 30 minutes.');
                 
-            return $this->redirectToRoute('index');
+            return $this->redirectToRoute('app_home');
             // <---this original from make registration --->
             // return $guardHandler->authenticateUserAndHandleSuccess(
             //     $user,

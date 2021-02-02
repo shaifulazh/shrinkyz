@@ -88,9 +88,13 @@ class LoginFormAuthAuthenticator extends AbstractFormLoginAuthenticator
             return new RedirectResponse($targetPath);
         }
 
+        $user = $token->getUser();
+
+
+
         
 
-        $this->flash->add('success', 'Login Success! ');
+        $this->flash->add('success', 'Login Success!' . $user->getUsername() );
 
 
 
