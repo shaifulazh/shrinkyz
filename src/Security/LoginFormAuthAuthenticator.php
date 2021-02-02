@@ -95,8 +95,11 @@ class LoginFormAuthAuthenticator extends AbstractFormLoginAuthenticator
             $this->flash->add('success', 'Login Success!');
 
         }
+        else {
 
-        $this->flash->add('warning', 'Login Success! Your Account Not Verfied');
+            $this->flash->add('warning', 'Login Success! Your Account Not Verfied');
+        }
+
 
 
 
