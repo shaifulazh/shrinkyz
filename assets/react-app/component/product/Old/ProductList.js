@@ -3,7 +3,7 @@ import Axios from "axios";
 import { NavLink, Link } from "react-router-dom";
 import { Table, Spinner, Pagination } from "react-bootstrap";
 import { Col, Row } from "reactstrap";
-import ModalProd from "../product/ModalProd";
+import ModalProd from "../Old/ModalProd";
 
 export default class ProductList extends Component {
   constructor(props) {

@@ -29,11 +29,6 @@ class ProductModel
      */
     private $product_price;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * 
-     */
-    private $product_image;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -62,12 +57,18 @@ class ProductModel
      */
     private $productDetailss;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Category::class, mappedBy="productmodel")
+     */
+    private $categories;
+
 
 
     public function __construct()
     {
         $this->cart = new ArrayCollection();
         $this->productDetailss = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -95,18 +96,6 @@ class ProductModel
     public function setProductPrice(float $product_price): self
     {
         $this->product_price = $product_price;
-
-        return $this;
-    }
-
-    public function getProductImage(): ?string
-    {
-        return $this->product_image;
-    }
-
-    public function setProductImage(?string $product_image): self
-    {
-        $this->product_image = $product_image;
 
         return $this;
     }
@@ -203,6 +192,33 @@ class ProductModel
             if ($productDetailss->getProduct() === $this) {
                 $productDetailss->setProduct(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Category[]
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Category $category): self
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories[] = $category;
+            $category->addProductmodel($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): self
+    {
+        if ($this->categories->removeElement($category)) {
+            $category->removeProductmodel($this);
         }
 
         return $this;

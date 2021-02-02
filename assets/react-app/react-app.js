@@ -12,6 +12,8 @@ import Base from "./Base";
 // );
 
 ReactDOM.render(
-  <Base />,
+  <Router>
+    <App />
+  </Router>,
   document.getElementById("root")
 );

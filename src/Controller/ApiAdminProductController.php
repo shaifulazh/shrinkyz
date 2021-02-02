@@ -114,7 +114,7 @@ class ApiAdminProductController extends AbstractFOSRestController
         $imageFile = $em->getRepository(ImageFile::class)->find($paramFetcher->get('imageid'));
 
         $product = new ProductModel();
-        $product->setProductImage($imageFile->getFilename());
+        // $product->setProductImage($imageFile->getFilename()); later change this
         $product->setCategory($category);
         $product->setProductName($paramFetcher->get('name'));
         $product->setProductPrice($paramFetcher->get('price'));
@@ -180,9 +180,9 @@ class ApiAdminProductController extends AbstractFOSRestController
         $filesystem = new Filesystem();
         //remove file 
         if ($imageFile) {
-            if ($filesystem->exists($imageFile->getDefaultName())) {
+            if ($filesystem->exists( $this->getParameter('image_directory')  . '/'. $imageFile->getDefaultName())) {
                 try {
-                    $filesystem->remove($imageFile->getDefaultName());
+                    $filesystem->remove( $this->getParameter('image_directory')  . '/'. $imageFile->getDefaultName());
                 } catch (IOExceptionInterface $exception) {
                     return $this->view($exception, Response::HTTP_INTERNAL_SERVER_ERROR);
                 }

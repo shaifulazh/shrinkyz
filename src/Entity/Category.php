@@ -24,18 +24,16 @@ class Category
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\ManyToMany(targetEntity=ProductModel::class, inversedBy="categories")
      */
-    private $details;
+    private $productmodel;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ProductModel", mappedBy="category", cascade={"REMOVE"})
-     */
-    private $productModels;
+
 
     public function __construct()
     {
         $this->productModels = new ArrayCollection();
+        $this->productmodel = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -55,46 +53,28 @@ class Category
         return $this;
     }
 
-    public function getDetails(): ?string
-    {
-        return $this->details;
-    }
-
-    public function setDetails(string $details): self
-    {
-        $this->details = $details;
-
-        return $this;
-    }
-
     /**
      * @return Collection|ProductModel[]
      */
-    public function getProductModels(): Collection
+    public function getProductmodel(): Collection
     {
-        return $this->productModels;
+        return $this->productmodel;
     }
 
-    public function addProductModel(ProductModel $productModel): self
+    public function addProductmodel(ProductModel $productmodel): self
     {
-        if (!$this->productModels->contains($productModel)) {
-            $this->productModels[] = $productModel;
-            $productModel->setCategory($this);
+        if (!$this->productmodel->contains($productmodel)) {
+            $this->productmodel[] = $productmodel;
         }
 
         return $this;
     }
 
-    public function removeProductModel(ProductModel $productModel): self
+    public function removeProductmodel(ProductModel $productmodel): self
     {
-        if ($this->productModels->contains($productModel)) {
-            $this->productModels->removeElement($productModel);
-            // set the owning side to null (unless already changed)
-            if ($productModel->getCategory() === $this) {
-                $productModel->setCategory(null);
-            }
-        }
+        $this->productmodel->removeElement($productmodel);
 
         return $this;
     }
+    
 }

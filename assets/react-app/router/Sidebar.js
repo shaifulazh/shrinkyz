@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 export default class Sidebar extends Component {
   render() {
     return (
-      <div className="border" style={{ height: "100vh" }}>
+      <div className="border sidebar-wrapper" style={{ minheight: "100vh" }}>
         <ul style={{ listStyleType: "none", padding: 0 }}>
           <li>
             <NavLink
@@ -43,17 +43,15 @@ export default class Sidebar extends Component {
             >
               <i className="fas fa-users" /> Customer
             </NavLink>
-            
           </li>
           <li>
-          <NavLink
+            <NavLink
               to="/formredux"
               activeClassName="active"
               className="list-group-item list-group-item-action"
             >
-              <i className="fas fa-boxes" /> reduxForm
+              <i className="fas fa-boxes" /> DevOps
             </NavLink>
-
           </li>
         </ul>
       </div>
