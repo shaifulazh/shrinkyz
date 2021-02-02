@@ -25,6 +25,7 @@
     "symfony/form": "4.4.*",
     "symfony/framework-bundle": "4.4.*",
     "symfony/google-mailer": "4.4.*",
+    "symfony/maker-bundle": "^1.28",
     "symfony/proxy-manager-bridge": "4.4.*",
     "symfony/security-bundle": "4.4.*",
     "symfony/serializer": "4.4.*",
@@ -82,7 +83,6 @@
   },
   "require-dev": {
     "doctrine/doctrine-fixtures-bundle": "^3.1",
-    "symfony/maker-bundle": "^1.11",
     "symfony/phpunit-bridge": "^4.4",
     "symfony/web-profiler-bundle": "4.4.*",
     "symfony/web-server-bundle": "4.4.*"
