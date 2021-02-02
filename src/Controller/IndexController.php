@@ -36,10 +36,9 @@ class IndexController extends AbstractController
     public function index(Request $request)
     {
 
-        // react dev
-        return $this->render('dashboard/index.html.twig', [
-            'controller_name' => 'DashboardController',
-        ]);
+  
+   
+  
         //remove above line for prod
 
         $repository = $this->getDoctrine()->getRepository(ProductModel::class)->findBy([], ['product_name' => 'ASC']);

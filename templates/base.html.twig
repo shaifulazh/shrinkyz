@@ -1,52 +1,69 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
 
-        <title>
-            {% block title %}Welcome!
-            {% endblock %}
-        </title>
+<head>
+    <meta charset="UTF-8">
 
-        {% block stylesheets %}
-
-            {{ encore_entry_link_tags('app') }}
-                
-            <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" rel="stylesheet">
-            <link rel="icon" href="{{asset('/images/favicon.jpeg')}}">
-                     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>
+        {% block title %}Welcome!
         {% endblock %}
-        {% block head%}
-            
-            {{ include('navbar.html.twig') }}
-        {% endblock %}
+    </title>
 
-    </head>
-    <body>
+    {% block stylesheets %}
+
+  
+
+
+    {{ encore_entry_link_tags('app') }}
+
+    <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" rel="stylesheet">
+    <link rel="icon" href="{{asset('/images/favicon.jpeg')}}">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no user-scalable=no">
+    {% endblock %}
+    {% block head%}
+
+      <style>
+        body {
+            overflow-x: clip !important;
+            background : black;
+
+        }
+    </style>
+
+
+
+    {{ include('navbar.html.twig') }}
+    {% endblock %}
+
+</head>
+
+<body>
 
     {# this handle all the alert in this web #}
-        {% for label, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="container alert alert-{{ label }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endfor %}
-<div        style="
+    {% for label, messages in app.flashes %}
+    {% for message in messages %}
+    <div class="container alert alert-{{ label }}">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endfor %}
+    <div style="
      position: relative;
   min-height: 100vh;
     ">
         {% block body %}
-         {% endblock %}
-      </div> 
-
-        {{include('footer.html.twig')}}
-        {% block javascript %}
-            {{ encore_entry_script_tags('app') }}
-
         {% endblock %}
+    </div>
 
-    
+    {{include('footer.html.twig')}}
+    {% block javascript %}
+    {{ encore_entry_script_tags('app') }}
 
-    </body>
+    {% endblock %}
+
+
+
+</body>
+
 </html>

@@ -12,6 +12,7 @@ import Order from "./component/order/Order";
 import CategoryEdit from "./component/product/Old/CategoryEdit";
 import FormRedux from "./component/product/reduxForm/FormRedux";
 import ProductAdd from "./component/product/AddProducts/ProductAdd";
+import MobileSideBar from "./router/MobileSideBar";
 
 export default class App extends Component {
   constructor(props) {
@@ -74,50 +75,55 @@ export default class App extends Component {
     if (this.state.mobileView) containerClass = "container-fluid";
 
     return (
-      <div className={containerClass}>
-        {this.state.showSidebar ? <Sidebar /> : null}
-        <div className="d-flex justify-content-center">
+      <div>
+        {this.state.showSidebar ? <Sidebar /> : <MobileSideBar />}
+        <div className={containerClass}>
+          {/* <div className="d-flex justify-content-center">
           {this.state.mobileView ? (
             <button
-              className="btn btn-primary btn-sm "
-              onClick={this.toggleSideBar}
+            className="btn btn-primary btn-sm "
+            onClick={this.toggleSideBar}
             >
-              {this.state.showSidebar ? "^" : "v"}{" "}
+            {this.state.showSidebar ? "^" : "v"}{" "}
             </button>
-          ) : null}
+            ) : null}
+          </div> */}
+          <Switch>
+            <Route path="/admin" render={(props) => <Dashboard {...props} />} />
+            <Route path="/orders" render={(props) => <Orders {...props} />} />
+            <Route
+              path="/customer"
+              render={(props) => <Customer {...props} />}
+            />
+            <Route path="/product" render={(props) => <Product {...props} />} />
+            <Route
+              path="/newproduct"
+              render={(props) => (
+                <AddProduct
+                  {...props}
+                  showCrop={this.handleShowCrop}
+                  closeCrop={this.handleCloseCrop}
+                />
+              )}
+            />
+            <Route
+              path="/category"
+              render={(props) => <CategoryEdit {...props} />}
+            />
+            <Route path="/vieworder" render={(props) => <Order {...props} />} />
+            <Route path="/edit" render={(props) => <Editing {...props} />} />
+            <Route
+              path="/formredux"
+              render={(props) => <ProductAdd {...props} />}
+            />
+          </Switch>
+          <Cropping
+            showCrop={this.state.showCrop}
+            closeCrop={this.handleCloseCrop}
+            src={this.state.src}
+            upload={this.state.upload}
+          />
         </div>
-        <Switch>
-          <Route path="/admin" render={(props) => <Dashboard {...props} />} />
-          <Route path="/orders" render={(props) => <Orders {...props} />} />
-          <Route path="/customer" render={(props) => <Customer {...props} />} />
-          <Route path="/product" render={(props) => <Product {...props} />} />
-          <Route
-            path="/newproduct"
-            render={(props) => (
-              <AddProduct
-                {...props}
-                showCrop={this.handleShowCrop}
-                closeCrop={this.handleCloseCrop}
-              />
-            )}
-          />
-          <Route
-            path="/category"
-            render={(props) => <CategoryEdit {...props} />}
-          />
-          <Route path="/vieworder" render={(props) => <Order {...props} />} />
-          <Route path="/edit" render={(props) => <Editing {...props} />} />
-          <Route
-            path="/formredux"
-            render={(props) => <ProductAdd {...props} />}
-          />
-        </Switch>
-        <Cropping
-          showCrop={this.state.showCrop}
-          closeCrop={this.handleCloseCrop}
-          src={this.state.src}
-          upload={this.state.upload}
-        />
       </div>
     );
   }

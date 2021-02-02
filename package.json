@@ -19,8 +19,7 @@
     "push:origin": "git push origin master",
     "pull": "git pull origin master",
     "router": "php bin/console debug:router",
-    "server": "php bin/console server:run"
-    
+    "server": "php bin/console server:run *:80"
   },
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.12.1",

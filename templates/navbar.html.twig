@@ -36,6 +36,15 @@
                                                 {# <span class="sr-only">(current)</span> #}
                                             </a>
                                         </li>
+                                            {# remove this in production coz this only for dev #}
+                                            <li class="nav-item {{ app.request.get('_route') == 'about' ? 'active' }}">
+                                            <a class="nav-link" href="{{ path('dashboard') }}">ADMINTEST</a>
+                                        </li>
+                                            {# until this line #}
+
+
+
+
                                         <li class="nav-item {{ app.request.get('_route') == 'about' ? 'active' }}">
                                             <a class="nav-link" href="{{ path('about') }}">About</a>
                                         </li>
