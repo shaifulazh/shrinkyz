@@ -116,7 +116,7 @@ export default class Cropping extends Component {
               <div className="float-right">
                 <button
                   className="btn btn-dark"
-                  onClick={() => this.props.closeCrop()}
+                  onClick={(e) =>{e.preventDefault(); this.props.closeCrop()}}
                 >
                   <i className="fas fa-times-circle fa-2x" />
                 </button>
@@ -133,7 +133,7 @@ export default class Cropping extends Component {
                   </div>
                   <button
                     className="btn btn-primary"
-                    onClick={() => this.setState({ showCropImage: false })}
+                    onClick={(e) => {e.preventDefault();this.setState({ showCropImage: false })}}
                   >
                     Back
                   </button>
@@ -158,7 +158,7 @@ export default class Cropping extends Component {
                   <button
                     className="btn btn-primary"
                     disabled={croppedImageUrl ? false : true}
-                    onClick={() => this.showCropImage()}
+                    onClick={(e) => {e.preventDefault();this.showCropImage()}}
                   >
                     Crop
                   </button>

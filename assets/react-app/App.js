@@ -106,7 +106,7 @@ export default class App extends Component {
             <Route path="/edit" render={(props) => <Editing {...props} />} />
             <Route
               path="/formredux"
-              render={(props) => <ProductAdd {...props} />}
+              render={(props) => <ProductAdd showCrop={this.handleShowCrop} closeCrop={this.handleCloseCrop} {...props} />}
             />
           </Switch>
           <Cropping

@@ -1,20 +1,29 @@
 import React, { Component } from "react";
 import { Card, CardBody, Col, Row, Spinner } from "reactstrap";
+import Picture from "./Picture";
 
 export default class ProductAdd extends Component {
+  constructor(props) {
+    super(props)
+  
+    this.state = {
+      images : []
+       
+    }
+  }
+  
 
 
   handleSubmit = (event) => {
-    
-    
-    
-    
-    
-    
     event.preventDefault();
     console.log("helo pulis")
   }
+  handleUploaded = (images) =>{
+    this.setState({images : images})
+  }
+
   render() {
+    console.log(this.state.images);
     return (
       <div className="container">
         {/* Top Row */}
@@ -59,7 +68,7 @@ export default class ProductAdd extends Component {
         </Row>
         <Row>
           <Col>
-
+              <Picture showCrop={this.props.showCrop} showPicture={this.handleUploaded} closeCrop={this.props.closeCrop}/>
           </Col>
           <Col>
           
