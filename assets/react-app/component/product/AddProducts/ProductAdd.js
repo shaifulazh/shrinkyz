@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Card, CardBody, Col, Row, Spinner } from "reactstrap";
+import MCategory from "./MCategory";
 import Picture from "./Picture";
 
 export default class ProductAdd extends Component {
@@ -20,6 +21,16 @@ export default class ProductAdd extends Component {
   }
   handleUploaded = (images) =>{
     this.setState({images : images})
+  }
+  handleRemovePicture = (images) =>{
+    this.setState({images : images})
+  }
+  handleChangeCategory = (value) =>{
+    this.setState({categories : value})
+  }
+
+  handleRemoveCategory = () =>{
+    console.log("sfdsaf")
   }
 
   render() {
@@ -68,10 +79,10 @@ export default class ProductAdd extends Component {
         </Row>
         <Row>
           <Col>
-              <Picture showCrop={this.props.showCrop} showPicture={this.handleUploaded} closeCrop={this.props.closeCrop}/>
+              <Picture showCrop={this.props.showCrop} showPicture={this.handleUploaded} closeCrop={this.props.closeCrop} removepicture={this.handleRemovePicture}/>
           </Col>
           <Col>
-          
+            <MCategory removecategory={this.handleRemoveCategory}  changecategory={this.handleChangeCategory} />
           </Col>
         </Row>
         <button>Button</button>

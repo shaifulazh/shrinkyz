@@ -35,7 +35,7 @@ export default class Picture extends Component {
       })
         .then((response) => {
           console.log(response);
-          this.setState({ picture: remove , message : null});
+          this.setState({ picture: remove , message : null},this.props.removepicture(remove));
         })
         .catch((error) => 
         
@@ -110,7 +110,10 @@ export default class Picture extends Component {
       return { ...image, imageid: e.id, imagename: e.image };
     });
     this.setState({ picture: imageUpload }, () =>
-      this.props.showPicture(imageUpload)
+      {
+        this.props.showPicture(imageUpload)
+        
+      }
     );
   };
 
