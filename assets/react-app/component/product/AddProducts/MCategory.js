@@ -15,7 +15,7 @@ export default class MCategory extends Component {
   }
 
   handleAddCategory = () => {
-      console.log("adding category")
+    console.log("adding category");
     this.setState({
       categories: this.state.categories.concat({
         categoryid: "",
@@ -25,28 +25,33 @@ export default class MCategory extends Component {
   };
 
   handleRemoveCategory = (index) => {
-      const removecat = this.categories.filter(x,i=>index !== i );
-      this.setState({
-          categories : removecat
-      },this.props.removecategory(removecat))
-  }   
-  handleChangeCategory = (index,catid) => (event)=>{
-      const newcat = this.state.categories.map((category,i)=>{
-          if (index !== i) return category;
-          return { ...category, categoryname : event.target.value}
-      })
+    const removecat = this.state.categories.filter((a, i) => index !== i);
+    this.setState(
+      {
+        categories: removecat,
+      },
+      this.props.removecategory(removecat)
+    );
+  };
+  handleChangeCategory = (index, catid) => (event) => {
+    const newcat = this.state.categories.map((category, i) => {
+      if (index !== i) return category;
+      return { ...category, categoryname: event.target.value };
+    });
 
-      this.setState({
-          categories : newcat
-      },this.props.changecategory(newcat))
-
-  }
+    this.setState(
+      {
+        categories: newcat,
+      },
+      this.props.changecategory(newcat)
+    );
+  };
 
   render() {
-      console.log(this.state)
+    console.log(this.state);
     return (
       <div className="">
-        {this.state.categories.map( (data, index) => (
+        {this.state.categories.map((data, index) => (
           <div key={index} className="">
             <input
               type="text"
@@ -55,24 +60,27 @@ export default class MCategory extends Component {
               onChange={this.handleChangeCategory(index)}
               placeholder={`Category #${index}}`}
             />
-    
+
             <a
               href="#"
               onClick={(e) => {
-                e.preventDefault;
+                e.preventDefault();
                 this.handleRemoveCategory(index);
               }}
-            >X</a>
+              className="btn btn-primary btn-sm p-2 m-2"
+            >
+              X
+            </a>
           </div>
         ))}
-
 
         <a
           href="#"
           onClick={(e) => {
-            e.preventDefault;
+            e.preventDefault();
             this.handleAddCategory();
           }}
+          className="btn btn-primary btn-sm btn-block mb-3"
         >
           Add Category
         </a>

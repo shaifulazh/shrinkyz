@@ -14,7 +14,7 @@ export default class Picture extends Component {
       ],
       targetimage: null,
       showBlackScreen: false,
-      message : null
+      message: null,
     };
   }
   handleImageAdd = () => {
@@ -26,33 +26,29 @@ export default class Picture extends Component {
   handleRemoveImage = (i) => {
     const remove = this.state.picture.filter((s, fi) => i !== fi);
     const imagedel = this.state.picture.filter((image, idx) => i === idx);
-    const pictureup = imagedel.find((x) => x.imageid)
-    if (typeof(pictureup) !== "undefined") {
-        this.setState({  message : "Deleting Image"});
+    const pictureup = imagedel.find((x) => x.imageid);
+    if (typeof pictureup !== "undefined") {
+      this.setState({ message: "Deleting Image" });
       Axios({
         method: "DELETE",
         url: `/api/admin/products/${pictureup.imageid}/image`,
       })
         .then((response) => {
           console.log(response);
-          this.setState({ picture: remove , message : null},this.props.removepicture(remove));
+          this.setState(
+            { picture: remove, message: null },
+            this.props.removepicture(remove)
+          );
         })
-        .catch((error) => 
-        
-        {
-            console.log(error)
-            this.setState({ message : null});
-            alert("Something Not Good i can feel it..")
-        }
-        );
-
+        .catch((error) => {
+          console.log(error);
+          this.setState({ message: null });
+          alert("Something Not Good i can feel it..");
+        });
     } else {
-      this.setState(
-        {
-          picture: remove,
-        }
-       
-      );
+      this.setState({
+        picture: remove,
+      });
     }
   };
   onSelectFile = (a) => (b) => {
@@ -109,21 +105,31 @@ export default class Picture extends Component {
       if (i !== this.state.targetimage) return image;
       return { ...image, imageid: e.id, imagename: e.image };
     });
-    this.setState({ picture: imageUpload }, () =>
-      {
-        this.props.showPicture(imageUpload)
-        
-      }
-    );
+    this.setState({ picture: imageUpload }, () => {
+      this.props.showPicture(imageUpload);
+    });
   };
 
   render() {
     console.log(this.state.picture);
     return (
-      <div className="p-3 m-3">
+      <div className="mt-3">
         {this.state.picture.map((data, i) => (
           <div key={i} className="d-flex">
-            {i+1 + "." }{data.imagename ? (
+            <div>
+              <a
+                href="#"
+                className="btn btn-primary p-1 pt-1 mt-0.8 mr-1"
+                onClick={(e) => {
+                  e.preventDefault();
+                  this.handleRemoveImage(i);
+                }}
+              >
+                X
+              </a>
+            </div>
+            <div className="m-1">{i + 1 + "."}</div>
+            {data.imagename ? (
               <img
                 className="p-2"
                 src={`/images/${data.imagename}`}
@@ -134,36 +140,24 @@ export default class Picture extends Component {
               <input
                 required
                 key={i}
-                className="form-control-file"
+                className="form-control-file m-1"
                 type="file"
                 accept="image/png, image/jpeg"
                 onChange={this.onSelectFile(i)}
               />
             )}
-            <div>
-              <a
-                href="#"
-                className="btn btn-primary btn-sm"
-                onClick={(e) => {
-                  e.preventDefault;
-                  this.handleRemoveImage(i);
-                }}
-              >
-                X
-              </a>
-            </div>
           </div>
         ))}
 
         <a
           href="#"
-          className="btn btn-sm btn-primary my-3"
+          className="btn btn-sm btn-primary btn-block my-3"
           onClick={(e) => {
-            e.preventDefault;
+            e.preventDefault();
             this.handleImageAdd();
           }}
         >
-          Add More Pircture
+          Add More Picture
         </a>
 
         {this.state.message && (
@@ -173,7 +167,6 @@ export default class Picture extends Component {
               style={divDialog}
             >
               <h3>{this.state.message}</h3>
-
             </div>
           </div>
         )}
