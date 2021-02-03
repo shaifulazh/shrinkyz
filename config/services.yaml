@@ -10,7 +10,7 @@ parameters:
   clientid: "%env(CLIENT_ID)%"
   csecret: "%env(CLIENT_SECRET)%"
   webmaster: "%env(WEB_MASTER)%"
-  webemail : "%env(WEB_EMAIL)%"
+  webemail: "%env(WEB_EMAIL)%"
   webemailname: "%env(WEB_EMAIL_NAME)%"
   
 services:

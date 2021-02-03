@@ -42,12 +42,7 @@ class ProductModel
      */
     private $product_stock;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="productModels")
-     */
-    private $category;
-
-    /**
+   /**
      * @ORM\OneToMany(targetEntity="App\Entity\CartModel", mappedBy="product", cascade={"REMOVE"})
      */
     private $cart;
@@ -58,11 +53,9 @@ class ProductModel
     private $productDetailss;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Category::class, mappedBy="productmodel")
+     * @ORM\ManyToMany(targetEntity=Category::class, mappedBy="product_model")
      */
     private $categories;
-
-
 
     public function __construct()
     {
@@ -124,18 +117,6 @@ class ProductModel
         return $this;
     }
 
-    public function getCategory(): ?Category
-    {
-        return $this->category;
-    }
-
-    public function setCategory(?Category $category): self
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
     /**
      * @return Collection|CartModel[]
      */
@@ -156,8 +137,7 @@ class ProductModel
 
     public function removeCart(CartModel $cart): self
     {
-        if ($this->cart->contains($cart)) {
-            $this->cart->removeElement($cart);
+        if ($this->cart->removeElement($cart)) {
             // set the owning side to null (unless already changed)
             if ($cart->getProduct() === $this) {
                 $cart->setProduct(null);
@@ -209,7 +189,7 @@ class ProductModel
     {
         if (!$this->categories->contains($category)) {
             $this->categories[] = $category;
-            $category->addProductmodel($this);
+            $category->addProductModel($this);
         }
 
         return $this;
@@ -218,14 +198,10 @@ class ProductModel
     public function removeCategory(Category $category): self
     {
         if ($this->categories->removeElement($category)) {
-            $category->removeProductmodel($this);
+            $category->removeProductModel($this);
         }
 
         return $this;
     }
 
-
- 
-
-  
 }

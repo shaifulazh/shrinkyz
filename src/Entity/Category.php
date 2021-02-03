@@ -26,14 +26,11 @@ class Category
     /**
      * @ORM\ManyToMany(targetEntity=ProductModel::class, inversedBy="categories")
      */
-    private $productmodel;
-
-
+    private $product_model;
 
     public function __construct()
     {
-        $this->productModels = new ArrayCollection();
-        $this->productmodel = new ArrayCollection();
+        $this->product_model = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -56,25 +53,26 @@ class Category
     /**
      * @return Collection|ProductModel[]
      */
-    public function getProductmodel(): Collection
+    public function getProductModel(): Collection
     {
-        return $this->productmodel;
+        return $this->product_model;
     }
 
-    public function addProductmodel(ProductModel $productmodel): self
+    public function addProductModel(ProductModel $productModel): self
     {
-        if (!$this->productmodel->contains($productmodel)) {
-            $this->productmodel[] = $productmodel;
+        if (!$this->product_model->contains($productModel)) {
+            $this->product_model[] = $productModel;
         }
 
         return $this;
     }
 
-    public function removeProductmodel(ProductModel $productmodel): self
+    public function removeProductModel(ProductModel $productModel): self
     {
-        $this->productmodel->removeElement($productmodel);
+        $this->product_model->removeElement($productModel);
 
         return $this;
     }
-    
+
+     
 }

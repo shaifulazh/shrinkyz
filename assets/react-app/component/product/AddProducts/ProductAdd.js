@@ -3,6 +3,7 @@ import { Card, CardBody, Col, Row, Spinner } from "reactstrap";
 import MCategory from "./MCategory";
 import PDetails from "./PDetails";
 import Picture from "./Picture";
+import Axios from "axios";
 
 export default class ProductAdd extends Component {
   constructor(props) {
@@ -12,12 +13,62 @@ export default class ProductAdd extends Component {
       images: [],
       details: [],
       categories: [],
+      name: null,
+      price: null,
+      stock: null,
+      desc: null,
+      details: null,
+      showbutton: false,
     };
   }
 
   handleSubmit = (event) => {
     event.preventDefault();
     console.log(this.state);
+    const {
+      name,
+      price,
+      stock,
+      desc,
+      images,
+      categories,
+      details,
+    } = this.state;
+    this.setState({
+      message: "Saving data.. Please Take Deep Breath ..",
+    });
+    Axios(
+      {
+        method: "POST",
+        url: `/api/admin/products`,
+        data: {
+          name: name,
+          price: price,
+          stock: stock,
+          desc: desc,
+          details: details,
+          images: images,
+          categories: categories,
+        },
+      },
+      () => {
+        console.log("sending data to server....");
+      }
+    )
+      .then((e) => {
+        
+          console.log(e);
+          alert("Product Saved!!");
+          this.props.history.push("/product");
+        
+      })
+      .catch((e) => {
+        this.setState({
+          message: "Something Wrong..erorr please contact pulis",
+          showbutton: true,
+        });
+        console.log(e);
+      });
   };
   handleUploaded = (images) => {
     this.setState({ images: images });
@@ -35,15 +86,15 @@ export default class ProductAdd extends Component {
       categories: cat,
     });
   };
-  handleNewDetails = (details) => {
-    console.log(details);
+  handleNewDetails = (e) => {
+    console.log(e);
     this.setState({
-      details: details,
+      details: e,
     });
   };
 
   handleRemoveDetail = (remove) => {
-    console.log(e);
+    console.log(remove);
     this.setState({
       details: remove,
     });
@@ -61,7 +112,7 @@ export default class ProductAdd extends Component {
               <input
                 required
                 type="text"
-                onChange={(e) => this.setState({ price: e.target.value })}
+                onChange={(e) => this.setState({ name: e.target.value })}
                 className="form-control"
               />
               <label>Price</label>
@@ -116,9 +167,37 @@ export default class ProductAdd extends Component {
               />
             </Col>
           </Row>
-          <button>Button</button>
+          <button className="btn btn-primary btn-sm">Button</button>
         </form>
+        {this.state.message && (
+          <div style={submitDialog}>
+            <div
+              className="col-8 mx-auto col-md-6 col-lg-4 p-2"
+              style={divDialog}
+            >
+              <h3>{this.state.message}</h3>
+
+              {this.state.showbutton && (
+                <button onClick={() => this.setState({ message: null })}>
+                  Close
+                </button>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     );
   }
 }
+
+const submitDialog = {
+  position: "fixed",
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  background: "rgba(0, 0, 0, 0.3)",
+};
+const divDialog = {
+  background: "rgb(255, 255, 255)",
+};

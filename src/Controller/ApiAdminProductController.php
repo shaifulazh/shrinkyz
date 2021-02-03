@@ -14,15 +14,16 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use App\Entity\OrderModel;
 use App\Entity\OrderDetails;
-use App\Entity\Category;
 use App\Entity\ImageFile;
 use App\Entity\User;
 use App\Entity\ProductDetails;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use App\Entity\Category;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Constraints\Image;
+use Symfony\Component\Validator\Constraints\Length;
 
 class ApiAdminProductController extends AbstractFOSRestController
 {
@@ -94,43 +95,80 @@ class ApiAdminProductController extends AbstractFOSRestController
      * 
      * @Rest\RequestParam(name="price", description="product price", nullable=false)
      * 
-     * @Rest\RequestParam(name="imageid", description="product image", nullable=false)
+     * @Rest\RequestParam(name="stock", description="product image", nullable=false)
      * 
-     * @Rest\RequestParam(name="stock", description="product stock", nullable=false)
-     * 
-     * @Rest\RequestParam(name="desc", description="product description", nullable=false)
+     * @Rest\RequestParam(name="desc", description="product stock", nullable=false)
      * 
      * @Rest\RequestParam(name="details", description="product details", nullable=true)
+     * 
+     * @Rest\RequestParam(name="images", description="product images", nullable=true)
+     * 
+     * @Rest\RequestParam(name="categories", description="product categories", nullable=true)
 
      * @param ParamFetcher $paramFetcher
      */
 
-    public function postProductAction(ParamFetcher $paramFetcher, Category $category)
+    public function postProductAction(ParamFetcher $paramFetcher)
     {
         //add something
 
         $em = $this->getDoctrine()->getManager();
 
-        $imageFile = $em->getRepository(ImageFile::class)->find($paramFetcher->get('imageid'));
-
+        
         $product = new ProductModel();
-        // $product->setProductImage($imageFile->getFilename()); later change this
-        $product->setCategory($category);
         $product->setProductName($paramFetcher->get('name'));
         $product->setProductPrice($paramFetcher->get('price'));
         $product->setProductStock($paramFetcher->get('stock'));
         $product->setProductDesc($paramFetcher->get('desc'));
-
         $em->persist($product);
         $em->flush();
-        $details = $paramFetcher->get('details');
+        
+        $categories = $paramFetcher->get('categories');
+        if($categories)
+        {
+            
+            foreach ($categories as $jsoncat) {
+                $category = new Category();
+                $category->addProductmodel($product);
+                $objc = (Object)$jsoncat;
+                if ($objc->categoryname){
+                    $category->setName($objc->categoryname);
+                }
+                $em->persist($category);
+                $em->flush();
+            }
+        }
+        else{
+            return $this->view(['message' => 'something went wrong on category'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        
+        $images = $paramFetcher->get('images');
+        if($images){
+            $i = 0;
+            foreach ($images as $jsonimage) {
+                $objimage[$i] = (Object)$jsonimage;
+                if($objimage[$i]->imageid){
+                    $image = $this->getDoctrine()->getRepository(ImageFile::class)->findOneBy(['id' => $objimage[$i]->imageid]);
+                    $image->setProductModel($product->getId());
+                    $em->persist($image);
+                    $em->flush();
+                }
+            }
+        }
+        else{
+            return $this->view(['message' => 'something went wrong image'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        
+          $details = $paramFetcher->get('details');
         if ($details)
-        {             
+        {      
+            
             foreach ($details as $detail) {
                 # code...
                 $prodetails = new ProductDetails();
                 $prodetails->setProduct($product);
-                $obj = (Object)$detail;
+                $obj = (Object)$detail; 
                 if ($obj->detailname) {
                     # code...
                     $prodetails->setDetailName($obj->detailname);
@@ -144,6 +182,9 @@ class ApiAdminProductController extends AbstractFOSRestController
 
                 
             }
+        }
+        else{
+            return $this->view(['message' => $details], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
 

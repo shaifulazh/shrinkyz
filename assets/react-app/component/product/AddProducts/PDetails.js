@@ -32,7 +32,7 @@ export default class PDetails extends Component {
   handleChangeDetailName = (id) => (event) => {
     const newdetails = this.state.details.map((detail, index) => {
       if (id !== index) return detail;
-      return { ...details, detailname: event.target.value };
+      return { ...detail, detailname: event.target.value };
     });
     this.setState(
       {
@@ -45,7 +45,7 @@ export default class PDetails extends Component {
   handleChangeDataDesc = (id) => (event) => {
     const newdetaildatadesc = this.state.details.map((detail, index) => {
       if (id !== index) return detail;
-      return { ...details, datadesc: event.target.value };
+      return { ...detail, datadesc: event.target.value };
     });
     this.setState(
       {
@@ -65,15 +65,15 @@ export default class PDetails extends Component {
                 size="15"
                 className="mr-2 mb-2"
                 type="text"
-                placeholder={`Detail Name #${index+1}`}
-                onChange={this.handleChangeDetailName}
+                placeholder={`Detail Name #${index + 1}`}
+                onChange={this.handleChangeDetailName(index)}
               />
               <input
                 size="15"
                 className="mr-2 mb-2"
                 type="text"
                 placeholder={`Details #${index}`}
-                onChange={this.handleChangeDataDesc}
+                onChange={this.handleChangeDataDesc(index)}
               />
               <div>
                 <a
