@@ -58,7 +58,7 @@ export default class MCategory extends Component {
               required
               size="12"
               onChange={this.handleChangeCategory(index)}
-              placeholder={`Category #${index}}`}
+              placeholder={`Category #${index+1}`}
             />
 
             <a

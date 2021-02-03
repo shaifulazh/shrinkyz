@@ -65,7 +65,7 @@ export default class PDetails extends Component {
                 size="15"
                 className="mr-2 mb-2"
                 type="text"
-                placeholder={`Detail Name #${index}`}
+                placeholder={`Detail Name #${index+1}`}
                 onChange={this.handleChangeDetailName}
               />
               <input

@@ -10,12 +10,14 @@ export default class ProductAdd extends Component {
 
     this.state = {
       images: [],
+      details: [],
+      categories: [],
     };
   }
 
   handleSubmit = (event) => {
     event.preventDefault();
-    console.log("helo pulis");
+    console.log(this.state);
   };
   handleUploaded = (images) => {
     this.setState({ images: images });
@@ -27,19 +29,28 @@ export default class ProductAdd extends Component {
     this.setState({ categories: value });
   };
 
-  handleRemoveCategory = () => {
-    console.log("sfdsaf");
+  handleRemoveCategory = (cat) => {
+    console.log(cat);
+    this.setState({
+      categories: cat,
+    });
   };
-  handleNewDetails = (e) => {
-    console.log(e);
+  handleNewDetails = (details) => {
+    console.log(details);
+    this.setState({
+      details: details,
+    });
   };
 
-  handleRemoveDetail = (e) => {
+  handleRemoveDetail = (remove) => {
     console.log(e);
+    this.setState({
+      details: remove,
+    });
   };
 
   render() {
-    console.log(this.state.images);
+    console.log(this.state);
     return (
       <div className="container">
         {/* Top Row */}
@@ -72,7 +83,7 @@ export default class ProductAdd extends Component {
                 min="0"
               />
             </Col>
-            <Col xs="12" md="6" xl="6" >
+            <Col xs="12" md="6" xl="6">
               <label>Product Description</label>
               <textarea
                 required
