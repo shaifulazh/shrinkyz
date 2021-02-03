@@ -76,18 +76,10 @@ export default class App extends Component {
 
     return (
       <div>
-        {this.state.showSidebar ? <Sidebar /> : <MobileSideBar />}
+          {this.state.showSidebar ? null : <MobileSideBar/> }
         <div className={containerClass}>
-          {/* <div className="d-flex justify-content-center">
-          {this.state.mobileView ? (
-            <button
-            className="btn btn-primary btn-sm "
-            onClick={this.toggleSideBar}
-            >
-            {this.state.showSidebar ? "^" : "v"}{" "}
-            </button>
-            ) : null}
-          </div> */}
+        {this.state.showSidebar ? <Sidebar /> :null }
+
           <Switch>
             <Route path="/admin" render={(props) => <Dashboard {...props} />} />
             <Route path="/orders" render={(props) => <Orders {...props} />} />

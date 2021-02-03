@@ -38,7 +38,7 @@ class IndexController extends AbstractController
 
   
    
-  
+        return $this->redirectToRoute('dashboard');
         //remove above line for prod
 
         $repository = $this->getDoctrine()->getRepository(ProductModel::class)->findBy([], ['product_name' => 'ASC']);

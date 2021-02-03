@@ -51,7 +51,7 @@
                           </div>
                           <div>
                             <div class="def-number-input number-input safari_only mb-0 w-100">
-                             {{form_start(form[i], {'method' : 'GET' , 'action': url('update_cart' , { 'id' : product.product.getId} ), 'attr' : {'class' : 'form-inline'}})}}
+                             {{form_start(form[i], {'method' : 'GET' , 'action': path('update_cart' , { 'id' : product.product.getId} ), 'attr' : {'class' : 'form-inline'}})}}
                                 <p>{{form_widget(form[i].update, {'value' : product.qty, 'attr' : { 'class' : 'form-control form-control-sm' , 'style': 'width:5em'}})}}
                                     {{form_widget(form[i].save, {'attr' : {'class' : 'btn btn-primary btn-sm'}})}}</p>
                                 {{form_end(form[i])}}

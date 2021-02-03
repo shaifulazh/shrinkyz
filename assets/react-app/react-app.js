@@ -3,13 +3,7 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import { BrowserRouter as Router } from "react-router-dom";
 import Base from "./Base";
-
-// ReactDOM.render(
-//   <Router>
-//     <App />
-//   </Router>,
-//   document.getElementById("root")
-// );
+import Mobile from "./Mobile";
 
 ReactDOM.render(
   <Router>
@@ -17,3 +11,4 @@ ReactDOM.render(
   </Router>,
   document.getElementById("root")
 );
+

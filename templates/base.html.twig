@@ -25,8 +25,8 @@
 
       <style>
         body {
-            overflow-x: clip !important;
-            background : black;
+            overflow-x: hidden !important;
+            
 
         }
     </style>
@@ -48,10 +48,7 @@
     </div>
     {% endfor %}
     {% endfor %}
-    <div style="
-     position: relative;
-  min-height: 100vh;
-    ">
+
         {% block body %}
         {% endblock %}
     </div>
