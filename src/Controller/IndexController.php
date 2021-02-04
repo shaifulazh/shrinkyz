@@ -48,7 +48,6 @@ class IndexController extends AbstractController
             $request->query->getInt('page', 1),
             8 /*limit per page*/
         );
-        dump($repository);
 
         return $this->render('index/index.html.twig', [
             'products' => $pagination, 'category' => null, 'active' => null

@@ -36,8 +36,11 @@
                     <div class="col-md-5 col-lg-3 col-xl-3">
                       <div class="view zoom overlay z-depth-1 rounded mb-3 mb-md-0">
                         <img class="img-fluid w-100"
-                          src="{{ asset( '/images/' ~ product.product.getProductImage) }}" alt="Sample">
-
+                        {% for key, picture in product.product.pictures %}
+                            {% if key == 0 %}
+                          src="{{ asset( '/images/' ~ picture.filename ) }}" alt="Sample">
+                        {% endif %}
+                        {% endfor %}
                       </div>
                     </div>
                     <div class="col-md-7 col-lg-9 col-xl-9">
@@ -51,6 +54,12 @@
                           </div>
                           <div>
                             <div class="def-number-input number-input safari_only mb-0 w-100">
+                            {# <div class="d-flex">
+                                <a href="#" class="class btn btn-sm btn-primary">-</a>
+                                <input type="text" disable value="{{product.qty}}" style="width:5em" class="disbled form-control form-control-sm">
+                                <a href="#" class="class btn btn-sm btn-primary">+</a>
+                            </div> #}
+
                              {{form_start(form[i], {'method' : 'GET' , 'action': path('update_cart' , { 'id' : product.product.getId} ), 'attr' : {'class' : 'form-inline'}})}}
                                 <p>{{form_widget(form[i].update, {'value' : product.qty, 'attr' : { 'class' : 'form-control form-control-sm' , 'style': 'width:5em'}})}}
                                     {{form_widget(form[i].save, {'attr' : {'class' : 'btn btn-primary btn-sm'}})}}</p>

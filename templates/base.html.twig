@@ -20,6 +20,7 @@
         integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" rel="stylesheet">
     <link rel="icon" href="{{asset('/images/favicon.jpeg')}}">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no user-scalable=no">
+         {# <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'> #}
     {% endblock %}
     {% block head%}
 
@@ -29,6 +30,21 @@
             
 
         }
+
+
+  
+        .btn-info {
+            background-color: #808B96;
+        }
+
+        .btn-info:hover {
+            background-color: #ABB2B9;
+        /* }
+        body {
+            font-family: 'Montserrat';
+        }
+   */
+
     </style>
 
 
@@ -51,7 +67,7 @@
 
         {% block body %}
         {% endblock %}
-    </div>
+    
 
     {{include('footer.html.twig')}}
     {% block javascript %}

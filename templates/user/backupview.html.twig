@@ -2,6 +2,10 @@
 
 {% block title %}View
 {% endblock %}
+  {% block stylesheets %}
+   {{ parent() }}
+   {{ encore_entry_link_tags('email') }}
+{% endblock %}
 
 {% block body %}
     <div class="container ">
@@ -14,7 +18,8 @@
 
         <div class="row">
             <div class="col-10 mx-auto col-md-6 my-3 text-capitalize">
-                <img class="img-fluid img-thumbnail" src="{{ asset('/images/' ~ product.getProductImage) }}">
+               <div id="email"></div>
+                {# <img class="img-fluid img-thumbnail" src="{{ asset('/images/' ~ product.getProductImage) }}"> #}
             </div>
 
             <div class="col-10 mx-auto col-md-6 my-3 text-capitalize">
@@ -33,4 +38,14 @@
         </div>
 
     </div>
+
+    {% block javascript %}
+
+    {{ parent() }}
+
+  {{ encore_entry_script_tags('email') }}
+
+
+
+{% endblock %}
 {% endblock %}

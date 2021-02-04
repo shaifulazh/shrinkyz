@@ -6,22 +6,10 @@
 
 {% block head %}
     {{ parent() }}
-    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
-
-    <style>
-        .btn-info {
-            background-color: #808B96;
-        }
-
-        .btn-info:hover {
-            background-color: #ABB2B9;
-        }
-        body {
-            font-family: 'Montserrat';
-        }
-    </style>
-
+   
 {% endblock %}
+
+
 
 {% block body %}
     <div class="container ">
@@ -36,12 +24,31 @@
             <div class="col-12 col-md-6 mb-3">
                 <div class="">
                     <div class=h"border " style="">
-                       {% for key, picture in product.pictures %}
-                                    {% if key == 0 %}
-                        <img class="h-100"  style='height: 100%; width: 100%; object-fit: contain' src="{{ asset('/images/' ~ picture.getFilename) }}">
+            
+     
+                                        <div id="carouselExampleInterval" class="carousel slide" data-ride="carousel">
+                                        <div class="carousel-inner">
+                                            {% for key, picture in product.pictures %}
+                                        
 
-                        {% endif %}
-                        {% endfor %}
+                                            <div class="carousel-item {{ key == 0 ? "active" : null}}" id="car{{key}}">
+                                            <img class="h-100"  style='height: 100%; width: 100%; object-fit: contain' src="{{ asset('/images/' ~ picture.getFilename) }}">
+                                        
+                                            </div>
+
+                                        {% endfor %}
+                                        
+                                        </div>
+                                        <a class="carousel-control-prev" href="#carouselExampleInterval" role="button" data-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                        <a class="carousel-control-next" href="#carouselExampleInterval" role="button" data-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
+                                        </div>
+
                     </div>
                 </div>
             </div>
@@ -77,7 +84,6 @@
                     {% endif %}
                 </h6>
 
-                
                 <br>
                 <div class="row">
                 {% if product.getProductStock > 0 %}
@@ -102,5 +108,16 @@
         </div>
 
     </div>
+  
+   
+
+{% block javascript %}
+
+    {{ parent() }}
+
+
+
+
+{% endblock %}
 
 {% endblock %}
