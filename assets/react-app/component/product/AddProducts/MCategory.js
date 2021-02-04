@@ -1,3 +1,4 @@
+import Axios from "axios";
 import React, { Component } from "react";
 
 export default class MCategory extends Component {
@@ -11,7 +12,29 @@ export default class MCategory extends Component {
           categoryname: "",
         },
       ],
+      data: null,
     };
+  }
+
+  componentDidMount() {
+    this.mounted = true;
+    this.handleAxios();
+  }
+  componentWillUnmount() {
+    this.mounted = false;
+  }
+
+  handleAxios() {
+    Axios.get("api/admin/product/categories")
+      .then((response) => {
+        if (this.mounted) {
+          console.log(response.data);
+          this.setState({
+            data: response.data,
+          });
+        }
+      })
+      .catch((error) => console.log(error));
   }
 
   handleAddCategory = () => {
@@ -33,19 +56,32 @@ export default class MCategory extends Component {
       this.props.removecategory(removecat)
     );
   };
-  handleChangeCategory = (index, catid) => (event) => {
-    const newcat = this.state.categories.map((category, i) => {
-      if (index !== i) return category;
-      return { ...category, categoryname: event.target.value };
-    });
 
-    this.setState(
-      {
-        categories: newcat,
-      },
-      this.props.changecategory(newcat)
+
+  handleInput = (i) => (e) => {
+    console.log(e.target.value);
+    const data = this.state.data.find(
+      (datas, i) => e.target.value === datas.name
     );
-  };
+    console.log("kena cari",data);
+
+    const newData = this.state.categories.map((post, idx) => {
+      if (i !== idx) return post;
+      if (data !== undefined) {
+          //this return value if select
+        return { ...post, categoryname: data.name, categoryid: data.id };
+      } else {
+          //this return new value without select
+        return { ...post, categoryname: e.target.value, categoryid: null };
+      }
+    });
+    console.log("new data : ", newData);
+    this.setState({
+      categories: newData,
+    });
+    this.props.changecategory(newData)
+
+  }
 
   render() {
     console.log(this.state);
@@ -55,10 +91,11 @@ export default class MCategory extends Component {
           <div key={index} className="">
             <input
               type="text"
+              list="data"
               required
               size="12"
-              onChange={this.handleChangeCategory(index)}
-              placeholder={`Category #${index+1}`}
+              onInput={this.handleInput(index)}
+              placeholder={`Category #${index + 1}`}
             />
 
             <a
@@ -73,6 +110,12 @@ export default class MCategory extends Component {
             </a>
           </div>
         ))}
+        <datalist id="data">
+          {this.state.data &&
+            this.state.data.map((item, key) => (
+              <option key={key} value={item.name} />
+            ))}
+        </datalist>
 
         <a
           href="#"
