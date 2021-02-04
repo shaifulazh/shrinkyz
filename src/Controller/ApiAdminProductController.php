@@ -44,7 +44,7 @@ class ApiAdminProductController extends AbstractFOSRestController
         $file = $paramFetcher->get('image');
 
         if ($file) {
-            $filename = md5(uniqid()) . '.' . $file->guessClientExtension();
+            $filename = md5(uniqid() . time()) . '.' . $file->guessClientExtension();
 
             $file->move(
                 $this->getParameter('image_directory'),
@@ -89,7 +89,7 @@ class ApiAdminProductController extends AbstractFOSRestController
         return $this->view($category, Response::HTTP_OK);
     }
 
-
+//DONE !!! DONT TOUCH THIS
     /**
      * @Rest\RequestParam(name="name", description="product name", nullable=false)
      * 
