@@ -156,6 +156,7 @@ export default class ProductList extends Component {
     console.log(this.props);
     const { data, active, range, pagination, categoryData } = this.state;
     let items = [];
+    console.log("this is pagination : ", pagination);
     if (range) {
       for (let number = 0; number < range; number++) {
         items.push(
@@ -284,33 +285,40 @@ export default class ProductList extends Component {
               </Col>
             </div>
             <br />
-            <Table striped bordered hover variant="dark">
+            <table class="table table-dark">
               <thead>
                 <tr>
-                  <th>Image</th>
-                  <th>Product</th>
-                  <th>
+                  <th scope="col">#</th>
+                  <th scope="col">Image</th>
+                  <th scope="col">Product</th>
+                  <th scope="col">
                     Category{" "}
                     <Link className="btn btn-primary" to="/category">
                       <i className="fas fa-edit" /> Edit
                     </Link>
                   </th>
-                  <th>Price</th>
-                  <th>Stock</th>
-                  <th>Edit</th>
-                  <th>Remove</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Stock</th>
+                  <th scope="col">Edit</th>
+                  <th scope="col">Remove</th>
                 </tr>
               </thead>
               <tbody>
                 {pagination ? (
                   pagination.map((x, i) => (
                     <tr key={i}>
+                      <th scope="row">{i}</th>
                       <td>
-                        <img
-                          src={"/images/" + x.productImage}
-                          alt=""
-                          style={{ width: "50px", height: "50px" }}
-                        />
+                        {x.pictures.map((a, b) =>
+                          b === 0 ? (
+                            <img
+                              key={b}
+                              src={"/images/" + a.filename}
+                              alt=""
+                              style={{ width: "50px", height: "50px" }}
+                            />
+                          ) : null
+                        )}
                       </td>
                       <td>{x.productName}</td>
                       <td>{x.category ? x.category.name : ""}</td>
@@ -363,7 +371,7 @@ export default class ProductList extends Component {
                   </tr>
                 )}
               </tbody>
-            </Table>
+            </table>
             <br />
 
             <Pagination>

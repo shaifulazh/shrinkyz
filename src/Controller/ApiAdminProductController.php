@@ -128,14 +128,26 @@ class ApiAdminProductController extends AbstractFOSRestController
         {
             
             foreach ($categories as $jsoncat) {
-                $category = new Category();
-                $category->addProductmodel($product);
+
                 $objc = (Object)$jsoncat;
-                if ($objc->categoryname){
-                    $category->setName($objc->categoryname);
+                //this check category already exist
+                if($objc->categoryid){
+                    $existcat = $em->getRepository(Category::class)->find($objc->categoryid);
+                    $existcat->addProductModel($product);
+                    $em->persist($existcat);
+                    $em->flush();
+                }   
+                else{
+
+                    $category = new Category();
+                    $category->addProductmodel($product);
+                    //category not exist yet                        
+                    if ($objc->categoryname){
+                        $category->setName($objc->categoryname);
+                        $em->persist($category);
+                        $em->flush();
+                    }
                 }
-                $em->persist($category);
-                $em->flush();
             }
         }
         else{
@@ -205,6 +217,12 @@ class ApiAdminProductController extends AbstractFOSRestController
         return $this->view($categories, Response::HTTP_OK);
     }
 
+    public function getProductDetailsAction()
+    {
+        $details = $this->getDoctrine()->getRepository(ProductDetails::class)->findAll();
+        return $this->view($details, Response::HTTP_OK);
+    }
+
     public function deleteCategoryAction(Category $category)
     {
         if ($category) {
@@ -255,23 +273,37 @@ class ApiAdminProductController extends AbstractFOSRestController
 
         if ($product) {
 
-            $productImage = $product->getProductImage();
-
-            $imageFile = $this->getDoctrine()->getRepository(ImageFile::class)->findOneBy(['filename' => $productImage]);
-            if ($imageFile) {
-                $filesystem = new Filesystem();
-                if ($filesystem->exists($imageFile->getDefaultName())) {
-                    try {
-                        $filesystem->remove($imageFile->getDefaultName());
-                    } catch (IOExceptionInterface $exception) {
-                        return $this->view($exception, Response::HTTP_INTERNAL_SERVER_ERROR);
+            $productImage = $product->getPictures();
+            foreach ($productImage as $productpicture)
+            {
+                // $imageFile = $this->getDoctrine()->getRepository(ImageFile::class)->find($productpicture->getId());
+                // if ($imageFile) {
+                    $filesystem = new Filesystem();
+                    if ($filesystem->exists($productpicture->getDefaultName())) {
+                        try {
+                            $filesystem->remove($productpicture->getDefaultName());
+                        } catch (IOExceptionInterface $exception) {
+                            return $this->view($exception, Response::HTTP_INTERNAL_SERVER_ERROR);
+                        }
+                        
+                        $em = $this->entityManager;
+                        $em->remove($productpicture);
                     }
-
-                    $em = $this->entityManager;
-                    $em->remove($imageFile);
                 }
+            
+        
+
+            $productdetails = $product->getProductDetailss();
+
+            foreach ($productdetails as $productdetail)
+            {
+                $em = $this->entityManager;
+                $em->remove($productdetail);
             }
 
+
+
+                
             $this->entityManager->remove($product);
             $this->entityManager->flush();
             return $this->view(null, Response::HTTP_NO_CONTENT);

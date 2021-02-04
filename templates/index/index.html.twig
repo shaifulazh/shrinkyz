@@ -20,16 +20,16 @@
     <div class="mt-3">
         <div class="container">
        
-            {% if category %}
+            {# {% if category %}
                 <div class="">
                     <h3>
                         {{ category.name }}
                     </h3>
                 </div>
-            {% else %}
-
+            {% else %} #}
+{# 
                 <h3>Products</h3>
-            {% endif %}
+            {% endif %} #}
 
             <div class="row ">
                 {% for product in products %}
@@ -37,7 +37,13 @@
                         <div class="card border h-500">
                             <a href="{{ path('app_view', { id: product.getId }) }}">
                                 <div class="img-container mb-2">
-                                    <img alt="product" class="card-img-top" src="{{asset('/images/' ~ product.productImage)}}"/>
+                                    {% for key, picture in product.pictures %}
+                                    {% if key == 0 %}
+                                    <img alt="product" class="card-img-top" src="{{asset('/images/' ~ picture.filename)}}"/>
+                                    {% endif %}
+                                    {% endfor %}
+                                    
+                                    
                                 </div>
                             </a>
                             <div class="pl-3" style="height: 80px; ">

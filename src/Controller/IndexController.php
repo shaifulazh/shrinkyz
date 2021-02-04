@@ -38,7 +38,7 @@ class IndexController extends AbstractController
 
   
    
-        return $this->redirectToRoute('dashboard');
+        // return $this->redirectToRoute('dashboard');
         //remove above line for prod
 
         $repository = $this->getDoctrine()->getRepository(ProductModel::class)->findBy([], ['product_name' => 'ASC']);
@@ -48,6 +48,7 @@ class IndexController extends AbstractController
             $request->query->getInt('page', 1),
             8 /*limit per page*/
         );
+        dump($repository);
 
         return $this->render('index/index.html.twig', [
             'products' => $pagination, 'category' => null, 'active' => null
@@ -119,7 +120,6 @@ class IndexController extends AbstractController
     public function viewProduct($id)
     {
         $repository = $this->getDoctrine()->getRepository(ProductModel::class)->find($id);
-
         return $this->render('index/view.html.twig', ['product' => $repository]);
     }
 

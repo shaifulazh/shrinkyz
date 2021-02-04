@@ -36,7 +36,12 @@
             <div class="col-12 col-md-6 mb-3">
                 <div class="">
                     <div class=h"border " style="">
-                        <img class="h-100"  style='height: 100%; width: 100%; object-fit: contain' src="{{ asset('/images/' ~ product.getProductImage) }}">
+                       {% for key, picture in product.pictures %}
+                                    {% if key == 0 %}
+                        <img class="h-100"  style='height: 100%; width: 100%; object-fit: contain' src="{{ asset('/images/' ~ picture.getFilename) }}">
+
+                        {% endif %}
+                        {% endfor %}
                     </div>
                 </div>
             </div>
@@ -48,10 +53,11 @@
                 <div class="my-3">
                     {{product.productDesc}}
                 </div >
-                
-                <p><span style="color:black;font-weight:bold" > MATERIAL : </span> Material<br>
-                <span style="color:black;font-weight:bold"> LENGTH : </span> Length<br>
-                <span style="color:black;font-weight:bold"> WIDTH : </span>Width<br></p>
+                <p>
+                 {% for key, detail in product.productDetailss %}
+                <span style="color:black;font-weight:bold" > {{detail.getDetailname}} : </span> {{detail.getDatadesc}}<br>
+                  {% endfor %}
+
                 <h5>
                     Price : RM{{product.getProductPrice|number_format(2, '.', ',')}}
                 </h5>

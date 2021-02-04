@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { Component } from "react";
 
 export default class PDetails extends Component {
@@ -11,8 +12,32 @@ export default class PDetails extends Component {
           datadesc: "",
         },
       ],
+      data: null,
     };
   }
+
+  componentDidMount() {
+    this.mounted = true;
+    this.handleAxios();
+  }
+  componentWillUnmount() {
+    this.mounted = false;
+  }
+
+  handleAxios() {
+    axios
+      .get("api/admin/product/details")
+      .then((response) => {
+        if (this.mounted) {
+          console.log("From Details: ", response.data);
+          this.setState({
+            data: response.data,
+          });
+        }
+      })
+      .catch((error) => console.log(error));
+  }
+
   handleAdd = () => {
     this.setState({
       details: this.state.details.concat([{ detailname: "", datadesc: "" }]),
@@ -64,12 +89,16 @@ export default class PDetails extends Component {
               <input
                 size="15"
                 className="mr-2 mb-2"
+                required
+                list="name"
                 type="text"
                 placeholder={`Detail Name #${index + 1}`}
                 onChange={this.handleChangeDetailName(index)}
               />
               <input
                 size="15"
+                required
+                list="desc"
                 className="mr-2 mb-2"
                 type="text"
                 placeholder={`Details #${index}`}
@@ -90,6 +119,19 @@ export default class PDetails extends Component {
             </div>
           </div>
         ))}
+        <datalist id="name">
+          {this.state.data &&
+            this.state.data.map((item, key) => (
+              <option key={key} value={item.detailname} />
+            ))}
+        </datalist>
+
+        <datalist id="desc">
+          {this.state.data &&
+            this.state.data.map((item, key) => (
+              <option key={key} value={item.datadesc} />
+            ))}
+        </datalist>
 
         <a
           href="#"
