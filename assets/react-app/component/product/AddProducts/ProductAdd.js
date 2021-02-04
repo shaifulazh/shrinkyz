@@ -167,7 +167,7 @@ export default class ProductAdd extends Component {
               />
             </Col>
           </Row>
-          <button className="btn btn-primary btn-sm">Button</button>
+          <button className="btn btn-primary btn-sm">Save</button>
         </form>
         {this.state.message && (
           <div style={submitDialog}>

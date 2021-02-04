@@ -57,11 +57,17 @@ class ProductModel
      */
     private $categories;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=ImageFile::class, inversedBy="productModels")
+     */
+    private $pictures;
+
     public function __construct()
     {
         $this->cart = new ArrayCollection();
         $this->productDetailss = new ArrayCollection();
         $this->categories = new ArrayCollection();
+        $this->pictures = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -200,6 +206,30 @@ class ProductModel
         if ($this->categories->removeElement($category)) {
             $category->removeProductModel($this);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ImageFile[]
+     */
+    public function getPictures(): Collection
+    {
+        return $this->pictures;
+    }
+
+    public function addPicture(ImageFile $picture): self
+    {
+        if (!$this->pictures->contains($picture)) {
+            $this->pictures[] = $picture;
+        }
+
+        return $this;
+    }
+
+    public function removePicture(ImageFile $picture): self
+    {
+        $this->pictures->removeElement($picture);
 
         return $this;
     }

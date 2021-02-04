@@ -144,12 +144,11 @@ class ApiAdminProductController extends AbstractFOSRestController
         
         $images = $paramFetcher->get('images');
         if($images){
-            $i = 0;
             foreach ($images as $jsonimage) {
-                $objimage[$i] = (Object)$jsonimage;
-                if($objimage[$i]->imageid){
-                    $image = $this->getDoctrine()->getRepository(ImageFile::class)->findOneBy(['id' => $objimage[$i]->imageid]);
-                    $image->setProductModel($product->getId());
+                $objimage = (Object)$jsonimage;
+                if($objimage->imageid){
+                    $image = $this->getDoctrine()->getRepository(ImageFile::class)->find($objimage->imageid);
+                    $image->addProductModel($product);
                     $em->persist($image);
                     $em->flush();
                 }

@@ -29,17 +29,17 @@ class ImageFile
     private $default_name;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
-     * 
+     * @ORM\ManyToMany(targetEntity=ProductModel::class, mappedBy="pictures")
      */
-    private $product_model;
+    private $productModels;
+
 
 
 
 
     public function __construct()
     {
-   
+        $this->productModels = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -71,16 +71,33 @@ class ImageFile
         return $this;
     }
 
-    public function getProductModel(): ?int
+    /**
+     * @return Collection|ProductModel[]
+     */
+    public function getProductModels(): Collection
     {
-        return $this->product_model;
+        return $this->productModels;
     }
 
-    public function setProductModel(int $product_model): self
+    public function addProductModel(ProductModel $productModel): self
     {
-        $this->product_model = $product_model;
+        if (!$this->productModels->contains($productModel)) {
+            $this->productModels[] = $productModel;
+            $productModel->addPicture($this);
+        }
 
         return $this;
     }
+
+    public function removeProductModel(ProductModel $productModel): self
+    {
+        if ($this->productModels->removeElement($productModel)) {
+            $productModel->removePicture($this);
+        }
+
+        return $this;
+    }
+
+
 
 }
