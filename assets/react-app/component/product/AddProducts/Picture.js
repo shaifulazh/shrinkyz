@@ -24,6 +24,7 @@ export default class Picture extends Component {
   };
 
   handleRemoveImage = (i) => {
+    if (this.state.picture.length < 2) return;
     const remove = this.state.picture.filter((s, fi) => i !== fi);
     const imagedel = this.state.picture.filter((image, idx) => i === idx);
     const pictureup = imagedel.find((x) => x.imageid);

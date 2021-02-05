@@ -45,6 +45,7 @@ export default class PDetails extends Component {
   };
 
   handleRemove = (value) => {
+    if (this.state.details.length < 2) return;
     const remove = this.state.details.filter((data, index) => value !== index);
     this.setState(
       {
@@ -89,6 +90,7 @@ export default class PDetails extends Component {
               <input
                 size="15"
                 className="mr-2 mb-2"
+                value={data.detailname}
                 required
                 list="name"
                 type="text"
@@ -98,6 +100,7 @@ export default class PDetails extends Component {
               <input
                 size="15"
                 required
+                value={data.datadesc}
                 list="desc"
                 className="mr-2 mb-2"
                 type="text"
