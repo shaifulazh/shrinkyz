@@ -47,4 +47,27 @@ class CategoryRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findOneBySubtwocategoryId($value): ?Category
+    {
+        return $this->createQueryBuilder('c')
+            ->join('c.subcategory', 'subcat')
+            ->join('subcat.Subtwocategory', 'd')
+            ->andWhere('d.id = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    public function findOneBySubcategoryId($value): ?Category
+    {
+        return $this->createQueryBuilder('c')
+            ->join('c.subcategory', 'subcat')
+            ->andWhere('subcat.id = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

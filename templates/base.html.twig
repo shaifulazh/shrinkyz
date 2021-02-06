@@ -22,7 +22,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no user-scalable=no">
          {# <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'> #}
     {% endblock %}
-    {% block head%}
+    {% block head %}
 
       <style>
         body {
@@ -43,19 +43,19 @@
         body {
             font-family: 'Montserrat';
         }
-   */
+        */
 
-    </style>
+        </style>
 
 
 
-    {{ include('navbar.html.twig') }}
     {% endblock %}
 
 </head>
 
 <body>
 
+    {% include('navbar.html.twig') %}
     {# this handle all the alert in this web #}
     {% for label, messages in app.flashes %}
     {% for message in messages %}

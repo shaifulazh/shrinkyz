@@ -1,31 +1,27 @@
  <nav class="navbar navbar-expand-xl navbar-dark bg-primary">
-
-
-                   
-                            
                 <div class="d-flex container-fluid my-1">
-                        <div class="mr-auto">
-         
+                    <div class="mr-auto">
                             {{app.request.get('_route') == 'app_home' ?  '   <button class="btn btn-primary " id="menu-toggle">Categories </button>' }}
                             {{app.request.get('_route') == 'link_category' ?  '    <button class="btn btn-primary" id="menu-toggle">Categories </button>' }}
                     </div>    
-            <div class="m-3 p-3"> 
-            <div class="navbar-brand m-3 m-auto">
-    <img src="{{asset('/images/navicon.jpeg')}}" width="30" height="30" class="" alt="">
-                           <a class="navbar-brand" href="#top">
-    Shrinkyz
-  </a></div>
-
-                    </div>
-   <div class="ml-auto">
-                           <button aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor01" data-toggle="collapse" type="button">
-                            <span class="navbar-toggler-icon"></span>
-                                </button>
-                           </div>
-                    <div class="collapse navbar-collapse" id="navbarColor01">
+                           <div class="m-3 p-3"> 
+                                <div class="navbar-brand m-3 m-auto">
+                                             <img src="{{asset('/images/navicon.jpeg')}}" width="30" height="30" class="" alt="">
+                                                  <a class="navbar-brand" href="#top">
+                                                                                 Shrinkyz
+                                                        </a>
+                                </div>
+                            </div>
+                                <div class="ml-auto">
+                                    <button aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor01" data-toggle="collapse" type="button">
+                                                <span class="navbar-toggler-icon"></span>
+                                          </button>
+                                
+                                </div>
+                            <div class="collapse navbar-collapse" id="navbarColor01">
                     
                   
-                            <div class="">
+                                <div class="">
                             
                             
                                     <ul class="navbar-nav">
@@ -60,7 +56,7 @@
                                                     <li class="nav-item {{ app.request.get('_route') == 'register_admin' ? 'active' }}">
                                                         <a class="nav-link" href="{{ path('register_admin') }}">Admin Register</a>
                                                     </li> #}
-                            </div>      
+                                </div>      
                             <div class="m-auto">    
 
 

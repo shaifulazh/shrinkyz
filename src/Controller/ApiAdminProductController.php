@@ -177,6 +177,7 @@ class ApiAdminProductController extends AbstractFOSRestController
                                     {
                                         $subcategoryclass = $em->getRepository(Subcategory::class)->find($subcategory->subcategoryid);
                                         $subcategoryclass->setCategory($category);
+                                        $subcategoryclass->addProduct($product);
                                         $em->persist($subcategoryclass);
                                         $em->flush();
                                     }
@@ -185,6 +186,7 @@ class ApiAdminProductController extends AbstractFOSRestController
                                         $subcategoryclass =  new Subcategory;
                                         $subcategoryclass->setSubcategoryname($subcategory->subcategoryname);
                                         $subcategoryclass->setCategory($category);
+                                        $subcategoryclass->addProduct($product);
                                         $em->persist($subcategoryclass);
                                         $em->flush();
                                     }
@@ -209,6 +211,7 @@ class ApiAdminProductController extends AbstractFOSRestController
                                                 if($subtwocategory->subtwocategoryid)
                                                 {
                                                     $subtwocategoryclass = $em->getRepository(Subtwocategory::class)->find($subtwocategory->subtwocategoryid);
+                                                    $subtwocategoryclass->addProduct($product);
                                                     $subtwocategoryclass->setSubcategory($subcategoryclass);
                                                     $em->persist($subtwocategoryclass);
                                                     $em->flush();
@@ -217,6 +220,7 @@ class ApiAdminProductController extends AbstractFOSRestController
                                                     
                                                     $subtwocategoryclass = new Subtwocategory;
                                                     $subtwocategoryclass->setSubtwocategoryname($subtwocategory->subtwocategoryname);
+                                                    $subtwocategoryclass->addProduct($product);
                                                     $subtwocategoryclass->setSubcategory($subcategoryclass);
                                                     $em->persist($subtwocategoryclass);
                                                     $em->flush();
@@ -373,7 +377,9 @@ class ApiAdminProductController extends AbstractFOSRestController
          ORDER BY a.createdAt DESC');
         $data = $query->getResult();
 
-        return $this->view($data, Response::HTTP_OK);
+        $dataa = $this->entityManager->getRepository(ProductModel::class)->findAll();
+
+        return $this->view($dataa, Response::HTTP_OK);
     }
 
     public function deleteProductAction(ProductModel $product)

@@ -47,4 +47,38 @@ class ProductModelRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findCategoryById($id)
+    {
+        return $this->createQueryBuilder('a')
+        // ->select('product')
+        ->innerJoin('a.categories', 'category')
+        ->where('category.id = :id')
+        ->setParameter('id', $id)
+        ->getQuery()
+        ->getResult();
+    }
+
+
+    public function findBySubcategoryId($id)
+    {
+        return $this->createQueryBuilder('a')
+        // ->select('product')
+        ->innerJoin('a.subcategories', 'category')
+        ->where('category.id = :id')
+        ->setParameter('id', $id)
+        ->getQuery()
+        ->getResult();
+    }
+
+    public function findBySubtwocategoryId($id)
+    {
+        return $this->createQueryBuilder('a')
+        // ->select('product')
+        ->innerJoin('a.subtwocategories', 'category')
+        ->where('category.id = :id')
+        ->setParameter('id', $id)
+        ->getQuery()
+        ->getResult();
+    }
 }

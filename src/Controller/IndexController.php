@@ -12,6 +12,8 @@ use App\Entity\User;
 use Hoa\Compiler\Visitor\Dump;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\ImageFile;
+use App\Entity\Subcategory;
+use App\Entity\Subtwocategory;
 use Knp\Component\Pager\PaginatorInterface;
 
 // email controler delete this just for testing
@@ -99,19 +101,95 @@ class IndexController extends AbstractController
     /**
      * @Route("/category/{id}", name="link_category")
      */
-
+    
     public function linkCategory($id, Request $request)
     {
-        $repository = $this->getDoctrine()->getRepository(ProductModel::class)->findBy(['category' => $id]);
-        $category = $this->getDoctrine()->getRepository(Category::class)->find($id);
+        // $repository = $this->getDoctrine()->getRepository(ProductModel::class)->findBy(['category' => $id]);
+        
+        if(is_numeric($id))
+        {
+            
+            $category = $this->getDoctrine()->getRepository(Category::class)->find($id);
+            $repository = $this->getDoctrine()->getRepository(ProductModel::class)->findCategoryById($id);
+            $subcategory = $this->getDoctrine()->getRepository(Subcategory::class)->findByCategory($id);
+           
 
-        $pagination = $this->paginator->paginate(
-            $repository, /* query NOT result */
-            $request->query->getInt('page', 1),
-            8 /*limit per page*/
-        );
-        return $this->render('index/index.html.twig', ['products' => $pagination, 'category' => $category , 'active' => $id]);
-    }
+            
+            // dump($subtwocategory);
+            
+            
+            $pagination = $this->paginator->paginate(
+                $repository, /* query NOT result */
+                $request->query->getInt('page', 1),
+                8 /*limit per page*/
+            );
+            return $this->render('index/index.html.twig',[
+                'products' => $pagination,
+                'category' => $category , 
+                'subcategories'=> $subcategory ,
+                'active' => $id,
+                ]);
+            }
+            
+        }
+        
+        /**
+         * @Route("/subtwo/{id}", name="subtwocategories_link")
+         */
+        
+        public function subtwolink($id, Request $request)
+        {
+            if(is_numeric($id)){
+
+                $repository = $this->getDoctrine()->getRepository(ProductModel::class)->findBySubtwocategoryId($id);
+                $cat = $this->getDoctrine()->getRepository(Category::class)->findOneBySubtwocategoryId($id);
+                // dump($cat);
+                
+                
+            }
+            $pagination = $this->paginator->paginate(
+                $repository, /* query NOT result */
+                $request->query->getInt('page', 1),
+                8 /*limit per page*/
+            );
+            return $this->render('index/subtwocategory.html.twig',[
+                'products' => $pagination,
+                'active' => $cat->getId(),
+             
+                ]);
+            
+        }
+
+        /**
+         * @Route("/subcat/{id}", name="subcategories_link")
+         */
+        
+        public function subcatlink($id, Request $request)
+        {
+            if(is_numeric($id)){
+                
+                $repository = $this->getDoctrine()->getRepository(ProductModel::class)->findBySubcategoryId($id);
+                $subtwocategory = $this->getDoctrine()->getRepository(Subtwocategory::class)->findBySubCategory($id);
+                $cat = $this->getDoctrine()->getRepository(Category::class)->findOneBySubcategoryId($id);
+                
+
+                
+            }
+            $pagination = $this->paginator->paginate(
+                $repository, /* query NOT result */
+                $request->query->getInt('page', 1),
+                8 /*limit per page*/
+            );
+            return $this->render('index/subcategory.html.twig',[
+                'products' => $pagination,
+                'subtwocategories'=> $subtwocategory ,
+                'active' => $cat->getId(),
+                ]);
+            
+        }
+        
+        
+        
     /**
      * @Route("/view/{id}", name="app_view")
      */

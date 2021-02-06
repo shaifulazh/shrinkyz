@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Category;
 use App\Entity\Subcategory;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -47,4 +48,19 @@ class SubcategoryRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    
+    public function findByCategory($value)
+    {
+        return $this->createQueryBuilder('s')
+            // ->select('App\Entity\ProductModel', 'product')
+            // ->innerJoin('a.category', 'category')
+            ->join('s.category', 'category')
+            ->andWhere('category.id = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    
 }

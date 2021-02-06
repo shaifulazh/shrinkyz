@@ -34,9 +34,15 @@ class Subcategory
      */
     private $Subtwocategory;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=ProductModel::class, inversedBy="subcategories")
+     */
+    private $product;
+
     public function __construct()
     {
         $this->Subtwocategory = new ArrayCollection();
+        $this->product = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -94,6 +100,30 @@ class Subcategory
                 $subtwocategory->setSubcategory(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ProductModel[]
+     */
+    public function getProduct(): Collection
+    {
+        return $this->product;
+    }
+
+    public function addProduct(ProductModel $product): self
+    {
+        if (!$this->product->contains($product)) {
+            $this->product[] = $product;
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(ProductModel $product): self
+    {
+        $this->product->removeElement($product);
 
         return $this;
     }

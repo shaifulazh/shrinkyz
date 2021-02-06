@@ -62,12 +62,24 @@ class ProductModel
      */
     private $pictures;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Subcategory::class, mappedBy="product")
+     */
+    private $subcategories;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Subtwocategory::class, mappedBy="product")
+     */
+    private $subtwocategories;
+
     public function __construct()
     {
         $this->cart = new ArrayCollection();
         $this->productDetailss = new ArrayCollection();
         $this->categories = new ArrayCollection();
         $this->pictures = new ArrayCollection();
+        $this->subcategories = new ArrayCollection();
+        $this->subtwocategories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -230,6 +242,60 @@ class ProductModel
     public function removePicture(ImageFile $picture): self
     {
         $this->pictures->removeElement($picture);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Subcategory[]
+     */
+    public function getSubcategories(): Collection
+    {
+        return $this->subcategories;
+    }
+
+    public function addSubcategory(Subcategory $subcategory): self
+    {
+        if (!$this->subcategories->contains($subcategory)) {
+            $this->subcategories[] = $subcategory;
+            $subcategory->addProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubcategory(Subcategory $subcategory): self
+    {
+        if ($this->subcategories->removeElement($subcategory)) {
+            $subcategory->removeProduct($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Subtwocategory[]
+     */
+    public function getSubtwocategories(): Collection
+    {
+        return $this->subtwocategories;
+    }
+
+    public function addSubtwocategory(Subtwocategory $subtwocategory): self
+    {
+        if (!$this->subtwocategories->contains($subtwocategory)) {
+            $this->subtwocategories[] = $subtwocategory;
+            $subtwocategory->addProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubtwocategory(Subtwocategory $subtwocategory): self
+    {
+        if ($this->subtwocategories->removeElement($subtwocategory)) {
+            $subtwocategory->removeProduct($this);
+        }
 
         return $this;
     }

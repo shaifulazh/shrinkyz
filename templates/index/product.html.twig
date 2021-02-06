@@ -1,0 +1,90 @@
+      <div class="row ">
+                {% for product in products %}
+                    <div class="col-6 col-xs-6 col-md-6 col-xl-3 my-2 mx-0">
+                        <div class="card border h-500">
+                            <a href="{{ path('app_view', { id: product.getId }) }}">
+                                <div class="img-container mb-2">
+                                    {% for key, picture in product.pictures %}
+                                    {% if key == 0 %}
+                                    <img alt="product" class="card-img-top" src="{{asset('/images/' ~ picture.filename)}}"/>
+                                    {% endif %}
+                                    {% endfor %}
+                                    
+                                </div>
+                            </a>
+                            <div class="pl-3" style="height: 80px; ">
+                                
+                                <h5 class="mb-0">
+                                <p class="mb-0 text-capitalize">
+                                    {{ product.productName|length >15 ? product.productName|slice(0, 15) ~ '...' : product.productName}}
+
+                                  
+
+                                </p>
+                                </h5>
+                                
+                            
+                                   <p class="my-0" style="color:orange;" > <span class="font-weight-bold mr-1">RM</span>
+                                    {{ product.productPrice |number_format(2, '.', ',')  }} </p>
+                               
+                               
+                            </div>
+                            <div style="height: 80px;" class="pl-3" >
+                                {% if product.productStock < 1%}
+                                     {# <div class="mb-4"> #}
+                                     <div class="row pl-3 mb-4">
+                                    <a href="" onclick="reqfunction()" class="btn btn-outline-secondary btn-sm ">Request</a>
+                                    <p style="color:blue; font-size:90%;"class="m-2" >Sold, available upon request.</p>
+                                    </div>
+                                    
+                                {% else %}
+
+
+                                <div class="row pl-3 mb-4">
+                                <a href="{{path('add_cart', {id: product.getId})}}" class="btn btn-primary btn-sm">Add To Cart</a>
+                                    <p style="color:grey; font-size:80%; "class="m-2 ">Stock : {{product.productStock}}</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                            {# please remove this in production #}
+                        </div>
+                    </div>
+
+                {% endfor %}
+            
+                {{ knp_pagination_render(products) }}
+            
+        </div>
+   
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+
+   
+
+
+        {# $(document).ready(function() { 
+            
+             if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+                  $("#wrapper").toggleClass("toggled");
+            console.log('this is mobile');
+ 
+}
+
+         }); #}
+
+{#        
+window.onload = (event) => {
+ 
+   if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+                  $("#wrapper").toggleClass("toggled");
+            console.log('onload');
+ 
+}
+  
+}; #}
+        
+    </script>
