@@ -11,16 +11,16 @@ export default class Cropping extends Component {
     this.state = {
       src: null,
       crop: {
+
         x: 0,
         y: 0,
         width: 100,
-
-        aspect: 1 / 1
+        aspect: 1 / 1,
       },
       croppedImageUrl: null,
       imageBlob: null,
       showCropImage: false,
-      loading: false
+      loading: false,
     };
   }
 
@@ -28,11 +28,11 @@ export default class Cropping extends Component {
     this.imageRef = image;
   };
 
-  onCropComplete = crop => {
+  onCropComplete = (crop) => {
     this.makeClientCrop(crop);
   };
 
-  onCropChange = crop => {
+  onCropChange = (crop) => {
     this.setState({ crop });
   };
 
@@ -68,14 +68,14 @@ export default class Cropping extends Component {
     );
 
     return new Promise((resolve, reject) => {
-      canvas.toBlob(blob => {
+      canvas.toBlob((blob) => {
         if (!blob) {
           //reject(new Error('Canvas is empty'));
           console.error("Canvas is empty");
           return;
         }
         this.setState({
-          imageBlob: blob
+          imageBlob: blob,
         });
         blob.name = fileName;
         window.URL.revokeObjectURL(this.fileUrl);
@@ -87,7 +87,7 @@ export default class Cropping extends Component {
 
   showCropImage() {
     this.setState({
-      showCropImage: true
+      showCropImage: true,
     });
   }
   cancelLoad = () => {
@@ -95,7 +95,7 @@ export default class Cropping extends Component {
       loading: false,
       croppedImageUrl: null,
       imageBlob: null,
-      showCropImage: false
+      showCropImage: false,
     });
   };
 
@@ -116,7 +116,10 @@ export default class Cropping extends Component {
               <div className="float-right">
                 <button
                   className="btn btn-dark"
-                  onClick={(e) =>{e.preventDefault(); this.props.closeCrop()}}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    this.props.closeCrop();
+                  }}
                 >
                   <i className="fas fa-times-circle fa-2x" />
                 </button>
@@ -127,13 +130,16 @@ export default class Cropping extends Component {
                   <div className="p-5">
                     <img
                       alt="Crop"
-                      style={{ maxWidth: "100%" }}
+                      style={{ width: "100%" }}
                       src={croppedImageUrl}
                     />
                   </div>
                   <button
                     className="btn btn-primary"
-                    onClick={(e) => {e.preventDefault();this.setState({ showCropImage: false })}}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      this.setState({ showCropImage: false });
+                    }}
                   >
                     Back
                   </button>
@@ -158,7 +164,10 @@ export default class Cropping extends Component {
                   <button
                     className="btn btn-primary"
                     disabled={croppedImageUrl ? false : true}
-                    onClick={(e) => {e.preventDefault();this.showCropImage()}}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      this.showCropImage();
+                    }}
                   >
                     Crop
                   </button>

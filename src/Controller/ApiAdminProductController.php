@@ -72,26 +72,7 @@ class ApiAdminProductController extends AbstractFOSRestController
 
 
 
-    /**
-     * @Rest\RequestParam(name="name", description="category name", nullable=false)
-     * @Rest\RequestParam(name="details", description="category details", nullable=false)
-     * @param ParamFetcher $paramFetcher
-     */
-
-    public function postProductCategoryAction(ParamFetcher $paramFetcher)
-    {
-        $category = new Category();
-        $category->setName($paramFetcher->get('name'));
-        $category->setDetails($paramFetcher->get('details'));
-
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($category);
-        $em->flush();
-
-        return $this->view($category, Response::HTTP_OK);
-    }
-
-//DONE !!! DONT TOUCH THIS
+  //DONE !!! DONT TOUCH THIS
     /**
      * @Rest\RequestParam(name="name", description="product name", nullable=false)
      * 
@@ -249,17 +230,7 @@ class ApiAdminProductController extends AbstractFOSRestController
                 }//foreach category end
                 
                 
-                
-                
-                
-                    
-                       
-
-                    
-
-
-                
-                
+     
             
         }
         else{

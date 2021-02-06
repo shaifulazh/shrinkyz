@@ -13,6 +13,7 @@ import CategoryEdit from "./component/product/Old/CategoryEdit";
 import FormRedux from "./component/product/reduxForm/FormRedux";
 import ProductAdd from "./component/product/AddProducts/ProductAdd";
 import MobileSideBar from "./router/MobileSideBar";
+import MobileProduct from "./mobilecomp/MobileProduct";
 
 export default class App extends Component {
   constructor(props) {
@@ -25,6 +26,7 @@ export default class App extends Component {
       idEdit: null,
       mobileView: false,
       showSidebar: true,
+      hideBarCrop: true,
     };
     this.updateViewState = this.updateViewState.bind(this);
     this.toggleSideBar = this.toggleSideBar.bind(this);
@@ -76,12 +78,17 @@ export default class App extends Component {
 
     return (
       <div>
-          {this.state.showSidebar ? null : <MobileSideBar/> }
+        {this.state.showSidebar && this.state.hideBarCrop ? null : (
+          <MobileSideBar />
+        )}
         <div className={containerClass}>
-        {this.state.showSidebar ? <Sidebar /> :null }
+          {this.state.showSidebar ? <Sidebar /> : null}
 
           <Switch>
-            <Route path="/admin" render={(props) => <Dashboard {...props} />} />
+            <Route
+              path="/admin"
+              render={(props) => <MobileProduct {...props} />}
+            />
             <Route path="/orders" render={(props) => <Orders {...props} />} />
             <Route
               path="/customer"
@@ -106,7 +113,13 @@ export default class App extends Component {
             <Route path="/edit" render={(props) => <Editing {...props} />} />
             <Route
               path="/formredux"
-              render={(props) => <ProductAdd showCrop={this.handleShowCrop} closeCrop={this.handleCloseCrop} {...props} />}
+              render={(props) => (
+                <ProductAdd
+                  showCrop={this.handleShowCrop}
+                  closeCrop={this.handleCloseCrop}
+                  {...props}
+                />
+              )}
             />
           </Switch>
           <Cropping

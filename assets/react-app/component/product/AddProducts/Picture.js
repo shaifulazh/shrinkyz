@@ -52,9 +52,7 @@ export default class Picture extends Component {
       });
     }
   };
-  onSelectFile = (a) => (b) => {
-    console.log(a, b);
-  };
+
 
   onSelectFile = (a) => (e) => {
     console.log("ini a :", a);

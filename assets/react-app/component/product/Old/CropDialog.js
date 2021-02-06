@@ -110,7 +110,7 @@ export default class CropDialog extends Component {
         console.log(response);
         this.props.addImage(response.data);
 
-        //todo this is sucess upload
+  
       })
       .catch(response => {
         console.log(response);
