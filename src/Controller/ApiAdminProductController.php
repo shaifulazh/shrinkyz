@@ -106,7 +106,7 @@ class ApiAdminProductController extends AbstractFOSRestController
      * @Rest\RequestParam(name="images", description="product images", nullable=true)
      * 
      * @Rest\RequestParam(name="categories", description="product categories", nullable=true)
-
+     
      * @param ParamFetcher $paramFetcher
      */
 
@@ -129,19 +129,18 @@ class ApiAdminProductController extends AbstractFOSRestController
         if($categories)
         {
             
-            foreach ($categories as $jsoncat) {
+            foreach ($categories as $key => $jsoncat ) {
                 $objc = (Object)$jsoncat;
-                if    (isset($objc->categoryname))//category
+                if    ($objc->categoryname)//category
                 {
                     
-                    if(isset($objc->categoryid))   {
-                        $existcat = $em->getRepository(Category::class)->find($objc->categoryid);
-                        $existcat->addProductModel($product);
-                        $em->persist($existcat);
+                    if($objc->categoryid)   {
+                        $category = $em->getRepository(Category::class)->find($objc->categoryid);
+                        $category->addProductModel($product);
+                        $em->persist($category);
                         $em->flush();
                     }
                     else{
-
                         $category = new Category();
                         $category->addProductmodel($product);
                         //category not exist yet                        
@@ -152,72 +151,103 @@ class ApiAdminProductController extends AbstractFOSRestController
                         }
                     }
                 }
-                if (isset($objc->subcategory))//subcategory
+                //check is subcategory for undefine note:  isset return false is undefine
+                if(isset($objc->subcategory))
                 {
-                    $subcatarr = $objc->subcategory;
-                    dump($subcatarr);
-                    foreach ($subcatarr as $subcategory)//array of subcategory
+                    
+                    if (count($objc->subcategory))//subcategory
                     {
-                        if(isset($subcategory->subcategoryname))//subtwocategory
+                        
+                        
+                        $subcatarr = $objc->subcategory;
+                        
+                        foreach ($subcatarr as $key => $nonsub)//array of subcategory
                         {
-                            if (isset($subcategory->subcategoryid))
-                            {
-                                $existsub = $em->getRepository(Subcategory::class)->find($subcategory->subcategoryid);
-                                $existsub->setCategory($category);
-                                $em->persist($existsub);
-                                $em->flush();
-                            }
-                            else
+                            $subcategory = (Object)$nonsub;
+
+                            //check is subcategoryname for undefine note:  isset return false is undefine
+                            if(isset($subcategory->subcategoryname))
                             {
 
-                                $subcategory =  new Subcategory;
-                                $subcategory->setSubcategoryname($subcategory->subcategoryname);
-                                $subcategory->setCategory($category);
-                                $em->persist($subcategory);
-                                $em->flush();
-                            }
-                        }
-                        if(isset($subcategory->subtwocategory))
-                        {
-                            $subtwoarr = $subcategory->subtwocategory;
-                            foreach ($subtwoarr as $subtwocategory){
-                                $subtwocategory = (Object)$subtwocategory;
-                                if (isset($subtwocategory->subtwocategoryname))
+                                if($subcategory->subcategoryname)//subtwocategory
                                 {
-                                    if(isset($subtwocategory->subtwocategoryid))
+                                    
+                                    if ($subcategory->subcategoryid)
+                                    
                                     {
-                                        $existsubtwo = $em->getRepository(Subtwocategory::class)->find($subtwocategory->subtwocategoryid);
-                                        $existsubtwo->setSubcategory($subcategory);
-                                        $em->persist($existsubtwo);
-                                        $em->flush();
-                                    }else{
-
-                                        $subtwocategory = new Subtwocategory;
-                                        $subtwocategory->setSubtwocategoryname($subtwocategory->subtwocategoryname);
-                                        $subtwocategory->setSubcategory($subcategory);
-                                        $em->persist($subtwocategory);
+                                        $subcategoryclass = $em->getRepository(Subcategory::class)->find($subcategory->subcategoryid);
+                                        $subcategoryclass->setCategory($category);
+                                        $em->persist($subcategoryclass);
                                         $em->flush();
                                     }
+                                    else
+                                    {
+                                        $subcategoryclass =  new Subcategory;
+                                        $subcategoryclass->setSubcategoryname($subcategory->subcategoryname);
+                                        $subcategoryclass->setCategory($category);
+                                        $em->persist($subcategoryclass);
+                                        $em->flush();
+                                    }
+                                    
                                 }
-                                                                
-                            }//foreach subtwocategory end
-                        }
-                        
-                        
-                        
-                        
-                        
-                    }//foreach subcategory end
-                    
-                    
-                }
-                
-            }//foreach category end
-                
-               
-                 
+                            }
+                                //check is subtwocategory for undefine note:  isset return false is undefine
+                                if(isset($subcategory->subtwocategory))
+                            {
 
+                                if($subcategory->subtwocategory)
+                                {
+                                    $subtwoarr = $subcategory->subtwocategory;
+                                    foreach ($subtwoarr as $key => $nonsubtwocategory){
+                                        $subtwocategory = (Object)$nonsubtwocategory;
+                                        //check is subtwocategoryname for underfine note:  isset return false is undefine
+                                        if(isset($subtwocategory->subtwocategoryname))
+                                        {
 
+                                            if ($subtwocategory->subtwocategoryname)
+                                            {
+                                                if($subtwocategory->subtwocategoryid)
+                                                {
+                                                    $subtwocategoryclass = $em->getRepository(Subtwocategory::class)->find($subtwocategory->subtwocategoryid);
+                                                    $subtwocategoryclass->setSubcategory($subcategoryclass);
+                                                    $em->persist($subtwocategoryclass);
+                                                    $em->flush();
+                                                    
+                                                }else{
+                                                    
+                                                    $subtwocategoryclass = new Subtwocategory;
+                                                    $subtwocategoryclass->setSubtwocategoryname($subtwocategory->subtwocategoryname);
+                                                    $subtwocategoryclass->setSubcategory($subcategoryclass);
+                                                    $em->persist($subtwocategoryclass);
+                                                    $em->flush();
+                                                }
+                                            }
+
+                                        }
+
+                                         
+                                            
+                                    }//foreach subtwocategory end
+                                }
+                            }
+                                
+                                
+                                
+                                
+                            
+                            
+                        }//foreach subcategory end
+                    }
+                        
+                        
+                    }
+                    
+                }//foreach category end
+                
+                
+                
+                
+                
                     
                        
 
@@ -234,7 +264,7 @@ class ApiAdminProductController extends AbstractFOSRestController
         
         $images = $paramFetcher->get('images');
         if($images){
-            foreach ($images as $jsonimage) {
+            foreach ($images as $key => $jsonimage) {
                 $objimage = (Object)$jsonimage;
                 if($objimage->imageid){
                     $image = $this->getDoctrine()->getRepository(ImageFile::class)->find($objimage->imageid);

@@ -47,9 +47,13 @@ export default class MCategory extends Component {
         },
       ],
     });
+    this.props.changecategory(this.state.categories);
+
+
   };
 
-  handleRemoveCategory = (index) => {
+  handleRemoveCategory = (index) => (e) => {
+    e.preventDefault();
     if (this.state.categories.length < 2) return;
     const removecat = this.state.categories.filter((a, i) => index !== i);
     this.setState(
@@ -60,11 +64,12 @@ export default class MCategory extends Component {
     );
   };
 
-  handleRemoveSubCategory = (cati, subi) => {
+  handleRemoveSubCategory = (cati, subi) => (e) => {
+    e.preventDefault();
     const removed = this.state.categories.map((mod, modindx) => {
       if (cati !== modindx) return mod;
       if (cati === 0 && subi === 0) {
-        return { ...mod, subcategory: null };
+        return { ...mod, subcategory: "" };
       }
       return {
         ...mod,
@@ -73,9 +78,11 @@ export default class MCategory extends Component {
     });
 
     this.setState({ categories: removed });
+    this.props.removecategory(removed);
   };
 
-  handleRemoveSubTwoCategory = (x, y, z) => {
+  handleRemoveSubTwoCategory = (x, y, z) => (e) => {
+    e.preventDefault();
     const removesubtwo = this.state.categories.map((addsubtwocat, itwo) => {
       if (x !== itwo) return addsubtwocat;
       return {
@@ -90,6 +97,7 @@ export default class MCategory extends Component {
       };
     });
     this.setState({ categories: removesubtwo });
+    this.props.removecategory(removesubtwo);
   };
 
   handleInput = (i) => (e) => {
@@ -106,7 +114,7 @@ export default class MCategory extends Component {
         return { ...post, categoryname: data.name, categoryid: data.id };
       } else {
         //this return new value without select
-        return { ...post, categoryname: e.target.value, categoryid: null };
+        return { ...post, categoryname: e.target.value, categoryid: "" };
       }
     });
     console.log("new data : ", newData);
@@ -116,7 +124,8 @@ export default class MCategory extends Component {
     this.props.changecategory(newData);
   };
 
-  handleAddSubCategory = (index) => {
+  handleAddSubCategory = (index) => (e) => {
+    e.preventDefault();
     const addsub = this.state.categories.map((cat, cati) => {
       if (index !== cati) return cat;
       return {
@@ -126,9 +135,11 @@ export default class MCategory extends Component {
     });
     console.log("add sub", addsub);
     this.setState({ categories: addsub });
+    this.props.changecategory(addsub);
   };
 
-  handleAddsubtwocategory = (i, s) => {
+  handleAddsubtwocategory = (i, s) => (e) => {
+    e.preventDefault();
     console.log("init addsub2", this.state.categories);
     const addsubtwo = this.state.categories.map((addsubtwocat, itwo) => {
       if (i !== itwo) return addsubtwocat;
@@ -147,7 +158,9 @@ export default class MCategory extends Component {
     this.setState({
       categories: addsubtwo,
     });
+    this.props.changecategory(addsubtwo);
   };
+
 
   handleSubInput = (catidx, subidx) => (e) => {
     // const catsel = this.state.categories.find((cat,ind)=>{x===ind})
@@ -166,6 +179,7 @@ export default class MCategory extends Component {
     this.setState({
       categories: modified,
     });
+    this.props.changecategory(modified);
   };
 
   handleSubTwoInput = (incatindx, incatsubidx, incatsubtwoidx) => (event) => {
@@ -189,9 +203,11 @@ export default class MCategory extends Component {
     this.setState({
       categories: subtwonew,
     });
+    this.props.changecategory(subtwonew);
   };
 
-  handleAddMoreSub = (butcat) => {
+  handleAddMoreSub = (butcat) => (e) => {
+    e.preventDefault();
     const addmoresub = this.state.categories.map((addmore, aidx) => {
       if (butcat !== aidx) return addmore;
       return {
@@ -204,9 +220,11 @@ export default class MCategory extends Component {
     });
     console.log("addmoresub", addmoresub);
     this.setState({ categories: addmoresub });
+    this.props.changecategory(addmoresub);
   };
 
-  handleAddMoreSubTwo = (addcat, butsub, subtwoindx) => {
+  handleAddMoreSubTwo = (addcat, butsub, subtwoindx) => (e) => {
+    e.preventDefault();
     const addmoresubtwo = this.state.categories.map((addmoresub, amsi) => {
       if (addcat !== amsi) return addmoresub;
       return {
@@ -227,6 +245,7 @@ export default class MCategory extends Component {
     this.setState({
       categories: addmoresubtwo,
     });
+    this.props.changecategory(addmoresubtwo);
   };
 
   render() {
@@ -248,10 +267,7 @@ export default class MCategory extends Component {
 
             <a
               href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                this.handleRemoveCategory(index);
-              }}
+              onClick={this.handleRemoveCategory(index)}
               className="btn btn-primary btn-sm p-2 m-2"
             >
               X
@@ -273,10 +289,7 @@ export default class MCategory extends Component {
                   />
                   <a
                     href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      this.handleRemoveSubCategory(index, subidx);
-                    }}
+                    onClick={this.handleRemoveSubCategory(index, subidx)}
                     className="btn btn-primary btn-sm p-2 m-2"
                   >
                     X
@@ -284,10 +297,7 @@ export default class MCategory extends Component {
 
                   <a
                     href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      this.handleAddMoreSub(index);
-                    }}
+                    onClick={this.handleAddMoreSub(index)}
                     className="btn btn-primary btn-sm p-2 m-2"
                   >
                     Add More Sub Category
@@ -314,14 +324,11 @@ export default class MCategory extends Component {
                         />
                         <a
                           href="#"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            this.handleRemoveSubTwoCategory(
-                              index,
-                              subidx,
-                              indtwo
-                            );
-                          }}
+                          onClick={this.handleRemoveSubTwoCategory(
+                            index,
+                            subidx,
+                            indtwo
+                          )}
                           className="btn btn-primary btn-sm p-2 m-2"
                         >
                           X
@@ -329,10 +336,11 @@ export default class MCategory extends Component {
 
                         <a
                           href="#"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            this.handleAddMoreSubTwo(index, subidx, indtwo);
-                          }}
+                          onClick={this.handleAddMoreSubTwo(
+                            index,
+                            subidx,
+                            indtwo
+                          )}
                           className="btn btn-primary btn-sm p-2 m-2"
                         >
                           Add More Sub Two Category
@@ -342,10 +350,7 @@ export default class MCategory extends Component {
                   ) : (
                     <a
                       href="#"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        this.handleAddsubtwocategory(index, subidx);
-                      }}
+                      onClick={this.handleAddsubtwocategory(index, subidx)}
                       className="btn btn-primary btn-sm p-2 m-2"
                     >
                       Add Sub Category Two
@@ -356,10 +361,7 @@ export default class MCategory extends Component {
             ) : (
               <a
                 href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  this.handleAddSubCategory(index);
-                }}
+                onClick={this.handleAddSubCategory(index)}
                 className="btn btn-primary btn-sm p-2 m-2"
               >
                 Add Sub Category

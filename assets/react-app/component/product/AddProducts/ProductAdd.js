@@ -20,6 +20,7 @@ export default class ProductAdd extends Component {
       details: null,
       showbutton: false,
     };
+    this.handSubmit = this.handleSubmit.bind(this);
   }
 
   handleSubmit = (event) => {
@@ -34,9 +35,7 @@ export default class ProductAdd extends Component {
       categories,
       details,
     } = this.state;
-    this.setState({
-      message: "Saving data.. Please Take Deep Breath ..",
-    });
+    this.setState({ message: "Saving data.. Please Take Deep Breath ..", });
     Axios(
       {
         method: "POST",
@@ -56,17 +55,12 @@ export default class ProductAdd extends Component {
       }
     )
       .then((e) => {
-        
-          console.log(e);
-          alert("Product Saved!!");
-          this.props.history.push("/product");
-        
+        console.log(e);
+        alert("Product Saved!!");
+        this.props.history.push("/product");
       })
       .catch((e) => {
-        this.setState({
-          message: "Something Wrong..erorr please contact pulis",
-          showbutton: true,
-        });
+        this.setState({ message: "Something Wrong..erorr please contact pulis",  showbutton: true,   });
         console.log(e);
       });
   };
@@ -99,6 +93,7 @@ export default class ProductAdd extends Component {
       details: remove,
     });
   };
+
 
   render() {
     console.log(this.state);
@@ -167,8 +162,13 @@ export default class ProductAdd extends Component {
               />
             </Col>
           </Row>
-          <button className="btn btn-primary btn-sm">Save</button>
-        </form>
+        <button
+          className="btn btn-primary btn-sm"
+          onClick={this.handleSaveButton}
+          >
+          Save
+        </button>
+          </form>
         {this.state.message && (
           <div style={submitDialog}>
             <div

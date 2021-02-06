@@ -20,8 +20,8 @@
     "push:origin": "git push origin master",
     "pull": "git pull origin master",
     "router": "php bin/console debug:router",
-    "web": "php bin/console server:run *:80",
-    "devops": "concurrently \"npm run web\" \"npm run watch\""
+    "mobile": "php bin/console server:run *:80",
+    "web": "concurrently \"npm run web\" \"npm run watch\""
   },
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.12.1",
