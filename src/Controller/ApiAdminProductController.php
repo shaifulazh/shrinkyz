@@ -20,8 +20,10 @@ use App\Entity\ProductDetails;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use App\Entity\Category;
-
+use App\Entity\Subcategory;
+use App\Entity\Subtwocategory;
 use Doctrine\ORM\EntityManagerInterface;
+use PhpParser\Node\Stmt\Switch_;
 use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\Length;
 
@@ -128,27 +130,103 @@ class ApiAdminProductController extends AbstractFOSRestController
         {
             
             foreach ($categories as $jsoncat) {
-
                 $objc = (Object)$jsoncat;
-                //this check category already exist
-                if($objc->categoryid){
-                    $existcat = $em->getRepository(Category::class)->find($objc->categoryid);
-                    $existcat->addProductModel($product);
-                    $em->persist($existcat);
-                    $em->flush();
-                }   
-                else{
-
-                    $category = new Category();
-                    $category->addProductmodel($product);
-                    //category not exist yet                        
-                    if ($objc->categoryname){
-                        $category->setName($objc->categoryname);
-                        $em->persist($category);
+                if    (isset($objc->categoryname))//category
+                {
+                    
+                    if(isset($objc->categoryid))   {
+                        $existcat = $em->getRepository(Category::class)->find($objc->categoryid);
+                        $existcat->addProductModel($product);
+                        $em->persist($existcat);
                         $em->flush();
                     }
+                    else{
+
+                        $category = new Category();
+                        $category->addProductmodel($product);
+                        //category not exist yet                        
+                        if ($objc->categoryname){
+                            $category->setName($objc->categoryname);
+                            $em->persist($category);
+                            $em->flush();
+                        }
+                    }
                 }
-            }
+                if (isset($objc->subcategory))//subcategory
+                {
+                    $subcatarr = $objc->subcategory;
+                    dump($subcatarr);
+                    foreach ($subcatarr as $subcategory)//array of subcategory
+                    {
+                        if(isset($subcategory->subcategoryname))//subtwocategory
+                        {
+                            if (isset($subcategory->subcategoryid))
+                            {
+                                $existsub = $em->getRepository(Subcategory::class)->find($subcategory->subcategoryid);
+                                $existsub->setCategory($category);
+                                $em->persist($existsub);
+                                $em->flush();
+                            }
+                            else
+                            {
+
+                                $subcategory =  new Subcategory;
+                                $subcategory->setSubcategoryname($subcategory->subcategoryname);
+                                $subcategory->setCategory($category);
+                                $em->persist($subcategory);
+                                $em->flush();
+                            }
+                        }
+                        if(isset($subcategory->subtwocategory))
+                        {
+                            $subtwoarr = $subcategory->subtwocategory;
+                            foreach ($subtwoarr as $subtwocategory){
+                                $subtwocategory = (Object)$subtwocategory;
+                                if (isset($subtwocategory->subtwocategoryname))
+                                {
+                                    if(isset($subtwocategory->subtwocategoryid))
+                                    {
+                                        $existsubtwo = $em->getRepository(Subtwocategory::class)->find($subtwocategory->subtwocategoryid);
+                                        $existsubtwo->setSubcategory($subcategory);
+                                        $em->persist($existsubtwo);
+                                        $em->flush();
+                                    }else{
+
+                                        $subtwocategory = new Subtwocategory;
+                                        $subtwocategory->setSubtwocategoryname($subtwocategory->subtwocategoryname);
+                                        $subtwocategory->setSubcategory($subcategory);
+                                        $em->persist($subtwocategory);
+                                        $em->flush();
+                                    }
+                                }
+                                                                
+                            }//foreach subtwocategory end
+                        }
+                        
+                        
+                        
+                        
+                        
+                    }//foreach subcategory end
+                    
+                    
+                }
+                
+            }//foreach category end
+                
+               
+                 
+
+
+                    
+                       
+
+                    
+
+
+                
+                
+            
         }
         else{
             return $this->view(['message' => 'something went wrong on category'], Response::HTTP_INTERNAL_SERVER_ERROR);

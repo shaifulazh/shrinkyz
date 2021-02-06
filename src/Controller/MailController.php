@@ -20,15 +20,8 @@ class MailController extends AbstractFOSRestController
      * @Rest\RequestParam(name="email", description="send email to", nullable=false)
      * @Rest\RequestParam(name="details", description="email details", nullable=false)
      */
-
-
        public function postEmail(MailerInterface $mailer)
         {
-
-
-
-
-
         // $email = (new Email())
         //     ->from('shaifulazhar.000@gmail.com')
         //     ->to($paramFetcher->get('email'))
@@ -41,10 +34,6 @@ class MailController extends AbstractFOSRestController
         //     return $this->view(["message" => "error fail to send email"], Response::HTTP_INTERNAL_SERVER_ERROR);
         // }
 
-
-
-
-    
     }
 
 

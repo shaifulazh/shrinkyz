@@ -63,11 +63,15 @@ export default class MCategory extends Component {
   handleRemoveSubCategory = (cati, subi) => {
     const removed = this.state.categories.map((mod, modindx) => {
       if (cati !== modindx) return mod;
+      if (cati === 0 && subi === 0) {
+        return { ...mod, subcategory: null };
+      }
       return {
         ...mod,
         subcategory: mod.subcategory.filter((sub, isub) => subi !== isub),
       };
     });
+
     this.setState({ categories: removed });
   };
 
@@ -80,7 +84,7 @@ export default class MCategory extends Component {
           if (y !== adsti) return adst;
           return {
             ...adst,
-            subcategorytwo: adst.subcategorytwo.filter((fil, ind) => z !== ind),
+            subtwocategory: adst.subtwocategory.filter((fil, ind) => z !== ind),
           };
         }),
       };
@@ -91,7 +95,7 @@ export default class MCategory extends Component {
   handleInput = (i) => (e) => {
     console.log(e.target.value);
     const data = this.state.data.find(
-      (datas, i) => e.target.value === datas.name
+      (datas, idx) => e.target.value === datas.name
     );
     console.log("kena cari", data);
 
@@ -124,7 +128,7 @@ export default class MCategory extends Component {
     this.setState({ categories: addsub });
   };
 
-  handleAddSubCategoryTwo = (i, s) => {
+  handleAddsubtwocategory = (i, s) => {
     console.log("init addsub2", this.state.categories);
     const addsubtwo = this.state.categories.map((addsubtwocat, itwo) => {
       if (i !== itwo) return addsubtwocat;
@@ -134,7 +138,7 @@ export default class MCategory extends Component {
           if (s !== adsti) return adst;
           return {
             ...adst,
-            subcategorytwo: [{ subcategorytwoid: "", subcategorytwoname: "" }],
+            subtwocategory: [{ subtwocategoryid: "", subtwocategoryname: "" }],
           };
         }),
       };
@@ -173,9 +177,9 @@ export default class MCategory extends Component {
           if (incatsubidx !== catsubidx) return catsub;
           return {
             ...catsub,
-            subcategorytwo: catsub.subcategorytwo.map((subtwo, subtwoidx) => {
+            subtwocategory: catsub.subtwocategory.map((subtwo, subtwoidx) => {
               if (incatsubtwoidx !== subtwoidx) return subtwo;
-              return { ...subtwo, subcategorytwoname: event.target.value };
+              return { ...subtwo, subtwocategoryname: event.target.value };
             }),
           };
         }),
@@ -211,9 +215,9 @@ export default class MCategory extends Component {
           if (butsub !== scidx) return subcatinit;
           return {
             ...subcatinit,
-            subcategorytwo: [
-              ...subcatinit.subcategorytwo,
-              { subcategorytwoid: "", subcategorytwoname: "" },
+            subtwocategory: [
+              ...subcatinit.subtwocategory,
+              { subtwocategoryid: "", subtwocategoryname: "" },
             ],
           };
         }),
@@ -238,7 +242,7 @@ export default class MCategory extends Component {
               value={data.categoryname}
               required
               size="12"
-              onInput={this.handleInput(index)}
+              onChange={this.handleInput(index)}
               placeholder={`Category #${index + 1}`}
             />
 
@@ -265,7 +269,7 @@ export default class MCategory extends Component {
                     required
                     value={sub.subcategoryname}
                     placeholder={`Sub Category#${subidx + 1}`}
-                    onInput={this.handleSubInput(index, subidx)}
+                    onChange={this.handleSubInput(index, subidx)}
                   />
                   <a
                     href="#"
@@ -289,8 +293,8 @@ export default class MCategory extends Component {
                     Add More Sub Category
                   </a>
 
-                  {sub.subcategorytwo ? (
-                    sub.subcategorytwo.map((sub2, indtwo) => (
+                  {sub.subtwocategory ? (
+                    sub.subtwocategory.map((sub2, indtwo) => (
                       <div key={indtwo}>
                         <h5>
                           Sub 2nd Category#{indtwo + 1} under Sub Category#
@@ -300,9 +304,9 @@ export default class MCategory extends Component {
                           type="text"
                           size="12"
                           required
-                          value={sub2.subcategorytwoname}
+                          value={sub2.subtwocategoryname}
                           placeholder={`Sub Two Category#${indtwo + 1}`}
-                          onInput={this.handleSubTwoInput(
+                          onChange={this.handleSubTwoInput(
                             index,
                             subidx,
                             indtwo
@@ -340,7 +344,7 @@ export default class MCategory extends Component {
                       href="#"
                       onClick={(e) => {
                         e.preventDefault();
-                        this.handleAddSubCategoryTwo(index, subidx);
+                        this.handleAddsubtwocategory(index, subidx);
                       }}
                       className="btn btn-primary btn-sm p-2 m-2"
                     >
