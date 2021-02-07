@@ -13,7 +13,8 @@ import CategoryEdit from "./component/product/Old/CategoryEdit";
 import FormRedux from "./component/product/reduxForm/FormRedux";
 import ProductAdd from "./component/product/AddProducts/ProductAdd";
 import MobileSideBar from "./router/MobileSideBar";
-import MobileProduct from "./mobilecomp/MobileProduct";
+import MobileUpload from "./mobilecomp/MobileUpload";
+import MobileDashboard from "./mobilecomp/MobileDashboard";
 
 export default class App extends Component {
   constructor(props) {
@@ -26,7 +27,7 @@ export default class App extends Component {
       idEdit: null,
       mobileView: false,
       showSidebar: true,
-      hideBarCrop: true,
+      showtopbar: true,
     };
     this.updateViewState = this.updateViewState.bind(this);
     this.toggleSideBar = this.toggleSideBar.bind(this);
@@ -34,11 +35,16 @@ export default class App extends Component {
 
   handleShowCrop = (payload) => {
     console.log(payload);
-    this.setState({ showCrop: true, src: payload.src, upload: payload.upload });
+    this.setState({
+      showCrop: true,
+      src: payload.src,
+      upload: payload.upload,
+      showtopbar: false,
+    });
   };
 
   handleCloseCrop = () => {
-    this.setState({ showCrop: false });
+    this.setState({ showCrop: false, showtopbar: true });
   };
 
   toggleSideBar() {
@@ -46,6 +52,14 @@ export default class App extends Component {
       showSidebar: !this.state.showSidebar,
     });
   }
+
+  handlecanceltopx = () => {
+    this.setState({
+      showCrop: false,
+      src: null,
+      upload: null,
+    });
+  };
 
   componentWillMount() {
     this.updateViewState();
@@ -78,17 +92,14 @@ export default class App extends Component {
 
     return (
       <div>
-        {this.state.showSidebar && this.state.hideBarCrop ? null : (
-          <MobileSideBar />
+        {this.state.showtopbar && (
+          <div>{this.state.showSidebar ? null : <MobileSideBar />}</div>
         )}
         <div className={containerClass}>
           {this.state.showSidebar ? <Sidebar /> : null}
 
           <Switch>
-            <Route
-              path="/admin"
-              render={(props) => <MobileProduct {...props} />}
-            />
+            <Route path="/admin" render={(props) => <Dashboard {...props} />} />
             <Route path="/orders" render={(props) => <Orders {...props} />} />
             <Route
               path="/customer"
@@ -112,6 +123,10 @@ export default class App extends Component {
             <Route path="/vieworder" render={(props) => <Order {...props} />} />
             <Route path="/edit" render={(props) => <Editing {...props} />} />
             <Route
+              path="/hooks"
+              render={(props) => <MobileUpload {...props} />}
+            />
+            <Route
               path="/formredux"
               render={(props) => (
                 <ProductAdd
@@ -127,6 +142,7 @@ export default class App extends Component {
             closeCrop={this.handleCloseCrop}
             src={this.state.src}
             upload={this.state.upload}
+            canceltopx={this.handlecanceltopx}
           />
         </div>
       </div>

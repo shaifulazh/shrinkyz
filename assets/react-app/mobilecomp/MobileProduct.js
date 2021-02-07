@@ -25,15 +25,18 @@ export default class MobileProduct extends Component {
 
   render() {
     return (
-      <Cropper
-        image={this.state.image}
-        crop={this.state.crop}
-        zoom={this.state.zoom}
-        aspect={this.state.aspect}
-        onCropChange={this.onCropChange}
-        onCropComplete={this.onCropComplete}
-        onZoomChange={this.onZoomChange}
-      />
+      <div>
+        <Cropper
+          classname=""
+          image={this.state.image}
+          crop={this.state.crop}
+          zoom={this.state.zoom}
+          aspect={this.state.aspect}
+          onCropChange={this.onCropChange}
+          onCropComplete={this.onCropComplete}
+          onZoomChange={this.onZoomChange}
+        />
+      </div>
     );
   }
 }

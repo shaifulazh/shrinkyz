@@ -48,8 +48,6 @@ export default class MCategory extends Component {
       ],
     });
     this.props.changecategory(this.state.categories);
-
-
   };
 
   handleRemoveCategory = (index) => (e) => {
@@ -161,7 +159,6 @@ export default class MCategory extends Component {
     this.props.changecategory(addsubtwo);
   };
 
-
   handleSubInput = (catidx, subidx) => (e) => {
     // const catsel = this.state.categories.find((cat,ind)=>{x===ind})
     const modified = this.state.categories.map((mod, modindx) => {
@@ -254,7 +251,7 @@ export default class MCategory extends Component {
       <div className="">
         {this.state.categories.map((data, index) => (
           <div key={index} className="">
-            <h5>Category#{index + 1}</h5>
+            <h5>{`Categori #${index + 1} - ${data.categoryname}`}</h5>
             <input
               type="text"
               list="data"
@@ -277,7 +274,9 @@ export default class MCategory extends Component {
               data.subcategory.map((sub, subidx) => (
                 <div key={subidx}>
                   <h5>
-                    Sub Category#{subidx + 1} of Category#{index + 1}
+                    {`Sub Category ${sub.subcategoryname}#${
+                      subidx + 1
+                    } of Category ${data.categoryname} #${index + 1}`}
                   </h5>
                   <input
                     type="text"
@@ -307,8 +306,11 @@ export default class MCategory extends Component {
                     sub.subtwocategory.map((sub2, indtwo) => (
                       <div key={indtwo}>
                         <h5>
-                          Sub 2nd Category#{indtwo + 1} under Sub Category#
-                          {subidx + 1} of Category#{index + 1}
+                          {`Sub 2nd Category ${sub2.subtwocategoryname} #${
+                            indtwo + 1
+                          } Sub Category ${sub.subcategoryname}#${
+                            subidx + 1
+                          } of Category ${data.categoryname} #${index + 1}`}
                         </h5>
                         <input
                           type="text"

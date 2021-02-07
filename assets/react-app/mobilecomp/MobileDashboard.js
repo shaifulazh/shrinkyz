@@ -1,11 +1,10 @@
-import React, { Component } from 'react'
+import React from 'react'
+import Bitch from './AppCrop/Bitch'
 
-export default class MobileDashboard extends Component {
-    render() {
-        return (
-            <div>
-                
-            </div>
-        )
-    }
+export default function MobileDashboard() {
+    return (
+        <div>
+            <Bitch/>
+        </div>
+    )
 }

@@ -17,6 +17,7 @@ export default class Picture extends Component {
       message: null,
     };
   }
+
   handleImageAdd = () => {
     this.setState({
       picture: this.state.picture.concat([{ imageid: "", imagename: "" }]),
@@ -53,7 +54,6 @@ export default class Picture extends Component {
     }
   };
 
-
   onSelectFile = (a) => (e) => {
     console.log("ini a :", a);
     console.log("ini e :", e.target.files);
@@ -89,7 +89,7 @@ export default class Picture extends Component {
         console.log(response);
         this.handleAddImage(response.data);
         this.props.closeCrop();
-        loader();
+        loader();//this is uploads to reset all to null for upload
       })
       .catch((response) => {
         console.log(response);
@@ -97,6 +97,8 @@ export default class Picture extends Component {
         loader();
       });
   };
+
+  
 
   handleAddImage = (e) => {
     console.log("image upload", e);
