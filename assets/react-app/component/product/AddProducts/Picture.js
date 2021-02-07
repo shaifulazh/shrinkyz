@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Axios from "axios";
+import loadImage from "blueimp-load-image/js";
 
 export default class Picture extends Component {
   constructor(props) {
@@ -62,17 +63,34 @@ export default class Picture extends Component {
       e.target.value = "";
       return;
     }
+    //original i edit on 2/8/2021 code
+
+    // if (e.target.files && e.target.files.length > 0) {
+    //   this.setState({ targetimage: a });
+    //   const reader = new FileReader();
+    //   reader.addEventListener("load", () => {
+    //     const payload = {
+    //       src: reader.result,
+    //       upload: this.handleUpload,
+    //     };
+    //     this.props.showCrop(payload);
+    //   });
+    //   reader.readAsDataURL(e.target.files[0]);
+    // }
+
     if (e.target.files && e.target.files.length > 0) {
-      this.setState({ targetimage: a });
-      const reader = new FileReader();
-      reader.addEventListener("load", () => {
-        const payload = {
-          src: reader.result,
-          upload: this.handleUpload,
-        };
-        this.props.showCrop(payload);
-      });
-      reader.readAsDataURL(e.target.files[0]);
+      loadImage(
+        e.target.files[0],
+        (img) => {
+          var base64data = img.toDataURL(`image/jpeg`);
+          const payload = {
+            src: base64data,
+            upload: this.handleUpload,
+          };
+          this.props.showCrop(payload);
+        },
+        { orientation: true, canvas: true }
+      );
     }
   };
 
@@ -89,7 +107,7 @@ export default class Picture extends Component {
         console.log(response);
         this.handleAddImage(response.data);
         this.props.closeCrop();
-        loader();//this is uploads to reset all to null for upload
+        loader(); //this is uploads to reset all to null for upload
       })
       .catch((response) => {
         console.log(response);
@@ -97,8 +115,6 @@ export default class Picture extends Component {
         loader();
       });
   };
-
-  
 
   handleAddImage = (e) => {
     console.log("image upload", e);

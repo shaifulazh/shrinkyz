@@ -167,6 +167,7 @@ export default class Cropping extends Component {
                     onImageLoaded={this.onImageLoaded}
                     onComplete={this.onCropComplete}
                     onChange={this.onCropChange}
+                    
                   />
                   <button
                     className="btn btn-primary"

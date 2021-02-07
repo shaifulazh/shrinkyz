@@ -29,6 +29,7 @@
     "@material-ui/core": "^4.11.3",
     "@popperjs/core": "^2.6.0",
     "axios": "^0.21.1",
+    "blueimp-load-image": "^5.14.0",
     "bootstrap": "^4.6.0",
     "bootswatch": "^4.6.0",
     "cropper": "^4.1.0",
