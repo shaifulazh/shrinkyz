@@ -1,21 +1,11 @@
-const pica = require('pica')();
+import axios from "axios"
+
+  
+
+
 const createImage = url =>
   new Promise((resolve, reject) => {
 
-    if (url.width * url.height > 16777216){
-
-      var offScreenCanvas = document.createElement('canvas')
-      offScreenCanvas.width  = 1920;
-      offScreenCanvas.height = 1080;
-      pica.resize(image, canvas)
-      .then(result =>{ 
-      const image = new Image()
-      image.addEventListener('load', () => resolve(image))
-      image.addEventListener('error', error => reject(error))
-      image.setAttribute('crossOrigin', 'anonymous') // needed to avoid cross-origin issues on CodeSandbox
-      image.src = result}
-      );
-    }
     const image = new Image()
     image.addEventListener('load', () => resolve(image))
     image.addEventListener('error', error => reject(error))
@@ -33,10 +23,8 @@ function getRadianAngle(degreeValue) {
  * @param {Object} pixelCrop - pixelCrop Object provided by react-easy-crop
  * @param {number} rotation - optional rotation parameter
  */
-export default async function getCroppedImg(imageSrc, pixelCrop, rotation = 0) {
+export default async function getUpload(imageSrc, pixelCrop, rotation = 0) {
   const image = await createImage(imageSrc)
-
-
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')
 
@@ -72,19 +60,38 @@ export default async function getCroppedImg(imageSrc, pixelCrop, rotation = 0) {
     Math.round(0 - safeArea / 2 + image.height * 0.5 - pixelCrop.y)
   )
 
+  
+
   // As Base64 string
   // return canvas.toDataURL('image/jpeg');
 
   // As a blob
   return new Promise(resolve => {
-    canvas.toBlob(file => {
+    canvas.toBlob(blob => {
+        const formData = new FormData();
+        formData.append("image", blob);
 
-      const load = {url : URL.createObjectURL(file), blob : file};
 
-      resolve(load)
+
+
+        axios({
+            method: "post",
+            url: "/api/admin/products/images",
+            data: formData,
+          })
+            .then((response) => {
+              console.log(response);
+              
+              
+               //this is uploads to reset all to null for upload
+            })
+            .catch((response) => {
+              console.log(response);
+              
+            });
+      resolve(blob)
     }, 'image/jpeg')
-
-    
-    
   })
 }
+
+

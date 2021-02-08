@@ -4,6 +4,7 @@ import { Spinner } from "react-bootstrap";
 import "react-image-crop/dist/ReactCrop.css";
 import "./crop.css";
 
+
 export default class Cropping extends Component {
   constructor(props) {
     super(props);
@@ -194,4 +195,12 @@ export default class Cropping extends Component {
       </div>
     );
   }
+}
+
+
+export async function dataURLtoFile(dataUrl, fileName) {
+
+  const res = await fetch(dataUrl);
+  const blob = await res.blob();
+  return new File([blob], fileName, { type: 'image/jpeg' });
 }

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Axios from "axios";
 import loadImage from "blueimp-load-image/js";
 
+
 export default class Picture extends Component {
   constructor(props) {
     super(props);
@@ -95,9 +96,14 @@ export default class Picture extends Component {
   };
 
   handleUpload = (imageBlob, loader) => {
+    
     const formData = new FormData();
     formData.append("image", imageBlob);
-
+    
+    //testing purpose
+    // const file = dataURLtoFile("imageBlob", imageBlob)
+    
+    // console.log("image blob",file)
     Axios({
       method: "post",
       url: "/api/admin/products/images",

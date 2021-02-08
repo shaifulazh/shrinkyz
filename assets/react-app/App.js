@@ -86,7 +86,7 @@ export default class App extends Component {
   }
 
   render() {
-    console.log(this);
+
     let containerClass = "d-flex";
     if (this.state.mobileView) containerClass = "container-fluid";
 
@@ -124,7 +124,7 @@ export default class App extends Component {
             <Route path="/edit" render={(props) => <Editing {...props} />} />
             <Route
               path="/hooks"
-              render={(props) => <MobileUpload {...props} />}
+              render={(props) => <MobileDashboard {...props} />}
             />
             <Route
               path="/formredux"

@@ -23,7 +23,7 @@ Encore
   // .addEntry('new', './assets/js/new.js')
   .addEntry('email', './assets/email-app/email-app.js')
   .addEntry("reactApp", "./assets/react-app/react-app.js")
-  // .addEntry("reactUser", "./assets/reactUser/index.js")
+  .addEntry("mobile", "./assets/mobile-dash-app/index.js")
 
   // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
   .splitEntryChunks()

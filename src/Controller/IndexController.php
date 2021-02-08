@@ -32,6 +32,11 @@ class IndexController extends AbstractController
         $this->paginator = $paginator;
         $this->session = $session;
     }
+
+
+
+
+    
     /**
      * @Route("/", name="app_home")
      */

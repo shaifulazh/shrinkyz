@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
 import "./index.css";
-
+import loadImage from "blueimp-load-image/js";
 import Cropper from "react-easy-crop";
 import Slider from "@material-ui/core/Slider";
 import Button from "@material-ui/core/Button";
@@ -23,12 +23,24 @@ export default function Bitch() {
   };
 
   const onSelectFile = (event) => {
+    // if (event.target.files && event.target.files.length > 0) {
+    //   const reader = new FileReader();
+    //   reader.readAsDataURL(event.target.files[0]);
+    //   reader.addEventListener("load", () => {
+    //     setImage(reader.result);
+    //   });
+    // }
+
+
     if (event.target.files && event.target.files.length > 0) {
-      const reader = new FileReader();
-      reader.readAsDataURL(event.target.files[0]);
-      reader.addEventListener("load", () => {
-        setImage(reader.result);
-      });
+      loadImage(
+        event.target.files[0],
+        (img) => {
+          var base64data = img.toDataURL(`image/jpeg`);
+          setImage(base64data);
+        },
+        { orientation: true, canvas: true }
+      );
     }
   };
 
@@ -41,8 +53,8 @@ export default function Bitch() {
 
   return (
     <div className="container">
-      <div className="container-cropper">
         {image ? (
+      <div className="container-cropper">
           <div>
             <div className="cropper">
               <Cropper
@@ -66,8 +78,8 @@ export default function Bitch() {
               />
             </div>
           </div>
-        ) : null}
       </div>
+        ) : null}
 
       <div className="container-buttons">
         <input
@@ -88,7 +100,7 @@ export default function Bitch() {
         <Button variant="contained" color="secondary" onClick={onDownload}>
           Download
         </Button>
-        <Button onClick={() => setImage(null)}>Close</Button>
+        <button onClick={() => setImage(null)}>Close</button>
       </div>
     </div>
   );
