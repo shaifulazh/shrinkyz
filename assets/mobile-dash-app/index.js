@@ -1,13 +1,7 @@
-import 'bootstrap/dist/css/bootstrap.css';
+import { Dashboard } from "@material-ui/icons";
+import "bootstrap/dist/css/bootstrap.css";
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "../react-app/App";
-import { BrowserRouter as Router } from "react-router-dom";
-import Index from '../react-app/mobilecomp/index';
+import DashboardMui from "./DashboardMui";
 
-
-ReactDOM.render(
-  <Index/>,
-  document.getElementById("root")
-);
-
+ReactDOM.render(<DashboardMui />, document.getElementById("root"));

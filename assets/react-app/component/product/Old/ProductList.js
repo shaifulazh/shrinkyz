@@ -285,93 +285,96 @@ export default class ProductList extends Component {
               </Col>
             </div>
             <br />
-            <table class="table table-dark">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Image</th>
-                  <th scope="col">Product</th>
-                  <th scope="col">
-                    Category{" "}
-                    <Link className="btn btn-primary" to="/category">
-                      <i className="fas fa-edit" /> Edit
-                    </Link>
-                  </th>
-                  <th scope="col">Price</th>
-                  <th scope="col">Stock</th>
-                  <th scope="col">Edit</th>
-                  <th scope="col">Remove</th>
-                </tr>
-              </thead>
-              <tbody>
-                {pagination ? (
-                  pagination.map((x, i) => (
-                    <tr key={i}>
-                      <th scope="row">{i}</th>
-                      <td>
-                        {x.pictures.map((a, b) =>
-                          b === 0 ? (
-                            <img
-                              key={b}
-                              src={"/images/" + a.filename}
-                              alt=""
-                              style={{ width: "50px", height: "50px" }}
-                            />
-                          ) : null
-                        )}
-                      </td>
-                      <td>{x.productName}</td>
-                      <td>{x.category ? x.category.name : ""}</td>
-                      <td>{x.productPrice}</td>
-                      <td>{x.productStock}</td>
-                      <td>
-                        {/* <button
+
+            <div className="overflow-auto">
+              <table class="table table-dark">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Product</th>
+                    <th scope="col">
+                      Category{" "}
+                      <Link className="btn btn-primary" to="/category">
+                        <i className="fas fa-edit" /> Edit
+                      </Link>
+                    </th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Stock</th>
+                    <th scope="col">Edit</th>
+                    <th scope="col">Remove</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pagination ? (
+                    pagination.map((x, i) => (
+                      <tr key={i}>
+                        <th scope="row">{i}</th>
+                        <td>
+                          {x.pictures.map((a, b) =>
+                            b === 0 ? (
+                              <img
+                                key={b}
+                                src={"/images/" + a.filename}
+                                alt=""
+                                style={{ width: "50px", height: "50px" }}
+                              />
+                            ) : null
+                          )}
+                        </td>
+                        <td>{x.productName}</td>
+                        <td>{x.category ? x.category.name : ""}</td>
+                        <td>{x.productPrice}</td>
+                        <td>{x.productStock}</td>
+                        <td>
+                          {/* <button
                             onClick={() => this.handleEdit(x.id)}
                             className="btn btn-primary"
                           >
                             <i className="fas fa-edit fa-1x" /> Edit
                           </button> */}
 
-                        <Link
-                          className="btn btn-primary"
-                          to={{ pathname: "/edit", state: { id: x.id } }}
-                        >
-                          <i className="far fa-edit" /> {"  "}Edit
-                        </Link>
-                      </td>
-                      <td>
-                        {/* <button
+                          <Link
+                            className="btn btn-primary"
+                            to={{ pathname: "/edit", state: { id: x.id } }}
+                          >
+                            <i className="far fa-edit" /> {"  "}Edit
+                          </Link>
+                        </td>
+                        <td>
+                          {/* <button
                             onClick={() => this.handleRemove(x.id)}
                             className="btn btn-primary"
                           >
                             <i className="far fa-1x fa-trash-alt" /> Remove
                           </button> */}
-                        <button
-                          type="button"
-                          className="btn btn-warning"
-                          data-toggle="modal"
-                          data-target={"#product" + x.id}
-                        >
-                          <i className="far fa-1x fa-trash-alt" /> Remove
-                        </button>
+                          <button
+                            type="button"
+                            className="btn btn-warning"
+                            data-toggle="modal"
+                            data-target={"#product" + x.id}
+                          >
+                            <i className="far fa-1x fa-trash-alt" /> Remove
+                          </button>
 
-                        <ModalProd
-                          delete={this.handleRemove}
-                          id={x.id}
-                          name={x.productName}
-                        />
+                          <ModalProd
+                            delete={this.handleRemove}
+                            id={x.id}
+                            name={x.productName}
+                          />
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td>
+                        <Spinner animation="border" />
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td>
-                      <Spinner animation="border" />
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+                  )}
+                </tbody>
+              </table>
+            </div>
             <br />
 
             <Pagination>

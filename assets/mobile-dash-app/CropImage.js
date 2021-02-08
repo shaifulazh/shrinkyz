@@ -1,4 +1,3 @@
-const pica = require("pica")();
 const createImage = (url) =>
   new Promise((resolve, reject) => {
     const image = new Image();
@@ -20,6 +19,7 @@ function getRadianAngle(degreeValue) {
  */
 export default async function getCroppedImg(imageSrc, pixelCrop, rotation = 0) {
   const image = await createImage(imageSrc);
+
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
 
@@ -60,9 +60,10 @@ export default async function getCroppedImg(imageSrc, pixelCrop, rotation = 0) {
 
   // As a blob
   return new Promise((resolve) => {
-    pica.toBlob(canvas, "image/jpeg", 0.9).then((blob) => {
-      const load = { blob: blob, url: URL.createObjectURL(blob) };
+    canvas.toBlob((file) => {
+      const load = { url: URL.createObjectURL(file), blob: file };
+
       resolve(load);
-    });
+    }, "image/jpeg");
   });
 }

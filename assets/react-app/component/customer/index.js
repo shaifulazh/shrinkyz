@@ -13,10 +13,10 @@ export default class ProductList extends Component {
       data: null,
       pagination: null,
       active: 0,
-      email: null
+      email: null,
     };
   }
-  formatDate = date => {
+  formatDate = (date) => {
     const year = new Date(date).getFullYear();
     const month = new Date(date).getMonth();
     const day = new Date(date).getDate();
@@ -32,23 +32,23 @@ export default class ProductList extends Component {
   componentDidMount() {
     this.mounted = true;
     Axios.get(`/api/admin/customer`)
-      .then(response => {
+      .then((response) => {
         if (this.mounted) {
           const { data } = response;
           console.log(data);
           this.setState({
-            defaultData: data
+            defaultData: data,
           });
           this.paginateData(data);
         }
       })
-      .catch(e => console.log(e));
+      .catch((e) => console.log(e));
   }
   componentWillUnmount() {
     this.mounted = false;
   }
 
-  paginateData = data => {
+  paginateData = (data) => {
     console.log(data);
     const { limit } = this.state;
     const range = Math.ceil(data.length / limit);
@@ -56,27 +56,27 @@ export default class ProductList extends Component {
       pagination: this.paginate(data, limit, 0),
       data: data,
       range: range,
-      active: 0
+      active: 0,
     });
   };
-  handlePage = page => {
+  handlePage = (page) => {
     this.setState({
       pagination: this.paginate(this.state.data, this.state.limit, page),
-      active: page
+      active: page,
     });
   };
 
-  handleRemove = id => {
+  handleRemove = (id) => {
     console.log("handle remove", id);
     Axios({
       method: "DELETE",
-      url: `/api/admin/products/${id}`
+      url: `/api/admin/products/${id}`,
     })
-      .then(response => {
+      .then((response) => {
         console.log(response);
         this.handlePage(this.state.active);
       })
-      .catch(e => console.log(e));
+      .catch((e) => console.log(e));
   };
 
   handleEdit(id) {
@@ -88,7 +88,7 @@ export default class ProductList extends Component {
     this.refs.email.value = "";
 
     this.setState({
-      email: null
+      email: null,
     });
   };
 
@@ -97,7 +97,7 @@ export default class ProductList extends Component {
     let data = this.state.defaultData;
     if (email) {
       data = data.filter(
-        x => x.email.toLowerCase().indexOf(email.toLowerCase()) !== -1
+        (x) => x.email.toLowerCase().indexOf(email.toLowerCase()) !== -1
       );
     }
 
@@ -135,7 +135,7 @@ export default class ProductList extends Component {
                 <input
                   ref="email"
                   type="text"
-                  onChange={e => this.setState({ email: e.target.value })}
+                  onChange={(e) => this.setState({ email: e.target.value })}
                   style={{ width: "12em" }}
                   className="form-control"
                 />
@@ -187,34 +187,36 @@ export default class ProductList extends Component {
               )}
             </div>
             <br />
-            <Table striped bordered hover variant="dark">
-              <thead>
-                <tr>
-                  <th>Email </th>
-                  <th>First Name</th>
-                  <th>Last Name</th>
-                  <th>Registered On</th>
-                </tr>
-              </thead>
-              <tbody>
-                {pagination ? (
-                  pagination.map((x, i) => (
-                    <tr key={i}>
-                      <td>{x.email}</td>
-                      <td>{x.firstname}</td>
-                      <td>{x.lastname}</td>
-                      <td>{this.formatDate(x.createdAt)}</td>
-                    </tr>
-                  ))
-                ) : (
+            <div className="overflow-auto">
+              <Table striped bordered hover variant="dark">
+                <thead>
                   <tr>
-                    <td>
-                      <Spinner animation="border" />
-                    </td>
+                    <th>Email </th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Registered On</th>
                   </tr>
-                )}
-              </tbody>
-            </Table>
+                </thead>
+                <tbody>
+                  {pagination ? (
+                    pagination.map((x, i) => (
+                      <tr key={i}>
+                        <td>{x.email}</td>
+                        <td>{x.firstname}</td>
+                        <td>{x.lastname}</td>
+                        <td>{this.formatDate(x.createdAt)}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td>
+                        <Spinner animation="border" />
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </Table>
+            </div>
             <br />
 
             <Pagination>

@@ -4,6 +4,7 @@ import MCategory from "./MCategory";
 import PDetails from "./PDetails";
 import Picture from "./Picture";
 import Axios from "axios";
+import Cropperv2 from "./Cropperv2";
 
 export default class ProductAdd extends Component {
   constructor(props) {
@@ -19,6 +20,7 @@ export default class ProductAdd extends Component {
       desc: null,
       details: null,
       showbutton: false,
+      showCropperDialog: false,
     };
     this.handSubmit = this.handleSubmit.bind(this);
   }
@@ -35,7 +37,7 @@ export default class ProductAdd extends Component {
       categories,
       details,
     } = this.state;
-    this.setState({ message: "Saving data.. Please Take Deep Breath ..", });
+    this.setState({ message: "Saving data.. Please Take Deep Breath .." });
     Axios(
       {
         method: "POST",
@@ -60,7 +62,10 @@ export default class ProductAdd extends Component {
         this.props.history.push("/product");
       })
       .catch((e) => {
-        this.setState({ message: "Something Wrong..erorr please contact pulis",  showbutton: true,   });
+        this.setState({
+          message: "Something Wrong..erorr please contact pulis",
+          showbutton: true,
+        });
         console.log(e);
       });
   };
@@ -94,6 +99,16 @@ export default class ProductAdd extends Component {
     });
   };
 
+  handleOpenDialog = (e) => {
+    this.setState({
+      showCropperDialog: true,
+    });
+  };
+  handleCloseCrop = () => {
+    this.setState({
+      showCropperDialog: false,
+    });
+  };
 
   render() {
     console.log(this.state);
@@ -162,13 +177,22 @@ export default class ProductAdd extends Component {
               />
             </Col>
           </Row>
-        <button
-          className="btn btn-primary btn-sm"
-          onClick={this.handleSaveButton}
+          <button
+            className="btn btn-primary btn-sm"
+            onClick={this.handleSaveButton}
           >
-          Save
-        </button>
-          </form>
+            Save
+          </button>
+        </form>
+        {this.state.showCropperDialog && (
+          <Cropperv2
+            showDialog={this.state.showCropperDialog}
+            closeCropper={this.handleCloseCrop}
+          />
+        )}
+
+        <button onClick={this.handleOpenDialog}> Open Dialog </button>
+
         {this.state.message && (
           <div style={submitDialog}>
             <div

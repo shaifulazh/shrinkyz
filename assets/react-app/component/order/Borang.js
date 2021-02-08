@@ -12,7 +12,7 @@ export default class Borang extends Component {
 
   componentDidMount() {}
 
-  handleStatus = value => {
+  handleStatus = (value) => {
     console.log(value);
     this.props.filterStatus(value);
     this.props.resetStatusFilter(value);
@@ -23,7 +23,7 @@ export default class Borang extends Component {
     const { data, filter } = this.props;
 
     return (
-      <div>
+      <div className="overflow-auto">
         <Table striped bordered hover variant="dark">
           <thead>
             <tr>
@@ -35,7 +35,7 @@ export default class Borang extends Component {
                 {"  "}{" "}
                 <select
                   defaultValue={"NONE"}
-                  onChange={e => this.handleStatus(e.target.value)}
+                  onChange={(e) => this.handleStatus(e.target.value)}
                 >
                   <option
                     selected={this.props.statusFilter === "NONE" ? true : false}
@@ -61,7 +61,7 @@ export default class Borang extends Component {
               </tr>
             )}
             {data &&
-              data.map(e => (
+              data.map((e) => (
                 <tr className="container" key={e.id}>
                   <td>{e.user.email}</td>
                   <td>RM:{e.total.toFixed(2)}</td>

@@ -17,7 +17,7 @@ export default class PaginateOrder extends Component {
       email: null,
       statusFilter: null,
       toDate: null,
-      fromDate: null
+      fromDate: null,
     };
   }
   paginate(array, page_size, page_number) {
@@ -29,7 +29,7 @@ export default class PaginateOrder extends Component {
   componentDidMount() {
     this.mounted = true;
     Axios.get(`/api/admin/order`)
-      .then(response => {
+      .then((response) => {
         if (this.mounted) {
           const { data } = response;
           console.log("data res", data);
@@ -37,12 +37,12 @@ export default class PaginateOrder extends Component {
           this.paginateData(data);
         }
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
       });
   }
 
-  paginateData = data => {
+  paginateData = (data) => {
     console.log(data);
     const { limit } = this.state;
     const range = Math.ceil(data.length / limit);
@@ -50,14 +50,14 @@ export default class PaginateOrder extends Component {
       pagination: this.paginate(data, limit, 0),
       data: data,
       range: range,
-      active: 0
+      active: 0,
     });
   };
 
-  handlePage = page => {
+  handlePage = (page) => {
     this.setState({
       pagination: this.paginate(this.state.data, this.state.limit, page),
-      active: page
+      active: page,
     });
   };
 
@@ -65,7 +65,7 @@ export default class PaginateOrder extends Component {
     return arr.toLowerCase().indexOf(query.toLowerCase()) !== -1;
   };
 
-  formatDate = date => {
+  formatDate = (date) => {
     const year = new Date(date).getFullYear();
     const month = new Date(date).getMonth();
     const day = new Date(date).getDate();
@@ -86,18 +86,18 @@ export default class PaginateOrder extends Component {
       toDate,
       orderId,
       greater,
-      less
+      less,
     } = this.state;
     let data = this.state.defaultData;
     if (email) {
       data = data.filter(
-        x => x.user.email.toLowerCase().indexOf(email.toLowerCase()) !== -1
+        (x) => x.user.email.toLowerCase().indexOf(email.toLowerCase()) !== -1
       );
     }
 
     if (statusFilter) {
       if (statusFilter !== "NONE") {
-        data = data.filter(x => x.status === statusFilter);
+        data = data.filter((x) => x.status === statusFilter);
       }
     }
 
@@ -105,7 +105,7 @@ export default class PaginateOrder extends Component {
       if (new Date(fromDate).getTime() === new Date(toDate).getTime()) {
         let dateSame = new Date(toDate);
         dateSame.setDate(dateSame.getDate() + 1);
-        data = data.filter(item => {
+        data = data.filter((item) => {
           return (
             new Date(item.createdAt).getTime() >=
               new Date(fromDate).getTime() &&
@@ -113,7 +113,7 @@ export default class PaginateOrder extends Component {
           );
         });
       } else {
-        data = data.filter(item => {
+        data = data.filter((item) => {
           return (
             new Date(item.createdAt).getTime() >=
               new Date(fromDate).getTime() &&
@@ -124,32 +124,32 @@ export default class PaginateOrder extends Component {
     }
 
     if (orderId) {
-      data = data.filter(x => x.id === parseInt(orderId));
+      data = data.filter((x) => x.id === parseInt(orderId));
     }
 
     if (greater) {
-      data = data.filter(x => x.total > parseFloat(greater));
+      data = data.filter((x) => x.total > parseFloat(greater));
     }
     if (less) {
-      data = data.filter(x => x.total < parseFloat(less));
+      data = data.filter((x) => x.total < parseFloat(less));
     }
     this.paginateData(data);
   };
 
-  handleDelete = value => {
+  handleDelete = (value) => {
     console.log(value);
     Axios({
       method: "DELETE",
-      url: `/api/admin/orders/${value}`
+      url: `/api/admin/orders/${value}`,
     })
-      .then(res => {
+      .then((res) => {
         console.log(res);
         let { data, active } = this.state;
-        let deleted = data.filter(x => x.id !== value);
+        let deleted = data.filter((x) => x.id !== value);
         this.setState({ data: deleted });
         this.handlePage(active);
       })
-      .catch(e => console.log(e));
+      .catch((e) => console.log(e));
   };
 
   handleClear = () => {
@@ -166,7 +166,7 @@ export default class PaginateOrder extends Component {
       toDate: null,
       orderId: null,
       greater: null,
-      less: null
+      less: null,
     });
   };
 
@@ -199,7 +199,7 @@ export default class PaginateOrder extends Component {
                 <input
                   ref="email"
                   type="text"
-                  onChange={e => this.setState({ email: e.target.value })}
+                  onChange={(e) => this.setState({ email: e.target.value })}
                   style={{ width: "12em" }}
                   className="form-control"
                 />
@@ -209,7 +209,9 @@ export default class PaginateOrder extends Component {
               <label>Status</label>
               <select
                 ref="status"
-                onChange={e => this.setState({ statusFilter: e.target.value })}
+                onChange={(e) =>
+                  this.setState({ statusFilter: e.target.value })
+                }
                 className="form-control"
                 style={{ width: "12em" }}
               >
@@ -228,7 +230,7 @@ export default class PaginateOrder extends Component {
                   selectsStart
                   className="form-control"
                   placeholderText="Click to select a date"
-                  onChange={e => this.setState({ fromDate: e })}
+                  onChange={(e) => this.setState({ fromDate: e })}
                   selected={this.state.fromDate}
                   startDate={this.state.fromDate}
                   endDate={this.state.toDate}
@@ -246,7 +248,7 @@ export default class PaginateOrder extends Component {
                   selectsEnd
                   className="form-control"
                   placeholderText="Click to select a date"
-                  onChange={e => this.setState({ toDate: e })}
+                  onChange={(e) => this.setState({ toDate: e })}
                   selected={this.state.toDate}
                   startDate={this.state.fromDate}
                   endDate={this.state.toDate}
@@ -263,7 +265,7 @@ export default class PaginateOrder extends Component {
                 <label>Order Id</label>
                 <input
                   ref="order"
-                  onChange={e => this.setState({ orderId: e.target.value })}
+                  onChange={(e) => this.setState({ orderId: e.target.value })}
                   style={{ width: "12em" }}
                   className="form-control"
                 />
@@ -274,7 +276,7 @@ export default class PaginateOrder extends Component {
                 <label>Total Greater Than</label>
                 <input
                   ref="greater"
-                  onChange={e => this.setState({ greater: e.target.value })}
+                  onChange={(e) => this.setState({ greater: e.target.value })}
                   style={{ width: "12em" }}
                   className="form-control"
                 />
@@ -285,7 +287,7 @@ export default class PaginateOrder extends Component {
                 <label>Total Less Than</label>
                 <input
                   ref="less"
-                  onChange={e => this.setState({ less: e.target.value })}
+                  onChange={(e) => this.setState({ less: e.target.value })}
                   style={{ width: "12em" }}
                   className="form-control"
                 />
@@ -313,7 +315,7 @@ export default class PaginateOrder extends Component {
             </Col>
           </Row>
         </div>
-        <div className="container border rounded">
+        <div className="container border rounded overflow-auto">
           <div className="m-3">
             <div className="row">
               {pagination && (

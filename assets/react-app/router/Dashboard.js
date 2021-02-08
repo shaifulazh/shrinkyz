@@ -13,7 +13,7 @@ export default class Dashboard extends Component {
     data: null,
     year: year,
     month: month,
-    startDate: new Date(Date.now())
+    startDate: new Date(Date.now()),
   };
   componentDidMount() {
     this.mounted = true;
@@ -22,21 +22,21 @@ export default class Dashboard extends Component {
 
   getData() {
     Axios.get(`/api/admin/dashboard?year=${this.state.year}`)
-      .then(response => {
+      .then((response) => {
         if (this.mounted) {
           this.setState(() => {
             return { data: response.data };
           });
         }
       })
-      .catch(e => console.log(e));
+      .catch((e) => console.log(e));
   }
 
   componentWillUnmount() {
     this.mounted = false;
   }
 
-  handleChange = date => {
+  handleChange = (date) => {
     const year = new Date(date).getFullYear();
     const month = new Date(date).getMonth() + 1;
     this.setState(
@@ -75,7 +75,7 @@ export default class Dashboard extends Component {
         return "Error";
     }
   }
-  handleInput = e => {
+  handleInput = (e) => {
     const year = new Date(e.target.value).getFullYear();
     const month = new Date(e.target.value).getMonth() + 1;
     this.setState(
@@ -91,7 +91,7 @@ export default class Dashboard extends Component {
     console.log(data, year, month);
 
     return (
-      <div className="container" style={{ padding: "10px" }}>
+      <div className="container overflow-auto" style={{ padding: "10px" }}>
         <div style={{ padding: "10px" }}>
           <Row>
             <Col xs="12" sm="6" lg="6">
@@ -215,13 +215,13 @@ export default class Dashboard extends Component {
                       ["Sep", parseFloat(data.month[9])],
                       ["Oct", parseFloat(data.month[10])],
                       ["Nov", parseFloat(data.month[11])],
-                      ["Dis", parseFloat(data.month[12])]
+                      ["Dis", parseFloat(data.month[12])],
                     ]}
                     options={{
                       // Material design options
                       chart: {
-                        title: "Total Sales By Month"
-                      }
+                        title: "Total Sales By Month",
+                      },
                     }}
                     // For tests
                     rootProps={{ "data-testid": "2" }}
@@ -257,15 +257,15 @@ export default class Dashboard extends Component {
                       ["Sep", parseFloat(data.count[9])],
                       ["Oct", parseFloat(data.count[10])],
                       ["Nov", parseFloat(data.count[11])],
-                      ["Dis", parseFloat(data.count[12])]
+                      ["Dis", parseFloat(data.count[12])],
                     ]}
                     options={{
                       hAxis: {
-                        title: "Month"
+                        title: "Month",
                       },
                       vAxis: {
-                        title: "Orders"
-                      }
+                        title: "Orders",
+                      },
                     }}
                     rootProps={{ "data-testid": "1" }}
                   />
