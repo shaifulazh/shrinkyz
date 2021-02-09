@@ -1,78 +1,154 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Cropper from "react-easy-crop";
 import { Button, Slider } from "@material-ui/core/";
+import CanvasCrop from "./CanvasCrop";
 
 export default function Cropperv2(props) {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [rotation, setRotation] = useState(0);
   const [zoom, setZoom] = useState(1);
-  const [image, setImage] = useState(null);
+  const [croppedImage, setCroppedImage] = useState(null);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
 
-  const dogImg =
-    "https://img.huffingtonpost.com/asset/5ab4d4ac2000007d06eb2c56.jpeg?cache=sih0jwle4e&ops=1910_1000";
-
-  // useEffect(() => {
-  //   setOpenDialog(props.showDialog);
-  //   console.log(props.showDialog);
-  // }, [openDialog]);
+  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+  }, []);
 
   function CloseDialog() {
     props.closeDialog();
+    clearState();
   }
-  const onCropComplete = () => {
-    console.log("hello");
+
+  const showCroppedImage = async () => {
+    try {
+      const croppedImage = await CanvasCrop(
+        props.payload.src,
+        croppedAreaPixels,
+        rotation
+      );
+      console.log("donee", { croppedImage });
+      setCroppedImage(croppedImage);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const UploadImage = () => {
+    props.payload.upload(croppedImage.blob, clearState);
+  };
+
+  const clearState = () => {
+    setCroppedImage(null);
+    setZoom(1);
+    setCrop({ x: 0, y: 0 });
+    setRotation(0);
+    setCroppedAreaPixels(null);
+    console.log("uploaded");
   };
 
   return (
     <div>
-      {props.showDialog && (
-        <div style={dialogStyle}>
-          <div style={containerStyle}>
-            <div style={containerButtonStyle}>
-              <Button
-                variant="contained"
-                color="primary"
-                size="large"
-                onClick={CloseDialog}
-              >
-                Close
-              </Button>
-            </div>
-            <div style={containerCropperStyle}>
-              <div style={cropperStyle}>
-                <Cropper
-                  image={dogImg}
-                  crop={crop}
-                  rotation={rotation}
-                  zoom={zoom}
-                  aspect={1}
-                  onCropChange={setCrop}
-                  onRotationChange={setRotation}
-                  onCropComplete={onCropComplete}
-                  onZoomChange={setZoom}
-                />
+      {croppedImage && props.showDialog ? (
+        <div>
+          <div style={dialogStyle}>
+            <div style={containerStyle}>
+              <div style={containerButtonStyle}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  onClick={CloseDialog}
+                >
+                  Cancel
+                </Button>
+                <div className="m-3">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    onClick={UploadImage}
+                  >
+                    Save
+                  </Button>
+                </div>
               </div>
-              <div style={sliderStyle}>
-                <h5 style={{ padding: "20px" }}>Zoom</h5>
-                <Slider
-                  min={1}
-                  max={3}
-                  step={0.1}
-                  value={zoom}
-                  onChange={(e, zoom) => setZoom(zoom)}
-                />{" "}
-                <h5 style={{ padding: "20px" }}>Rotate</h5>
-                <Slider
-                  value={rotation}
-                  min={0}
-                  max={360}
-                  step={1}
-                  aria-labelledby="Rotation"
-                  onChange={(e, rotation) => setRotation(rotation)}
-                />
+              <div style={containerCropperStyle}>
+                <div className=" container  " style={cropperStyle}>
+                  <div className="row justify-content-md-center">
+                    <img
+                      src={croppedImage.url}
+                      alt=""
+                      className="img-fluid"
+                      style={{ width: "250px", height: "250px" }}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+        </div>
+      ) : (
+        <div>
+          {props.showDialog && (
+            <div style={dialogStyle}>
+              <div style={containerStyle}>
+                <div style={containerButtonStyle}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    onClick={CloseDialog}
+                  >
+                    Cancel
+                  </Button>
+                  <div className="m-3">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="large"
+                      onClick={showCroppedImage}
+                    >
+                      Crop
+                    </Button>
+                  </div>
+                </div>
+                <div style={containerCropperStyle}>
+                  <div style={cropperStyle}>
+                    <Cropper
+                      image={props.payload.src}
+                      crop={crop}
+                      rotation={rotation}
+                      zoom={zoom}
+                      aspect={1}
+                      onCropChange={setCrop}
+                      onRotationChange={setRotation}
+                      onCropComplete={onCropComplete}
+                      onZoomChange={setZoom}
+                    />
+                  </div>
+                  <div style={sliderStyle}>
+                    <h5 style={{ padding: "20px" }}>Zoom</h5>
+                    <Slider
+                      min={1}
+                      max={3}
+                      step={0.1}
+                      value={zoom}
+                      onChange={(e, zoom) => setZoom(zoom)}
+                    />{" "}
+                    <h5 style={{ padding: "20px" }}>Rotate</h5>
+                    <Slider
+                      value={rotation}
+                      min={0}
+                      max={360}
+                      step={1}
+                      aria-labelledby="Rotation"
+                      onChange={(e, rotation) => setRotation(rotation)}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -86,7 +162,7 @@ const dialogStyle = {
   right: 0,
   bottom: 0,
   background: "rgb(0, 0, 0.4)",
-  zIndex: "100",
+  zIndex: "5",
 };
 const divDialog = {
   background: "rgb(255, 255, 255)",

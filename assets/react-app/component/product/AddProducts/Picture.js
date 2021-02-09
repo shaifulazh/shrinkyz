@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Axios from "axios";
 import loadImage from "blueimp-load-image/js";
 import Cropperv2 from "./Cropperv2";
+const pica = require("pica")();
 
 export default class Picture extends Component {
   constructor(props) {
@@ -18,6 +19,12 @@ export default class Picture extends Component {
       showBlackScreen: false,
       message: null,
       showEasyCrop: false,
+      payload: null,
+    };
+    this.inputFile = [];
+
+    this.fileInput = (i) => (e) => {
+      this.inputFile[i] = e;
     };
   }
 
@@ -29,6 +36,7 @@ export default class Picture extends Component {
 
   handleRemoveImage = (i) => {
     if (this.state.picture.length < 2) return;
+    if (this.fileInput) this.inputFile[i].value = "";
     const remove = this.state.picture.filter((s, fi) => i !== fi);
     const imagedel = this.state.picture.filter((image, idx) => i === idx);
     const pictureup = imagedel.find((x) => x.imageid);
@@ -84,13 +92,45 @@ export default class Picture extends Component {
       this.setState({ targetimage: a });
       loadImage(
         e.target.files[0],
-        (img) => {
-          var base64data = img.toDataURL(`image/jpeg`);
-          const payload = {
-            src: base64data,
-            upload: this.handleUpload,
-          };
-          this.props.showCrop(payload);
+        async (img) => {
+          var pixel = img.height * img.width;
+
+          if (pixel > 3145728) {
+            var ratio = pixel > 5038848 ? 0.5 : 0.8;
+
+            try {
+              this.setState({ message: "Please wait ..." });
+              var imgcomp = await compressImage(img, ratio);
+
+              var base64data = imgcomp.toDataURL(`image/jpeg`);
+              const payload = {
+                src: base64data,
+                upload: this.handleUpload,
+              };
+              this.setState({
+                payload: payload,
+                message: null,
+                showEasyCrop: true,
+              });
+            } catch (error) {
+              this.setState({ message: error }, () => {
+                setTimeout(() => {
+                  this.setState({ message: null });
+                }, 2000);
+              });
+            }
+          } else {
+            var base64data = img.toDataURL(`image/jpeg`);
+            const payload = {
+              src: base64data,
+              upload: this.handleUpload,
+            };
+            this.setState({
+              payload: payload,
+              message: null,
+              showEasyCrop: true,
+            });
+          }
         },
         { orientation: true, canvas: true }
       );
@@ -113,12 +153,13 @@ export default class Picture extends Component {
       .then((response) => {
         console.log(response);
         this.handleAddImage(response.data);
-        this.props.closeCrop();
+        this.handleCloseEasyCrop();
         loader(); //this is uploads to reset all to null for upload
       })
       .catch((response) => {
         console.log(response);
-        this.props.closeCrop();
+        this.handleCloseEasyCrop();
+        // this.props.closeCrop();
         loader();
       });
   };
@@ -131,17 +172,6 @@ export default class Picture extends Component {
     });
     this.setState({ picture: imageUpload }, () => {
       this.props.showPicture(imageUpload);
-    });
-  };
-
-  handleOpenDialog = (e) => {
-    this.setState({
-      showCropperDialog: true,
-    });
-  };
-  handleCloseCrop = () => {
-    this.setState({
-      showCropperDialog: false,
     });
   };
 
@@ -188,6 +218,7 @@ export default class Picture extends Component {
                 <input
                   required
                   key={i}
+                  ref={this.fileInput(i)}
                   className="form-control-file m-1"
                   type="file"
                   accept="image/png, image/jpeg"
@@ -208,7 +239,7 @@ export default class Picture extends Component {
 
         <a
           href="#"
-          className="btn btn-sm btn-primary  my-3"
+          className="btn  btn-primary btn-sm btn-block my-3"
           onClick={(e) => {
             e.preventDefault();
             this.handleImageAdd();
@@ -231,6 +262,8 @@ export default class Picture extends Component {
         <Cropperv2
           showDialog={this.state.showEasyCrop}
           closeDialog={this.handleCloseEasyCrop}
+          payload={this.state.payload}
+          upload={this.handleUpload}
         />
       </div>
     );
@@ -244,7 +277,18 @@ const submitDialog = {
   right: 0,
   bottom: 0,
   background: "rgba(0, 0, 0, 0.3)",
+  zIndex: "1",
 };
 const divDialog = {
   background: "rgb(255, 255, 255)",
+};
+
+const compressImage = (img, crt) => {
+  var offScreenCanvas = document.createElement("canvas");
+  offScreenCanvas.width = img.width * crt;
+  offScreenCanvas.height = img.height * crt;
+  return pica
+    .resize(img, offScreenCanvas)
+    .then((imageCCS) => imageCCS)
+    .catch((e) => e);
 };

@@ -114,7 +114,7 @@ export default class PDetails extends Component {
                     e.preventDefault();
                     this.handleRemove(index);
                   }}
-                  className="btn btn-primary btn-sm p-2 mt-2 mb-2 "
+                  className="btn btn-primary  p-2 mt-2 mb-2 "
                 >
                   X
                 </a>
@@ -142,7 +142,7 @@ export default class PDetails extends Component {
             e.preventDefault();
             this.handleAdd();
           }}
-          className="btn btn-primary btn-sm  mb-3 mt-3"
+          className="btn btn-primary btn-sm btn-block mb-3 mt-3"
         >
           Add More Detail
         </a>

@@ -101,7 +101,7 @@ export default class ProductAdd extends Component {
   render() {
     console.log(this.state);
     return (
-      <div>
+      <div className="m-3">
         {/* Top Row */}
         <form onSubmit={this.handleSubmit}>
           <Row>
@@ -164,14 +164,14 @@ export default class ProductAdd extends Component {
                 removedetail={this.handleRemoveDetail}
                 newdetails={this.handleNewDetails}
               />
+              <button
+                className="btn btn-primary btn-sm btn-block"
+                onClick={this.handleSaveButton}
+              >
+                Save
+              </button>
             </Col>
           </Row>
-          <button
-            className="btn btn-primary btn-sm"
-            onClick={this.handleSaveButton}
-          >
-            Save
-          </button>
         </form>
 
         {this.state.message && (

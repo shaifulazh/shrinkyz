@@ -97,7 +97,7 @@ export default class App extends Component {
         {this.state.showtopbar && (
           <div>{this.state.showSidebar ? null : <MobileSideBar />}</div>
         )}
-        <div className={containerClass} style={{ width: "vw" }}>
+        <div className={containerClass}>
           {this.state.showSidebar ? <Sidebar /> : null}
 
           <Switch>

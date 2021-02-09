@@ -265,7 +265,7 @@ export default class MCategory extends Component {
             <a
               href="#"
               onClick={this.handleRemoveCategory(index)}
-              className="btn btn-primary btn-sm p-2 m-2"
+              className="btn btn-sm btn-primary  p-2 m-2"
             >
               X
             </a>
@@ -289,7 +289,7 @@ export default class MCategory extends Component {
                   <a
                     href="#"
                     onClick={this.handleRemoveSubCategory(index, subidx)}
-                    className="btn btn-primary btn-sm p-2 m-2"
+                    className="btn btn-sm btn-primary  p-2 m-2"
                   >
                     X
                   </a>
@@ -297,7 +297,7 @@ export default class MCategory extends Component {
                   <a
                     href="#"
                     onClick={this.handleAddMoreSub(index)}
-                    className="btn btn-primary btn-sm p-2 m-2"
+                    className="btn btn-sm btn-primary  p-2 m-2"
                   >
                     Add More Sub Category
                   </a>
@@ -331,7 +331,7 @@ export default class MCategory extends Component {
                             subidx,
                             indtwo
                           )}
-                          className="btn btn-primary btn-sm p-2 m-2"
+                          className="btn btn-sm btn-primary btn-sm p-2 m-2"
                         >
                           X
                         </a>
@@ -343,7 +343,7 @@ export default class MCategory extends Component {
                             subidx,
                             indtwo
                           )}
-                          className="btn btn-primary btn-sm p-2 m-2"
+                          className="btn btn-sm btn-primary  p-2 m-2"
                         >
                           Add More Sub Two Category
                         </a>
@@ -353,7 +353,7 @@ export default class MCategory extends Component {
                     <a
                       href="#"
                       onClick={this.handleAddsubtwocategory(index, subidx)}
-                      className="btn btn-primary btn-sm p-2 m-2"
+                      className="btn btn-sm btn-primary  p-2 m-2"
                     >
                       Add Sub Category Two
                     </a>
@@ -364,7 +364,7 @@ export default class MCategory extends Component {
               <a
                 href="#"
                 onClick={this.handleAddSubCategory(index)}
-                className="btn btn-primary btn-sm p-2 m-2"
+                className="btn btn-sm btn-primary  p-2 m-2"
               >
                 Add Sub Category
               </a>
@@ -384,7 +384,7 @@ export default class MCategory extends Component {
             e.preventDefault();
             this.handleAddCategory();
           }}
-          className="btn btn-primary btn-sm  mb-3"
+          className="btn btn-sm btn-primary btn-block mb-3"
         >
           Add Category
         </a>
