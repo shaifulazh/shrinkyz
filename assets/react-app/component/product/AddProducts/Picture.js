@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Axios from "axios";
 import loadImage from "blueimp-load-image/js";
+import Cropperv2 from "./Cropperv2";
 
 export default class Picture extends Component {
   constructor(props) {
@@ -16,6 +17,7 @@ export default class Picture extends Component {
       targetimage: null,
       showBlackScreen: false,
       message: null,
+      showEasyCrop: false,
     };
   }
 
@@ -79,6 +81,7 @@ export default class Picture extends Component {
     // }
 
     if (e.target.files && e.target.files.length > 0) {
+      this.setState({ targetimage: a });
       loadImage(
         e.target.files[0],
         (img) => {
@@ -131,6 +134,28 @@ export default class Picture extends Component {
     });
   };
 
+  handleOpenDialog = (e) => {
+    this.setState({
+      showCropperDialog: true,
+    });
+  };
+  handleCloseCrop = () => {
+    this.setState({
+      showCropperDialog: false,
+    });
+  };
+
+  handleShowEasyCrop = () => {
+    this.setState({
+      showEasyCrop: true,
+    });
+  };
+
+  handleCloseEasyCrop = () => {
+    this.setState({
+      showEasyCrop: false,
+    });
+  };
   render() {
     console.log(this.state.picture);
     return (
@@ -149,6 +174,7 @@ export default class Picture extends Component {
                 X
               </a>
             </div>
+
             <div className="m-1">{i + 1 + "."}</div>
             {data.imagename ? (
               <img
@@ -158,21 +184,31 @@ export default class Picture extends Component {
                 style={{ width: "130px", height: "130px" }}
               />
             ) : (
-              <input
-                required
-                key={i}
-                className="form-control-file m-1"
-                type="file"
-                accept="image/png, image/jpeg"
-                onChange={this.onSelectFile(i)}
-              />
+              <div>
+                <input
+                  required
+                  key={i}
+                  className="form-control-file m-1"
+                  type="file"
+                  accept="image/png, image/jpeg"
+                  onChange={this.onSelectFile(i)}
+                />
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    this.handleShowEasyCrop();
+                  }}
+                >
+                  Open Easy Crop
+                </button>
+              </div>
             )}
           </div>
         ))}
 
         <a
           href="#"
-          className="btn btn-sm btn-primary btn-block my-3"
+          className="btn btn-sm btn-primary  my-3"
           onClick={(e) => {
             e.preventDefault();
             this.handleImageAdd();
@@ -191,6 +227,11 @@ export default class Picture extends Component {
             </div>
           </div>
         )}
+
+        <Cropperv2
+          showDialog={this.state.showEasyCrop}
+          closeDialog={this.handleCloseEasyCrop}
+        />
       </div>
     );
   }

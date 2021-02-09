@@ -4,7 +4,6 @@ import MCategory from "./MCategory";
 import PDetails from "./PDetails";
 import Picture from "./Picture";
 import Axios from "axios";
-import Cropperv2 from "./Cropperv2";
 
 export default class ProductAdd extends Component {
   constructor(props) {
@@ -99,21 +98,10 @@ export default class ProductAdd extends Component {
     });
   };
 
-  handleOpenDialog = (e) => {
-    this.setState({
-      showCropperDialog: true,
-    });
-  };
-  handleCloseCrop = () => {
-    this.setState({
-      showCropperDialog: false,
-    });
-  };
-
   render() {
     console.log(this.state);
     return (
-      <div className="container">
+      <div>
         {/* Top Row */}
         <form onSubmit={this.handleSubmit}>
           <Row>
@@ -160,6 +148,7 @@ export default class ProductAdd extends Component {
                 showPicture={this.handleUploaded}
                 closeCrop={this.props.closeCrop}
                 removepicture={this.handleRemovePicture}
+                showEasyCrop={this.props.showEasyCrop}
               />
             </Col>
             <Col xs="12" md="6" xl="6">
@@ -184,14 +173,6 @@ export default class ProductAdd extends Component {
             Save
           </button>
         </form>
-        {this.state.showCropperDialog && (
-          <Cropperv2
-            showDialog={this.state.showCropperDialog}
-            closeCropper={this.handleCloseCrop}
-          />
-        )}
-
-        <button onClick={this.handleOpenDialog}> Open Dialog </button>
 
         {this.state.message && (
           <div style={submitDialog}>

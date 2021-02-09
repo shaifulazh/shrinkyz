@@ -75,10 +75,12 @@ export default function EasyCrop() {
       loadImage(
         event.target.files[0],
         async (img) => {
-          if ((img.height * img.width > 3, 145, 728)) {
+          let pixel = img.height * img.width;
+          if (pixel > 3145728) {
             try {
               // better to have modal or loading screen
-              const imgcrs = await compressImage(img, 0.8);
+              let ratiopixel = pixel > 5038848 ? 0.5 : 0.8;
+              const imgcrs = await compressImage(img, ratiopixel);
               var base64data = imgcrs.toDataURL(`image/jpeg`);
               setImage(base64data);
             } catch (error) {

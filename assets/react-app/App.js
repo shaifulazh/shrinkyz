@@ -16,6 +16,7 @@ import MobileSideBar from "./router/MobileSideBar";
 import MobileUpload from "./mobilecomp/MobileUpload";
 import MobileDashboard from "./mobilecomp/MobileDashboard";
 import EasyCrop from "./mobilecomp/EasyCrop";
+import Cropperv2 from "./component/product/AddProducts/Cropperv2";
 
 export default class App extends Component {
   constructor(props) {
@@ -29,6 +30,7 @@ export default class App extends Component {
       mobileView: false,
       showSidebar: true,
       showtopbar: true,
+      showEasyCropDialog: false,
     };
     this.updateViewState = this.updateViewState.bind(this);
     this.toggleSideBar = this.toggleSideBar.bind(this);
@@ -88,14 +90,14 @@ export default class App extends Component {
 
   render() {
     let containerClass = "d-flex";
-    if (this.state.mobileView) containerClass = "container-fluid";
-
+    if (this.state.mobileView) containerClass = "container";
+    console.log(this.state.showEasyCropDialog);
     return (
       <div>
         {this.state.showtopbar && (
           <div>{this.state.showSidebar ? null : <MobileSideBar />}</div>
         )}
-        <div className={containerClass}>
+        <div className={containerClass} style={{ width: "vw" }}>
           {this.state.showSidebar ? <Sidebar /> : null}
 
           <Switch>
@@ -136,7 +138,6 @@ export default class App extends Component {
           </Switch>
           <Cropping
             showCrop={this.state.showCrop}
-            closeCrop={this.handleCloseCrop}
             src={this.state.src}
             upload={this.state.upload}
             canceltopx={this.handlecanceltopx}

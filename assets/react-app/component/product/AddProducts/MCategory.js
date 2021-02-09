@@ -384,7 +384,7 @@ export default class MCategory extends Component {
             e.preventDefault();
             this.handleAddCategory();
           }}
-          className="btn btn-primary btn-sm btn-block mb-3"
+          className="btn btn-primary btn-sm  mb-3"
         >
           Add Category
         </a>

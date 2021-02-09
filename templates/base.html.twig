@@ -25,9 +25,10 @@
     {% endblock %}
     {% block head %}
 
-      <style>
-        body {
+        <style>
+        .superdiv {
             overflow-x: hidden !important;
+            /* position : relative; */
 
         }
 
@@ -40,16 +41,17 @@
         .btn-info:hover {
             background-color: #ABB2B9;
  
-
+        }
         </style>
 
 
 
-    {% endblock %}
+            {% endblock %}
 
 </head>
 
 <body>
+<div class="superdiv">
 
     {% include('navbar.html.twig') %}
     {# this handle all the alert in this web #}
@@ -60,7 +62,6 @@
     </div>
     {% endfor %}
     {% endfor %}
-
         {% block body %}
         {% endblock %}
     
@@ -72,7 +73,7 @@
     {% endblock %}
 
 
-
+</div>
 </body>
 
 </html>
