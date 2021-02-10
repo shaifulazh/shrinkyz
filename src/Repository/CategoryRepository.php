@@ -70,4 +70,15 @@ class CategoryRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
     }
+
+    public function findCatSubSubtwo()
+    {
+       $em  = $this->createQueryBuilder('c');
+      return $em->select('c','s','sb')
+            ->join('c.subcategory', 's')
+            ->join('s.Subtwocategory', 'sb')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

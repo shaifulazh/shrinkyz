@@ -224,14 +224,6 @@ export default class Picture extends Component {
                   accept="image/png, image/jpeg"
                   onChange={this.onSelectFile(i)}
                 />
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    this.handleShowEasyCrop();
-                  }}
-                >
-                  Open Easy Crop
-                </button>
               </div>
             )}
           </div>

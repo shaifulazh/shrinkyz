@@ -48,7 +48,7 @@ export default class MobileSideBar extends Component {
             </li>
             <li className="nav-item p-1 m-1">
               <NavLink
-                to="/formredux"
+                to="/createproduct"
                 activeClassName="active"
                 className="nav-link p-1 m-1"
               >

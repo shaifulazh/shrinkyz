@@ -126,14 +126,8 @@ export default class App extends Component {
             <Route path="/edit" render={(props) => <Editing {...props} />} />
             <Route path="/hooks" render={(props) => <EasyCrop {...props} />} />
             <Route
-              path="/formredux"
-              render={(props) => (
-                <ProductAdd
-                  showCrop={this.handleShowCrop}
-                  closeCrop={this.handleCloseCrop}
-                  {...props}
-                />
-              )}
+              path="/createproduct"
+              render={(props) => <ProductAdd {...props} />}
             />
           </Switch>
           <Cropping

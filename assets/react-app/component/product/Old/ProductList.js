@@ -279,8 +279,8 @@ export default class ProductList extends Component {
                 )}
               </Col>
               <Col>
-                <Link className="btn btn-primary float-right" to="/newproduct">
-                  <i className="fas fa-plus-square fa-1x" /> Add Product
+                <Link className="btn btn-primary float-right" to="/createproduct">
+                  <i className="fas fa-plus-square fa-1x" /> Create Product
                 </Link>
               </Col>
             </div>

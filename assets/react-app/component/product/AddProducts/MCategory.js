@@ -161,13 +161,40 @@ export default class MCategory extends Component {
 
   handleSubInput = (catidx, subidx) => (e) => {
     // const catsel = this.state.categories.find((cat,ind)=>{x===ind})
+    console.log("target subcat", e.target.value);
+    const data = this.state.data.map((datas, datidx) => {
+      return datas.subcategory.find(
+        (sub, si) => sub.subcategoryname === e.target.value
+      );
+    });
+
+    console.log("data categori", data);
+    const subdata = data.filter((x, y) => {
+      x !== undefined;
+    });
+
+    console.log(subdata);
+
     const modified = this.state.categories.map((mod, modindx) => {
       if (catidx !== modindx) return mod;
       return {
         ...mod,
         subcategory: mod.subcategory.map((sub, isub) => {
           if (subidx !== isub) return sub;
-          return { ...sub, subcategoryname: e.target.value, subcategoryid: "" };
+
+          if (data) {
+            return {
+              ...sub,
+              subcategoryname: subdata.subcategoryname,
+              subcategoryid: subdata.id,
+            };
+          } else {
+            return {
+              ...sub,
+              subcategoryname: e.target.value,
+              subcategoryid: "",
+            };
+          }
         }),
       };
     });
@@ -281,11 +308,23 @@ export default class MCategory extends Component {
                   <input
                     type="text"
                     size="12"
+                    list={`${data.categoryname}${data.categoryid}`}
                     required
-                    value={sub.subcategoryname}
+                    // value={sub.subcategoryname}
                     placeholder={`Sub Category#${subidx + 1}`}
                     onChange={this.handleSubInput(index, subidx)}
                   />
+
+                  <datalist id={`${data.categoryname}${data.categoryid}`}>
+                    {this.state.data.map((db, dbix) => {
+                      if (db.id === data.categoryid) {
+                        return db.subcategory.map((dbs, dbi) => (
+                          <option key={dbi} value={dbs.subcategoryname} />
+                        ));
+                      }
+                    })}
+                  </datalist>
+
                   <a
                     href="#"
                     onClick={this.handleRemoveSubCategory(index, subidx)}
@@ -316,6 +355,7 @@ export default class MCategory extends Component {
                           type="text"
                           size="12"
                           required
+                          list="datasubtwo"
                           value={sub2.subtwocategoryname}
                           placeholder={`Sub Two Category#${indtwo + 1}`}
                           onChange={this.handleSubTwoInput(
@@ -350,24 +390,32 @@ export default class MCategory extends Component {
                       </div>
                     ))
                   ) : (
-                    <a
-                      href="#"
-                      onClick={this.handleAddsubtwocategory(index, subidx)}
-                      className="btn btn-sm btn-primary  p-2 m-2"
-                    >
-                      Add Sub Category Two
-                    </a>
+                    <div>
+                      {sub.subcategoryname && (
+                        <a
+                          href="#"
+                          onClick={this.handleAddsubtwocategory(index, subidx)}
+                          className="btn btn-sm btn-primary  p-2 m-2"
+                        >
+                          Add Sub Two Category
+                        </a>
+                      )}
+                    </div>
                   )}
                 </div>
               ))
             ) : (
-              <a
-                href="#"
-                onClick={this.handleAddSubCategory(index)}
-                className="btn btn-sm btn-primary  p-2 m-2"
-              >
-                Add Sub Category
-              </a>
+              <div>
+                {data.categoryname && (
+                  <a
+                    href="#"
+                    onClick={this.handleAddSubCategory(index)}
+                    className="btn btn-sm btn-primary  p-2 m-2"
+                  >
+                    Add Sub Category
+                  </a>
+                )}
+              </div>
             )}
           </div>
         ))}
@@ -376,6 +424,17 @@ export default class MCategory extends Component {
             this.state.data.map((item, key) => (
               <option key={key} value={item.name} />
             ))}
+        </datalist>
+
+        <datalist id="datasubtwo">
+          {this.state.data &&
+            this.state.data.map((item, key) =>
+              item.subcategory.map((sub, subkey) =>
+                sub.Subtwocategory.map((subtwo, subtwokey) => (
+                  <option key={subtwokey} value={subtwo.subtwocategoryname} />
+                ))
+              )
+            )}
         </datalist>
 
         <a

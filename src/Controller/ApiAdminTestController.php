@@ -10,37 +10,36 @@ use PhpParser\Node\Expr\Cast\Object_;
 use stdClass;
 use Symfony\Component\HttpFoundation\Response;
 use Test;
+use App\Entity\Category;
+use App\Entity\Subcategory;
+use App\Entity\Subtwocategory;
 
 class ApiAdminTestController extends AbstractFOSRestController
 {
 
-    /**
-     * @Rest\RequestParam(name="test", description="test test", nullable=false)
-     * 
-     * @param ParamFetcher $paramFetcher
-     */
-    public function postTestAction(ParamFetcher $paramFetcher){
+   
+    public function getTestAction(){
         //test testing purpose for getting json file form post Axios of redux
-        $datas = $paramFetcher->get('test');
+        // $datas = $paramFetcher->get('test');
 
-        // $obj = (object)$datas;
+        // // $obj = (object)$datas;
 
-        // $data = $obj->data;
+        // // $data = $obj->data;
 
-        // $objs = (object)$data;
+        // // $objs = (object)$data;
 
-        // $test = $objs->address;
+        // // $test = $objs->address;
         
-        dump($datas);
+        // dump($datas);
 
-        $obj = json_decode (json_encode ($datas), FALSE);
+        // $obj = json_decode (json_encode ($datas), FALSE);
 
-        dump($obj);
+        // // dump($obj);
 
-        // $object = new stdClass;
-        foreach ($obj as $array) {
+        // // $object = new stdClass;
+        // foreach ($obj as $array) {
 
-            dump($array->subcategory);
+        //     dump($array->subcategory);
 
             // $cat = (Object)$value;
             // if (isset($cat->subcategory))
@@ -48,14 +47,21 @@ class ApiAdminTestController extends AbstractFOSRestController
             //     $palui = $cat->subcategory;
             //     dump($palui);
             // }
-        }
+        // }
         
         // dump($object->subcategory);
+        $categories = $this->getDoctrine()->getRepository(Category::class)->findCatSubSubtwo();
+        // $subcategories =  $this->getDoctrine()->getRepository(Subcategory::class)->findAll();
+        // $subtwocategories = $this->getDoctrine()->getRepository(Subtwocategory::class)->findAll();
+
+        // $merged = (object) array_merge((array) $categories, (array) $subcategories, (array) $subtwocategories);
+
+        dump($categories);
 
    
 
 
-        return $this->view($datas, Response::HTTP_OK);
+        return $this->view($categories, Response::HTTP_OK);
     }
 
     

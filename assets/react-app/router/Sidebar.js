@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 export default class Sidebar extends Component {
   render() {
     return (
-      <div className="border" >
+      <div className="border">
         <ul style={{ listStyleType: "none", padding: 0 }}>
           <li>
             <NavLink
@@ -46,7 +46,7 @@ export default class Sidebar extends Component {
           </li>
           <li>
             <NavLink
-              to="/formredux"
+              to="/createproduct"
               activeClassName="active"
               className="list-group-item list-group-item-action"
             >
