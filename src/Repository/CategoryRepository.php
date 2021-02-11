@@ -81,4 +81,17 @@ class CategoryRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function findCatSub()
+    {
+       $em  = $this->createQueryBuilder('c');
+      return $em->select('c','s')
+            ->join('c.subcategory', 's')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+
+
 }

@@ -299,6 +299,20 @@ class ApiAdminProductController extends AbstractFOSRestController
         // $categories = $this->getDoctrine()->getRepository(Category::class)->findAll();
     
         $categories = $this->getDoctrine()->getRepository(Category::class)->findCatSubSubtwo();
+      
+            if (!count($categories)){
+                $categories = $this->getDoctrine()->getRepository(Category::class)->findCatSub();
+    
+                if (!count($categories)){
+                    $categories = $this->getDoctrine()->getRepository(Category::class)->findAll();
+        
+                    
+                }
+            }  
+
+        
+
+
         return $this->view($categories, Response::HTTP_OK);
     }
 

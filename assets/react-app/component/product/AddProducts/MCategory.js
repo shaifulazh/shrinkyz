@@ -1,3 +1,4 @@
+import { FaceSharp } from "@material-ui/icons";
 import Axios from "axios";
 import React, { Component } from "react";
 
@@ -10,9 +11,12 @@ export default class MCategory extends Component {
         {
           categoryid: "",
           categoryname: "",
+          disable : false,
+  
         },
       ],
-      data: null,
+      data: [],
+      datalist : []
     };
   }
 
@@ -31,22 +35,41 @@ export default class MCategory extends Component {
           console.log(response.data);
           this.setState({
             data: response.data,
+            datalist : response.data
           });
         }
       })
       .catch((error) => console.log(error));
   }
 
-  handleAddCategory = () => {
-    this.setState({
-      categories: [
-        ...this.state.categories,
-        {
-          categoryid: "",
-          categoryname: "",
-        },
-      ],
+  handleAddCategory = (index) => {
+    const addcat = this.state.categories.find(
+      (datas, idx) => index === idx
+    );
+    console.log("kena cari", addcat);
+
+    const newData = this.state.categories.map((post, idx) => {
+      if (index !== idx) return post;
+      if (addcat !== undefined) {
+        //this return value if select
+        return { ...post, disable : true };
+      } 
     });
+    this.setState({
+      categories : newData
+    },()=>{
+        this.setState({
+        categories: [
+          ...this.state.categories,
+          {
+            categoryid: "",
+            categoryname: "",
+            disable : false
+          },
+        ],
+      });
+    })
+
     this.props.changecategory(this.state.categories);
   };
 
@@ -100,6 +123,7 @@ export default class MCategory extends Component {
 
   handleInput = (i) => (e) => {
     console.log(e.target.value);
+
     const data = this.state.data.find(
       (datas, idx) => e.target.value === datas.name
     );
@@ -128,7 +152,7 @@ export default class MCategory extends Component {
       if (index !== cati) return cat;
       return {
         ...cat,
-        subcategory: [{ subcategoryid: "", subcategoryname: "" }],
+        subcategory: [{ subcategoryid: "", subcategoryname: "" }],vb
       };
     });
     console.log("add sub", addsub);
@@ -159,21 +183,23 @@ export default class MCategory extends Component {
     this.props.changecategory(addsubtwo);
   };
 
-  handleSubInput = (catidx, subidx) => (e) => {
-    // const catsel = this.state.categories.find((cat,ind)=>{x===ind})
+  handleSubInput = (catidx, subidx,categoryname) => (e) => {
     console.log("target subcat", e.target.value);
-    const data = this.state.data.map((datas, datidx) => {
-      return datas.subcategory.find(
-        (sub, si) => sub.subcategoryname === e.target.value
-      );
-    });
+    console.log("target cat", categoryname);
+    let subdata = null;
+    const category = this.state.data.find((datas,id)=>
+      categoryname === datas.name
+    )
+    console.log(category);
+    if(category){
+      subdata = category.subcategory.find(
+        (sub, ix) => sub.subcategoryname === e.target.value
+        );
+        console.log("data categori", subdata);  
+      }
+  
 
-    console.log("data categori", data);
-    const subdata = data.filter((x, y) => {
-      x !== undefined;
-    });
-
-    console.log(subdata);
+  
 
     const modified = this.state.categories.map((mod, modindx) => {
       if (catidx !== modindx) return mod;
@@ -182,7 +208,7 @@ export default class MCategory extends Component {
         subcategory: mod.subcategory.map((sub, isub) => {
           if (subidx !== isub) return sub;
 
-          if (data) {
+          if (subdata) {
             return {
               ...sub,
               subcategoryname: subdata.subcategoryname,
@@ -206,7 +232,29 @@ export default class MCategory extends Component {
     this.props.changecategory(modified);
   };
 
-  handleSubTwoInput = (incatindx, incatsubidx, incatsubtwoidx) => (event) => {
+  handleSubTwoInput = (incatindx, incatsubidx, incatsubtwoidx,categoryname,subcategoryname) => (event) => {
+    let subtwodata = null;
+    let subdata = null;
+
+    const category = this.state.data.find((datas,id)=>
+    categoryname === datas.name
+    )
+    if(category){
+      subdata = category.subcategory.find(
+        (sub, ix) => sub.subcategoryname === subcategoryname
+        );
+        console.log("data categori", subdata);  
+    }
+    if(subdata){
+      subtwodata = subdata.Subtwocategory.find((subtwo,sti)=>subtwo.subtwocategoryname === event.target.value)
+    }
+
+
+  
+    
+
+
+    
     const subtwonew = this.state.categories.map((catsubtwo, catsubtwoidx) => {
       if (incatindx !== catsubtwoidx) return catsubtwo;
       return {
@@ -217,7 +265,14 @@ export default class MCategory extends Component {
             ...catsub,
             subtwocategory: catsub.subtwocategory.map((subtwo, subtwoidx) => {
               if (incatsubtwoidx !== subtwoidx) return subtwo;
-              return { ...subtwo, subtwocategoryname: event.target.value };
+
+              if(subtwodata){
+                return { ...subtwo, subtwocategoryname: event.target.value ,subtwocategoryid : subtwodata.id};
+
+              }else{
+
+                return { ...subtwo, subtwocategoryname: event.target.value ,subtwocategoryid : ""};
+              }
             }),
           };
         }),
@@ -281,13 +336,20 @@ export default class MCategory extends Component {
             <h5>{`Categori #${index + 1} - ${data.categoryname}`}</h5>
             <input
               type="text"
-              list="data"
-              value={data.categoryname}
+              list={`datalist${index}`}
               required
+              disabled={data.subcategory || data.disable ? true : false}
               size="12"
               onChange={this.handleInput(index)}
               placeholder={`Category #${index + 1}`}
             />
+
+            <datalist id={`datalist${index}`}>
+              {this.state.datalist &&
+                this.state.datalist.map((item, key) => (
+                  <option key={key} value={item.name} />
+                ))}
+            </datalist>
 
             <a
               href="#"
@@ -296,6 +358,24 @@ export default class MCategory extends Component {
             >
               X
             </a>
+
+                {!data.disable && 
+                <div>{data.categoryname !== "" ? 
+      
+      (<a
+        href="#"
+        onClick={(e) => {
+          e.preventDefault();
+          this.handleAddCategory(index);
+        }}
+        className="btn btn-sm btn-primary btn-block mb-3"
+      >
+        Add Category
+      </a>
+    )
+    : null }</div>
+                }
+            
 
             {data.subcategory ? (
               data.subcategory.map((sub, subidx) => (
@@ -308,11 +388,12 @@ export default class MCategory extends Component {
                   <input
                     type="text"
                     size="12"
+                    disabled={sub.subtwocategory ? true : false}
                     list={`${data.categoryname}${data.categoryid}`}
                     required
                     // value={sub.subcategoryname}
                     placeholder={`Sub Category#${subidx + 1}`}
-                    onChange={this.handleSubInput(index, subidx)}
+                    onChange={this.handleSubInput(index, subidx,data.categoryname)}
                   />
 
                   <datalist id={`${data.categoryname}${data.categoryid}`}>
@@ -355,15 +436,37 @@ export default class MCategory extends Component {
                           type="text"
                           size="12"
                           required
-                          list="datasubtwo"
-                          value={sub2.subtwocategoryname}
+                          list={`${data.categoryname}${sub.subcategoryname}${sub.subcategoryid}`}
+                   
                           placeholder={`Sub Two Category#${indtwo + 1}`}
                           onChange={this.handleSubTwoInput(
                             index,
                             subidx,
-                            indtwo
+                            indtwo,
+                            data.categoryname,
+                            sub.subcategoryname
                           )}
                         />
+                            <datalist id={`${data.categoryname}${sub.subcategoryname}${sub.subcategoryid}`}>
+                            {this.state.data.map((db, dbix) => {
+                                                  if (db.id === data.categoryid) {
+                                                    return db.subcategory.map((dbs, dbi) => {
+                                                
+                                                      if (dbs.id === sub.subcategoryid){
+                                                    
+                                                        return dbs.Subtwocategory.map((subtwo,sdbi)=>( <option key={sdbi} value={subtwo.subtwocategoryname} />
+                                                        ))
+                                                      }
+                                                      
+                                                    });
+                                                  }
+                                                })}
+                                    </datalist>
+
+
+
+
+
                         <a
                           href="#"
                           onClick={this.handleRemoveSubTwoCategory(
@@ -419,34 +522,11 @@ export default class MCategory extends Component {
             )}
           </div>
         ))}
-        <datalist id="data">
-          {this.state.data &&
-            this.state.data.map((item, key) => (
-              <option key={key} value={item.name} />
-            ))}
-        </datalist>
+        
 
-        <datalist id="datasubtwo">
-          {this.state.data &&
-            this.state.data.map((item, key) =>
-              item.subcategory.map((sub, subkey) =>
-                sub.Subtwocategory.map((subtwo, subtwokey) => (
-                  <option key={subtwokey} value={subtwo.subtwocategoryname} />
-                ))
-              )
-            )}
-        </datalist>
+      
 
-        <a
-          href="#"
-          onClick={(e) => {
-            e.preventDefault();
-            this.handleAddCategory();
-          }}
-          className="btn btn-sm btn-primary btn-block mb-3"
-        >
-          Add Category
-        </a>
+        
       </div>
     );
   }

@@ -55,7 +55,15 @@ class ApiAdminTestController extends AbstractFOSRestController
         // $subtwocategories = $this->getDoctrine()->getRepository(Subtwocategory::class)->findAll();
 
         // $merged = (object) array_merge((array) $categories, (array) $subcategories, (array) $subtwocategories);
+         if (!count($categories)){
+            $categories = $this->getDoctrine()->getRepository(Category::class)->findCatSub();
 
+            if (!count($categories)){
+                $categories = $this->getDoctrine()->getRepository(Category::class)->findAll();
+    
+                
+            }
+        }       
         dump($categories);
 
    
