@@ -1,4 +1,4 @@
-import { FaceSharp } from "@material-ui/icons";
+import { FaceSharp, TrendingUpSharp } from "@material-ui/icons";
 import Axios from "axios";
 import React, { Component } from "react";
 
@@ -11,12 +11,11 @@ export default class MCategory extends Component {
         {
           categoryid: "",
           categoryname: "",
-          disable : false,
-  
+          disable: false,
         },
       ],
       data: [],
-      datalist : []
+      datalist: [],
     };
   }
 
@@ -35,7 +34,7 @@ export default class MCategory extends Component {
           console.log(response.data);
           this.setState({
             data: response.data,
-            datalist : response.data
+            datalist: response.data,
           });
         }
       })
@@ -43,39 +42,144 @@ export default class MCategory extends Component {
   }
 
   handleAddCategory = (index) => {
-    const addcat = this.state.categories.find(
-      (datas, idx) => index === idx
-    );
+    const addcat = this.state.categories.find((datas, idx) => index === idx);
     console.log("kena cari", addcat);
+
+    if (addcat !== undefined) {
+      const newdatalist = this.state.datalist.filter(
+        (datalist, ix) => addcat.categoryname !== datalist.name
+      );
+      this.setState({
+        datalist: newdatalist,
+      });
+    }
 
     const newData = this.state.categories.map((post, idx) => {
       if (index !== idx) return post;
       if (addcat !== undefined) {
         //this return value if select
-        return { ...post, disable : true };
-      } 
+
+        return { ...post, disable: true };
+      }
     });
-    this.setState({
-      categories : newData
-    },()=>{
+    this.setState(
+      {
+        categories: newData,
+      },
+      () => {
         this.setState({
-        categories: [
-          ...this.state.categories,
-          {
-            categoryid: "",
-            categoryname: "",
-            disable : false
-          },
-        ],
-      });
-    })
+          categories: [
+            ...this.state.categories,
+            {
+              categoryid: "",
+              categoryname: "",
+              disable: false,
+            },
+          ],
+        });
+      }
+    );
 
     this.props.changecategory(this.state.categories);
+  };
+  handleAddSubCategory = (index) => (e) => {
+    e.preventDefault();
+
+    const addsub = this.state.categories.map((cat, cati) => {
+      if (index !== cati) return cat;
+      return {
+        ...cat,
+        subcategory: [
+          { subcategoryid: "", subcategoryname: "", disable: false },
+        ],
+      };
+    });
+    console.log("add sub", addsub);
+    this.setState({ categories: addsub });
+    this.props.changecategory(addsub);
+  };
+
+  handleAddsubtwocategory = (i, s) => (e) => {
+    e.preventDefault();
+    console.log("init addsub2", this.state.categories);
+    const addsubtwo = this.state.categories.map((addsubtwocat, itwo) => {
+      if (i !== itwo) return addsubtwocat;
+      return {
+        ...addsubtwocat,
+        subcategory: addsubtwocat.subcategory.map((adst, adsti) => {
+          if (s !== adsti) return adst;
+          return {
+            ...adst,
+            subtwocategory: [{ subtwocategoryid: "", subtwocategoryname: "" }],
+          };
+        }),
+      };
+    });
+    console.log("add sub two", addsubtwo);
+    this.setState({
+      categories: addsubtwo,
+    });
+    this.props.changecategory(addsubtwo);
+  };
+
+  handleAddMoreSub = (butcat) => (e) => {
+    e.preventDefault();
+    const addmoresub = this.state.categories.map((addmore, aidx) => {
+      if (butcat !== aidx) return addmore;
+      return {
+        ...addmore,
+        subcategory: [
+          ...addmore.subcategory,
+          { subcategoryid: "", subcategoryname: "" },
+        ],
+      };
+    });
+    console.log("addmoresub", addmoresub);
+    this.setState({ categories: addmoresub });
+    this.props.changecategory(addmoresub);
+  };
+
+  handleAddMoreSubTwo = (addcat, butsub, subtwoindx) => (e) => {
+    e.preventDefault();
+    const addmoresubtwo = this.state.categories.map((addmoresub, amsi) => {
+      if (addcat !== amsi) return addmoresub;
+      return {
+        ...addmoresub,
+        subcategory: addmoresub.subcategory.map((subcatinit, scidx) => {
+          if (butsub !== scidx) return subcatinit;
+          return {
+            ...subcatinit,
+            subtwocategory: [
+              ...subcatinit.subtwocategory,
+              { subtwocategoryid: "", subtwocategoryname: "" },
+            ],
+          };
+        }),
+      };
+    });
+    console.log(addmoresubtwo);
+    this.setState({
+      categories: addmoresubtwo,
+    });
+    this.props.changecategory(addmoresubtwo);
   };
 
   handleRemoveCategory = (index) => (e) => {
     e.preventDefault();
-    if (this.state.categories.length < 2) return;
+
+    if (this.state.categories.length < 2) {
+      const enable = this.state.categories.map((x, i) => {
+        if (index === i) {
+          return { ...x, disable: false };
+        }
+      });
+      this.setState({
+        categories: enable,
+        datalist: this.state.data,
+      });
+
+      return;
+    }
     const removecat = this.state.categories.filter((a, i) => index !== i);
     this.setState(
       {
@@ -146,60 +250,20 @@ export default class MCategory extends Component {
     this.props.changecategory(newData);
   };
 
-  handleAddSubCategory = (index) => (e) => {
-    e.preventDefault();
-    const addsub = this.state.categories.map((cat, cati) => {
-      if (index !== cati) return cat;
-      return {
-        ...cat,
-        subcategory: [{ subcategoryid: "", subcategoryname: "" }],vb
-      };
-    });
-    console.log("add sub", addsub);
-    this.setState({ categories: addsub });
-    this.props.changecategory(addsub);
-  };
-
-  handleAddsubtwocategory = (i, s) => (e) => {
-    e.preventDefault();
-    console.log("init addsub2", this.state.categories);
-    const addsubtwo = this.state.categories.map((addsubtwocat, itwo) => {
-      if (i !== itwo) return addsubtwocat;
-      return {
-        ...addsubtwocat,
-        subcategory: addsubtwocat.subcategory.map((adst, adsti) => {
-          if (s !== adsti) return adst;
-          return {
-            ...adst,
-            subtwocategory: [{ subtwocategoryid: "", subtwocategoryname: "" }],
-          };
-        }),
-      };
-    });
-    console.log("add sub two", addsubtwo);
-    this.setState({
-      categories: addsubtwo,
-    });
-    this.props.changecategory(addsubtwo);
-  };
-
-  handleSubInput = (catidx, subidx,categoryname) => (e) => {
+  handleSubInput = (catidx, subidx, categoryname) => (e) => {
     console.log("target subcat", e.target.value);
     console.log("target cat", categoryname);
     let subdata = null;
-    const category = this.state.data.find((datas,id)=>
-      categoryname === datas.name
-    )
+    const category = this.state.data.find(
+      (datas, id) => categoryname === datas.name
+    );
     console.log(category);
-    if(category){
+    if (category) {
       subdata = category.subcategory.find(
         (sub, ix) => sub.subcategoryname === e.target.value
-        );
-        console.log("data categori", subdata);  
-      }
-  
-
-  
+      );
+      console.log("data categori", subdata);
+    }
 
     const modified = this.state.categories.map((mod, modindx) => {
       if (catidx !== modindx) return mod;
@@ -232,29 +296,31 @@ export default class MCategory extends Component {
     this.props.changecategory(modified);
   };
 
-  handleSubTwoInput = (incatindx, incatsubidx, incatsubtwoidx,categoryname,subcategoryname) => (event) => {
+  handleSubTwoInput = (
+    incatindx,
+    incatsubidx,
+    incatsubtwoidx,
+    categoryname,
+    subcategoryname
+  ) => (event) => {
     let subtwodata = null;
     let subdata = null;
 
-    const category = this.state.data.find((datas,id)=>
-    categoryname === datas.name
-    )
-    if(category){
+    const category = this.state.data.find(
+      (datas, id) => categoryname === datas.name
+    );
+    if (category) {
       subdata = category.subcategory.find(
         (sub, ix) => sub.subcategoryname === subcategoryname
-        );
-        console.log("data categori", subdata);  
+      );
+      console.log("data categori", subdata);
     }
-    if(subdata){
-      subtwodata = subdata.Subtwocategory.find((subtwo,sti)=>subtwo.subtwocategoryname === event.target.value)
+    if (subdata) {
+      subtwodata = subdata.Subtwocategory.find(
+        (subtwo, sti) => subtwo.subtwocategoryname === event.target.value
+      );
     }
 
-
-  
-    
-
-
-    
     const subtwonew = this.state.categories.map((catsubtwo, catsubtwoidx) => {
       if (incatindx !== catsubtwoidx) return catsubtwo;
       return {
@@ -266,12 +332,18 @@ export default class MCategory extends Component {
             subtwocategory: catsub.subtwocategory.map((subtwo, subtwoidx) => {
               if (incatsubtwoidx !== subtwoidx) return subtwo;
 
-              if(subtwodata){
-                return { ...subtwo, subtwocategoryname: event.target.value ,subtwocategoryid : subtwodata.id};
-
-              }else{
-
-                return { ...subtwo, subtwocategoryname: event.target.value ,subtwocategoryid : ""};
+              if (subtwodata) {
+                return {
+                  ...subtwo,
+                  subtwocategoryname: event.target.value,
+                  subtwocategoryid: subtwodata.id,
+                };
+              } else {
+                return {
+                  ...subtwo,
+                  subtwocategoryname: event.target.value,
+                  subtwocategoryid: "",
+                };
               }
             }),
           };
@@ -283,48 +355,6 @@ export default class MCategory extends Component {
       categories: subtwonew,
     });
     this.props.changecategory(subtwonew);
-  };
-
-  handleAddMoreSub = (butcat) => (e) => {
-    e.preventDefault();
-    const addmoresub = this.state.categories.map((addmore, aidx) => {
-      if (butcat !== aidx) return addmore;
-      return {
-        ...addmore,
-        subcategory: [
-          ...addmore.subcategory,
-          { subcategoryid: "", subcategoryname: "" },
-        ],
-      };
-    });
-    console.log("addmoresub", addmoresub);
-    this.setState({ categories: addmoresub });
-    this.props.changecategory(addmoresub);
-  };
-
-  handleAddMoreSubTwo = (addcat, butsub, subtwoindx) => (e) => {
-    e.preventDefault();
-    const addmoresubtwo = this.state.categories.map((addmoresub, amsi) => {
-      if (addcat !== amsi) return addmoresub;
-      return {
-        ...addmoresub,
-        subcategory: addmoresub.subcategory.map((subcatinit, scidx) => {
-          if (butsub !== scidx) return subcatinit;
-          return {
-            ...subcatinit,
-            subtwocategory: [
-              ...subcatinit.subtwocategory,
-              { subtwocategoryid: "", subtwocategoryname: "" },
-            ],
-          };
-        }),
-      };
-    });
-    console.log(addmoresubtwo);
-    this.setState({
-      categories: addmoresubtwo,
-    });
-    this.props.changecategory(addmoresubtwo);
   };
 
   render() {
@@ -359,23 +389,22 @@ export default class MCategory extends Component {
               X
             </a>
 
-                {!data.disable && 
-                <div>{data.categoryname !== "" ? 
-      
-      (<a
-        href="#"
-        onClick={(e) => {
-          e.preventDefault();
-          this.handleAddCategory(index);
-        }}
-        className="btn btn-sm btn-primary btn-block mb-3"
-      >
-        Add Category
-      </a>
-    )
-    : null }</div>
-                }
-            
+            {!data.disable && (
+              <div>
+                {data.categoryname !== "" ? (
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      this.handleAddCategory(index);
+                    }}
+                    className="btn btn-sm btn-primary btn-block mb-3"
+                  >
+                    Add Category
+                  </a>
+                ) : null}
+              </div>
+            )}
 
             {data.subcategory ? (
               data.subcategory.map((sub, subidx) => (
@@ -393,7 +422,11 @@ export default class MCategory extends Component {
                     required
                     // value={sub.subcategoryname}
                     placeholder={`Sub Category#${subidx + 1}`}
-                    onChange={this.handleSubInput(index, subidx,data.categoryname)}
+                    onChange={this.handleSubInput(
+                      index,
+                      subidx,
+                      data.categoryname
+                    )}
                   />
 
                   <datalist id={`${data.categoryname}${data.categoryid}`}>
@@ -416,7 +449,7 @@ export default class MCategory extends Component {
 
                   <a
                     href="#"
-                    onClick={this.handleAddMoreSub(index)}
+                    onClick={this.handleAddMoreSub(index, subidx)}
                     className="btn btn-sm btn-primary  p-2 m-2"
                   >
                     Add More Sub Category
@@ -437,7 +470,6 @@ export default class MCategory extends Component {
                           size="12"
                           required
                           list={`${data.categoryname}${sub.subcategoryname}${sub.subcategoryid}`}
-                   
                           placeholder={`Sub Two Category#${indtwo + 1}`}
                           onChange={this.handleSubTwoInput(
                             index,
@@ -447,25 +479,26 @@ export default class MCategory extends Component {
                             sub.subcategoryname
                           )}
                         />
-                            <datalist id={`${data.categoryname}${sub.subcategoryname}${sub.subcategoryid}`}>
-                            {this.state.data.map((db, dbix) => {
-                                                  if (db.id === data.categoryid) {
-                                                    return db.subcategory.map((dbs, dbi) => {
-                                                
-                                                      if (dbs.id === sub.subcategoryid){
-                                                    
-                                                        return dbs.Subtwocategory.map((subtwo,sdbi)=>( <option key={sdbi} value={subtwo.subtwocategoryname} />
-                                                        ))
-                                                      }
-                                                      
-                                                    });
-                                                  }
-                                                })}
-                                    </datalist>
-
-
-
-
+                        <datalist
+                          id={`${data.categoryname}${sub.subcategoryname}${sub.subcategoryid}`}
+                        >
+                          {this.state.data.map((db, dbix) => {
+                            if (db.id === data.categoryid) {
+                              return db.subcategory.map((dbs, dbi) => {
+                                if (dbs.id === sub.subcategoryid) {
+                                  return dbs.Subtwocategory.map(
+                                    (subtwo, sdbi) => (
+                                      <option
+                                        key={sdbi}
+                                        value={subtwo.subtwocategoryname}
+                                      />
+                                    )
+                                  );
+                                }
+                              });
+                            }
+                          })}
+                        </datalist>
 
                         <a
                           href="#"
@@ -522,11 +555,6 @@ export default class MCategory extends Component {
             )}
           </div>
         ))}
-        
-
-      
-
-        
       </div>
     );
   }

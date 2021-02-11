@@ -16,12 +16,12 @@
     <div class="ml-3">
     {% if subtwocategories  is defined %}
     {% for subtwocategory in subtwocategories %}
-    </div>
-    </div>
         
         <a href="{{path('subtwocategories_link', {id : subtwocategory.id})}}" class="btn btn-sm btn-info">{{ subtwocategory.subtwocategoryname }}</a>
     {% endfor %}
     {% endif %}
+    </div>
+    </div>
 {{include('index/product.html.twig')}}
     </div>
     

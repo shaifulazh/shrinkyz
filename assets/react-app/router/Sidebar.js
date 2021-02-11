@@ -46,20 +46,20 @@ export default class Sidebar extends Component {
           </li>
           <li>
             <NavLink
-              to="/createproduct"
+              to="/categories"
               activeClassName="active"
               className="list-group-item list-group-item-action"
             >
-              <i className="fas fa-boxes" /> DevOps
+              <i class="fas fa-paw"></i> Categories
             </NavLink>
           </li>
           <li>
             <NavLink
-              to="/hooks"
+              to="/createproduct"
               activeClassName="active"
               className="list-group-item list-group-item-action"
             >
-              <i className="fas fa-boxes" /> Hooks
+              <i class="fas fa-list-alt"></i> Devops
             </NavLink>
           </li>
         </ul>

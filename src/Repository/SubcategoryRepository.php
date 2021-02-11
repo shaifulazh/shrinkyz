@@ -62,5 +62,18 @@ class SubcategoryRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function findSubcategoryByCategory($value)
+    {
+        return $this->createQueryBuilder('s')
+            ->select('s')
+            // ->innerJoin('a.category', 'category')
+            ->innerJoin('s.category', 'category')
+            ->andWhere('category.id = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
     
 }

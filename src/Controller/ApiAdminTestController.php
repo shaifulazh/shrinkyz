@@ -50,26 +50,21 @@ class ApiAdminTestController extends AbstractFOSRestController
         // }
         
         // dump($object->subcategory);
-        $categories = $this->getDoctrine()->getRepository(Category::class)->findCatSubSubtwo();
-        // $subcategories =  $this->getDoctrine()->getRepository(Subcategory::class)->findAll();
-        // $subtwocategories = $this->getDoctrine()->getRepository(Subtwocategory::class)->findAll();
+       
 
-        // $merged = (object) array_merge((array) $categories, (array) $subcategories, (array) $subtwocategories);
-         if (!count($categories)){
-            $categories = $this->getDoctrine()->getRepository(Category::class)->findCatSub();
+        // $test = ['a' => []];
+        // $obj = (Object)($test);
 
-            if (!count($categories)){
-                $categories = $this->getDoctrine()->getRepository(Category::class)->findAll();
-    
-                
-            }
-        }       
-        dump($categories);
+        // if($obj->a){
 
-   
+        //     dump(($obj->a));
+        // }
+
+            $s = $this->getDoctrine()->getRepository(Category::class)->findsomething();
+            dump($s);
 
 
-        return $this->view($categories, Response::HTTP_OK);
+        return $this->view($s, Response::HTTP_OK);
     }
 
     

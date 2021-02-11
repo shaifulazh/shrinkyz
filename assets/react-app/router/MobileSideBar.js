@@ -48,20 +48,22 @@ export default class MobileSideBar extends Component {
             </li>
             <li className="nav-item p-1 m-1">
               <NavLink
+                to="/categories"
+                activeClassName="active"
+                className="nav-link p-1 m-1"
+              >
+                <i class="fas fa-paw"></i>
+              </NavLink>
+            </li>
+            <li className="nav-item p-1 m-1">
+              <NavLink
                 to="/createproduct"
                 activeClassName="active"
                 className="nav-link p-1 m-1"
               >
-                <i className="fas fa-boxes" />
+                <i class="fas fa-list-alt"></i>
               </NavLink>
             </li>
-            <NavLink
-              to="/hooks"
-              activeClassName="active"
-              className="nav-link p-1 m-1"
-            >
-              <i className="fas fa-boxes" />
-            </NavLink>
           </ul>
         </div>
       </Navbar>

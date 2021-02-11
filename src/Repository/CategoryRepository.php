@@ -75,8 +75,8 @@ class CategoryRepository extends ServiceEntityRepository
     {
        $em  = $this->createQueryBuilder('c');
       return $em->select('c','s','sb')
-            ->join('c.subcategory', 's')
-            ->join('s.Subtwocategory', 'sb')
+            ->leftJoin('c.subcategory', 's')
+            ->leftJoin('s.Subtwocategory', 'sb')
             ->getQuery()
             ->getResult()
         ;
@@ -86,10 +86,17 @@ class CategoryRepository extends ServiceEntityRepository
     {
        $em  = $this->createQueryBuilder('c');
       return $em->select('c','s')
-            ->join('c.subcategory', 's')
+            ->leftJoin('c.subcategory', 's')
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    public function findsomething(){
+        return $this->createQueryBuilder('c')
+        
+        ->getQuery()
+        ->getResult();
     }
 
 

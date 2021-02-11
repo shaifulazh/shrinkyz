@@ -136,7 +136,7 @@ class ApiAdminProductController extends AbstractFOSRestController
                 if(isset($objc->subcategory))
                 {
                     
-                    if (count($objc->subcategory))//subcategory
+                    if ($objc->subcategory)//subcategory
                     {
                         
                         
@@ -315,6 +315,52 @@ class ApiAdminProductController extends AbstractFOSRestController
 
         return $this->view($categories, Response::HTTP_OK);
     }
+
+    public function getProductAllcategoriesAction(){
+        $categories = $this->getDoctrine()->getRepository(Category::class)->findAll();
+        return $this->view($categories, Response::HTTP_OK);
+    }
+
+    public function getProductSubcategoriesAction(Category $category){
+        $subcategory =  $this->getDoctrine()->getRepository(Subcategory::class)->findSubcategoryByCategory($category);
+        return $this->view($subcategory, Response::HTTP_OK);
+    }
+
+
+    public function getProductSubtwocategoriesAction(Subcategory $subcategory){
+        $subtwocategory =  $this->getDoctrine()->getRepository(Subtwocategory::class)->findBySubtwo($subcategory);
+        return $this->view($subtwocategory, Response::HTTP_OK);
+    }
+
+    public function deleteSubtwocategoryAction(Subtwocategory $subtwocategory){
+
+        if($subtwocategory){
+            $this->entityManager->remove($subtwocategory);
+            $this->entityManager->flush();
+            return $this->view(null, Response::HTTP_NO_CONTENT);
+        }
+        return $this->view(['message' => 'something went wrong'], Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+
+    public function deleteSubcategoryAction(Subcategory $subcategory){
+
+        if($subcategory){
+            $this->entityManager->remove($subcategory);
+            $this->entityManager->flush();
+
+            
+            return $this->view(null, Response::HTTP_NO_CONTENT);
+        }
+        return $this->view(['message' => 'something went wrong'], Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+
+
+
+
+
+
+
+
 
     public function getProductDetailsAction()
     {

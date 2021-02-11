@@ -17,6 +17,7 @@ import MobileUpload from "./mobilecomp/MobileUpload";
 import MobileDashboard from "./mobilecomp/MobileDashboard";
 import EasyCrop from "./mobilecomp/EasyCrop";
 import Cropperv2 from "./component/product/AddProducts/Cropperv2";
+import CategoryList from "./component/product/AddProducts/CategoryList";
 
 export default class App extends Component {
   constructor(props) {
@@ -124,7 +125,10 @@ export default class App extends Component {
             />
             <Route path="/vieworder" render={(props) => <Order {...props} />} />
             <Route path="/edit" render={(props) => <Editing {...props} />} />
-            <Route path="/hooks" render={(props) => <EasyCrop {...props} />} />
+            <Route
+              path="/categories"
+              render={(props) => <CategoryList {...props} />}
+            />
             <Route
               path="/createproduct"
               render={(props) => <ProductAdd {...props} />}

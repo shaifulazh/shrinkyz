@@ -57,4 +57,16 @@ class SubtwocategoryRepository extends ServiceEntityRepository
         ->getResult()
         ;
     }
+
+    public function findBySubtwo($value)
+    {
+        return $this->createQueryBuilder('s')
+        ->select('s')
+        ->innerJoin('s.subcategory', 't')
+        ->andWhere('t.id = :val')
+        ->setParameter('val', $value)
+        ->getQuery()
+        ->getResult()
+        ;
+    }
 }
