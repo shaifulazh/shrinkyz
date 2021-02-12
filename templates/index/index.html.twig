@@ -23,12 +23,15 @@
 
                     <div class="row">
                 <div class="ml-3">
+                <ul class="nav nav-tabs">
                 {% if subcategories  is defined %}
                 {% for subcategory in subcategories %}
-                    
-                    <a href="{{path('subcategories_link', {id : subcategory.id})}}" class="btn btn-sm btn-info">{{ subcategory.subcategoryname }}</a>
+                     <li class="nav-item">
+                    <a href="{{path('subcategories_link', {id : subcategory.id})}}" class="nav-link"> {{ subcategory.subcategoryname }}</a>
+                    </li>
                 {% endfor %}
                 {% endif %}
+                </ul>
                 </div>
                 </div>
             {{include('index/product.html.twig')}}

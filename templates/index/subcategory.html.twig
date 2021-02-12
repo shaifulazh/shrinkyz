@@ -14,12 +14,21 @@
 
     <div class="row">
     <div class="ml-3">
+
+ 
+  
+
+
+    <ul class="nav nav-tabs">
     {% if subtwocategories  is defined %}
     {% for subtwocategory in subtwocategories %}
         
-        <a href="{{path('subtwocategories_link', {id : subtwocategory.id})}}" class="btn btn-sm btn-info">{{ subtwocategory.subtwocategoryname }}</a>
+  <li class="nav-item">
+        <a href="{{path('subtwocategories_link', {id : subtwocategory.id})}}" class="nav-link"> {{ subtwocategory.subtwocategoryname }}</a>
+  </li>
     {% endfor %}
     {% endif %}
+</ul>
     </div>
     </div>
 {{include('index/product.html.twig')}}

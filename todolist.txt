@@ -1,4 +1,0 @@
-1.  Item details for material and with height and width
-        Item details      material,  size
-
-        

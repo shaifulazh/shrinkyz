@@ -38,7 +38,6 @@ export default class App extends Component {
   }
 
   handleShowCrop = (payload) => {
-    console.log(payload);
     this.setState({
       showCrop: true,
       src: payload.src,
@@ -92,7 +91,6 @@ export default class App extends Component {
   render() {
     let containerClass = "d-flex";
     if (this.state.mobileView) containerClass = "container";
-    console.log(this.state.showEasyCropDialog);
     return (
       <div>
         {this.state.showtopbar && (

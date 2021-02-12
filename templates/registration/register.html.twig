@@ -1,21 +1,47 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Register
+{% endblock %}
 
 {% block body %}
-    {% for flashError in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
-    {% endfor %}
+    <div class="container">
+        <br>
+        <div class="row justify-content-md-center">
+        <div class="col-xl-6 col-sm-6 col-lg-6 py-3 px-3">
+        <h3>SIGN UP / REGISTRATION</h3>
+           {% if form_errors(registrationForm.email) %}
+                <div class="container alert alert-warning">
+                    {{ form_errors(registrationForm.email) }}
+                </div>
+            {% endif %}
+            {% for flashError in app.flashes('verify_email_error') %}
+                  <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+           {% endfor %}
 
-    <h1>Register</h1>
+            {% if form_errors(registrationForm.plainPassword.first) %}
+                <div class="container alert alert-warning">
+                    {{ form_errors(registrationForm.plainPassword.first) }}
+                </div>
+            {% endif %}
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
-
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+            {{ form_start(registrationForm) }}
+            {{form_row(registrationForm.firstName, {'attr' : {'class' : 'form-control', 'placeholder':'Firstname', 'required': 'required','style': 'width : 20em'}}) }}
+            {{form_row(registrationForm.lastName, {'attr' : {'class' : 'form-control', 'placeholder':'Lastname', 'required': 'required','style': 'width : 20em'}}) }}
+             {{ form_label(registrationForm.email)}}
+            {{ form_widget(registrationForm.email,{'attr' : {'class' : 'form-control','placeholder': 'Email','style': 'width : 15em'}}) }}
+            {{ form_label(registrationForm.plainPassword.first)}}
+            {{form_widget(registrationForm.plainPassword.first, {'attr' : {'class' : 'form-control', 'placeholder':'Password', 'required': 'required','style': 'width : 13em'}}) }}
+            {{ form_label(registrationForm.plainPassword.second)}}
+            {{form_widget(registrationForm.plainPassword.second, {'attr' : {'class' : 'form-control', 'placeholder':'Confirm Password', 'required': 'required','style': 'width : 13em'}}) }}
+</br>
+        {{ form_widget(registrationForm.agreeTerms)  }}
+{{ form_label(registrationForm.agreeTerms)}}
+          
+     
+            <p class=""></p>
+            <button class="btn btn-primary">Register</button>
+            {{ form_end(registrationForm ) }}
+        </div>
+        </div>
+    </div>
 {% endblock %}
