@@ -1,3 +1,10 @@
 1. Check PRice colour
 2. Only 1 stock left on product at home page
 3. 
+
+
+sudo service apache2 reload - relead server
+sudo nano /etc/apache2/sites-available/0* --- apache
+
+
+

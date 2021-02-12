@@ -1,5 +1,5 @@
 import { Provider } from "react-redux";
-import store from "./store";
+import store from "./Store";
 import FieldArraysForm from "./FieldArraysForm";
 
 import React, { Component } from "react";
@@ -16,8 +16,6 @@ export default class FormRedux extends Component {
           <Provider store={store}>
             <div style={{ padding: 15 }}>
               <h2>Simple Form</h2>
-
-            
 
               <FieldArraysForm onSubmit={this.handleSubmit} />
             </div>
