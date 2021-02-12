@@ -117,11 +117,9 @@ export default function Cropperv2(props) {
                     <Cropper
                       image={props.payload.src}
                       crop={crop}
-                      rotation={rotation}
                       zoom={zoom}
                       aspect={1}
                       onCropChange={setCrop}
-                      onRotationChange={setRotation}
                       onCropComplete={onCropComplete}
                       onZoomChange={setZoom}
                     />
@@ -136,14 +134,6 @@ export default function Cropperv2(props) {
                       onChange={(e, zoom) => setZoom(zoom)}
                     />{" "}
                     <h5 style={{ padding: "20px" }}>Rotate</h5>
-                    <Slider
-                      value={rotation}
-                      min={0}
-                      max={360}
-                      step={1}
-                      aria-labelledby="Rotation"
-                      onChange={(e, rotation) => setRotation(rotation)}
-                    />
                   </div>
                 </div>
               </div>
