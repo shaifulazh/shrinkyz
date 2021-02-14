@@ -6,45 +6,58 @@
                                 <div class="img-container mb-2">
                                     {% for key, picture in product.pictures %}
                                     {% if key == 0 %}
-                                    <img alt="product" class="card-img-top" src="{{asset('/images/' ~ picture.filename)}}"/>
+                                    <img alt="No Image" class="card-img-top" src="{{asset('/images/' ~ picture.filename)}}"/>
                                     {% endif %}
                                     {% endfor %}
                                     
                                 </div>
                             </a>
-                            <div class="pl-3" style="height: 80px; ">
+                            <div class="pl-3" style="height: 60px; ">
                                 
                                 <h6 class="mb-0">
                                 <p class="mb-0 text-capitalize">
                                     {{ product.productName|length >15 ? product.productName|slice(0, 15) ~ '...' : product.productName}}
-
-                                  
-
                                 </p>
-                                </h6>
+                                </h6>                           
                                 
-                            
-                                   <p class="my-0" style="color:black;" > <span class="font-weight-bold mr-1">RM</span>
-                                    {{ product.productPrice |number_format(2, '.', ',')  }} </p>
+                                   
+                                    <p class="my-0 font-weight-bold" style="color:black;" > <span class="font-weight-bold mr-1">RM</span>{{ product.productPrice |number_format(2, '.', ',')  }}</p>
                                
                                
                             </div>
                             <div style="height: 80px;" class="pl-3" >
-                                {% if product.productStock < 1%}
-                                     {# <div class="mb-4"> #}
-                                     <div class="row pl-3 mb-4">
-                                    <a href="" onclick="reqfunction()" class="btn btn-outline-secondary btn-sm ">Request</a>
-                                    <p style="color:blue; font-size:90%;"class="m-2" >Sold, available upon request.</p>
-                                    </div>
+                                        {% if product.productStock > 1 %}
+
+                                    <span style="color:black;font-style:italic"> {{product.productStock}} stocks left!  </span>
                                     
-                                {% else %}
+                                        {% elseif product.productStock == 1  %}
+
+                                        <span style="color:black;font-style:italic"> Only {{product.productStock}} stock left!  </span>
+                                    
+                                        {% elseif product.productStock < 1 %}
+
+                                        <span style="color:black;font-style:italic">No stocks left  </span>
+                                    
+                                        {% endif %}
+                                    
+                                        
+                                            <div class="mt-2"> 
+                                            <div class="row pl-3 mb-4">
+                                        {% if product.productStock < 1 %}
+                                            <a href="" onclick="reqfunction()" class="btn btn-outline-secondary btn-sm ">Request</a>
+                                            <p style="color:blue; font-size:90%;"class="m-2" >Sold, available upon request.</p>
+                                        {% else %} 
 
 
-                                <div class="row pl-3 mb-4">
-                                <a href="{{path('add_cart', {id: product.getId})}}" class="btn btn-primary btn-sm">Add To Cart</a>
-                                    <p style="color:grey; font-size:80%; "class="m-2 ">Stock : {{product.productStock}}</p>
-                                </div>
-                                {% endif %}
+                                            <div class="row pl-3 mb-4">
+                                            <a href="{{path('add_cart', {id: product.getId})}}" class="btn btn-primary btn-sm">Add To Cart</a>
+                                            </div>
+                                            {% endif %}
+                                                </div>
+                                                </div>
+                                    
+
+
                             </div>
                             {# please remove this in production #}
                         </div>
@@ -62,6 +75,12 @@
             e.preventDefault();
             $("#wrapper").toggleClass("toggled");
         });
+
+
+        function reqfunction(e){
+            e.preventDefault();
+            console.log('someone click')
+        }
 
    
 

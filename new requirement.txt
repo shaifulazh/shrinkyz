@@ -12,3 +12,5 @@ ps aux | egrep '(apache|httpd)'
 
 sudo chown -R /var/www/html/v2
 sudo chmod 755 /var/www/html/v2
+
+sudo chmod g+rwx -R /var/www/html/v2/shrinkyz/public

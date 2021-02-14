@@ -14,9 +14,13 @@ use App\Form\ProductModelType;
 use App\Entity\OrderDetails;
 use App\Entity\OrderModel;
 use App\Entity\User;
+use App\Form\ChangePassType;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+
 
 class UserController extends AbstractController
 {
+
 
     /**
      * @Route("/cart/{id}", name="add_cart")
@@ -166,7 +170,7 @@ class UserController extends AbstractController
     }
 
 
-        /**
+    /**
      * @Route("/profile" , name="user_profile")
      */
     public function userProfile()
@@ -201,4 +205,36 @@ class UserController extends AbstractController
 
         return $this->render('user/editProfile.html.twig', ['form' => $form->createView()]);
     }
+
+    /**
+     * @Route("/password_change" , name="edit_password")
+     */
+
+    public function changeUserPasswordProfile(Request $request, UserPasswordEncoderInterface $passenc){
+        $form = $this->createForm(ChangePassType::class);
+
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $test =  $passenc->isPasswordValid($this->getUser(),$form->get('oldPassword')->getData() );
+            if($test){
+                $user = $this->getDoctrine()->getRepository(User::class)->find($this->getUser()->getId());
+                $newpassword = $passenc->encodePassword(
+                    $user,
+                    $form->get('newPassword')->getData()
+                );
+                $user->setPassword($newpassword);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($user);
+                $em->flush();
+                $this->addFlash('success', 'Password Change. Next Login Require new password');
+                return $this->redirectToRoute('user_profile');
+            }
+            $this->addFlash('warning', 'Old password does not match');
+        }
+        return $this->render('user/changepwd.html.twig', ['form' => $form->createView()]);
+
+    }
+    
 }

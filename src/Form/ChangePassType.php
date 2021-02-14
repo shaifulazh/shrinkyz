@@ -11,12 +11,13 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
 
-class ChangePasswordFormType extends AbstractType
+class ChangePassType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('plainPassword', RepeatedType::class, [
+            ->add('oldPassword')
+            ->add('newPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'first_options' => [
                     'constraints' => [
@@ -32,16 +33,18 @@ class ChangePasswordFormType extends AbstractType
                         
                         new Regex([
                             'pattern' => '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.* )(?=.*[^a-zA-Z0-9]).{8,16}$/m',
-                            'message' => 'Your password must contains at least one uppercase, lowercase, numeric, and special characters.',
+                            'message' => 'Your password must contains at least one uppercase, lowercase, numeric, and special characters',
 
                         ]),
+
+                        
                     ],
                     'label' => 'New password',
                 ],
                 'second_options' => [
-                    'label' => 'Repeat Password',
+                    'label' => 'Repeat New Password',
                 ],
-                'invalid_message' => 'The password fields must match.',
+                'invalid_message' => 'The new password fields must match.',
                 // Instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'mapped' => false,
@@ -49,8 +52,10 @@ class ChangePasswordFormType extends AbstractType
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([]);
+        $resolver->setDefaults([
+            // Configure your form options here
+        ]);
     }
 }

@@ -12,6 +12,7 @@ parameters:
   webmaster: "%env(WEB_MASTER)%"
   webemail: "%env(WEB_EMAIL)%"
   webemailname: "%env(WEB_EMAIL_NAME)%"
+  geotoken: "%env(GEO_TOKEN)%"
   
 services:
   # default configuration for services in *this* file

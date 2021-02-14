@@ -7,7 +7,22 @@
     <h2>Reset your password</h2>
 
     {{ form_start(resetForm) }}
-        {{ form_row(resetForm.plainPassword) }}
+      
+
+
+        {{form_label(resetForm.plainPassword.first)}}
+{{form_widget(resetForm.plainPassword.first, {'attr' : {'class' : 'form-control'}}) }}
+{{form_label(resetForm.plainPassword.second)}}
+{{form_widget(resetForm.plainPassword.second, {'attr' : {'class' : 'form-control'}}) }}
+<br/>
+  {% if form_errors(resetForm.plainPassword.first) %}
+                <div class="container alert alert-warning">
+                    {{ form_errors(resetForm.plainPassword.first) }}
+                </div>
+     {% endif %}
+
+
+
         <button class="btn btn-primary">Reset password</button>
     {{ form_end(resetForm) }}
 </div>

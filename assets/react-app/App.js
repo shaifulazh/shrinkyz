@@ -18,6 +18,7 @@ import MobileDashboard from "./mobilecomp/MobileDashboard";
 import EasyCrop from "./mobilecomp/EasyCrop";
 import Cropperv2 from "./component/product/AddProducts/Cropperv2";
 import CategoryList from "./component/product/AddProducts/CategoryList";
+import Visitor from "./component/Visitor/Visitor";
 
 export default class App extends Component {
   constructor(props) {
@@ -131,6 +132,8 @@ export default class App extends Component {
               path="/createproduct"
               render={(props) => <ProductAdd {...props} />}
             />
+
+            <Route path="/visitor" render={(props) => <Visitor {...props} />} />
           </Switch>
           <Cropping
             showCrop={this.state.showCrop}

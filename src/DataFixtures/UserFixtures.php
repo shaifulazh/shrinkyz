@@ -20,16 +20,16 @@ class UserFixtures extends Fixture
 
         // $product = new Product();
         // $manager->persist($product);
-        $user = new User;
+    //     $user = new User;
 
-        $user->setEmail('skeleton@gmail.com');
-        $user->setPassword($this->passwordEncoder->encodePassword(
-             $user,      '1234'
-      ));
-        $roles[] = 'ROLE_ADMIN';
-        $user->setRoles($roles);
-        $manager->persist($user);
+    //     $user->setEmail('skeleton@gmail.com');
+    //     $user->setPassword($this->passwordEncoder->encodePassword(
+    //          $user,      '1234'
+    //   ));
+    //     $roles[] = 'ROLE_ADMIN';
+    //     $user->setRoles($roles);
+    //     $manager->persist($user);
 
-        $manager->flush();
+        // $manager->flush();
     }
 }

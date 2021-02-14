@@ -14,12 +14,16 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\ImageFile;
 use App\Entity\Subcategory;
 use App\Entity\Subtwocategory;
+use App\Entity\VisitorOfPage;
+use App\Form\TestType;
+use DoctrineExtensions\Query\Mysql\Now;
 use Knp\Component\Pager\PaginatorInterface;
 
 // email controler delete this just for testing
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Validator\Constraints\Ip;
 
 class IndexController extends AbstractController
 {
@@ -42,11 +46,44 @@ class IndexController extends AbstractController
      */
     public function index(Request $request)
     {
-
-  
    
         // return $this->redirectToRoute('dashboard');
-        //remove above line for prod
+        //remove above line for prod $user = file_get_contents('http://ipinfo.io/'. $_SERVER['REMOTE_ADDR']. '?token=ec19519fb4a63d');
+
+            //this function to register every person who visited homepage using database
+            try {
+
+                $user = $this->getDoctrine()->getRepository(VisitorOfPage::class)->findBy(['ip'=> $request->getClientIp()]);
+                if(!$user){
+                    $newuser = new VisitorOfPage;
+                    $data = file_get_contents('https://geolocation-db.com/json/'. $this->getParameter('geotoken') .'/'. $request->getClientIp() );
+                    $json = json_decode($data, true);
+                    if ( $json['IPv4']){
+             
+                        $newuser->setIp($request->getClientIp());
+                    }
+                    else{
+                        $newuser->setIp($request->getClientIp());
+                    }
+                    $newuser->createdAt();
+                    $newuser->setCountry($json['country_name']);
+                    $newuser->setState($json['state']);
+                    $newuser->setLongitute($json['longitude']);
+                    $newuser->setLatitude($json['latitude']);
+                    $newuser->setPostal($json['postal']);
+                    $newuser->setCity($json['city']);
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($newuser);
+                    $em->flush();
+
+                }
+                
+            } catch (\Throwable $th) {
+                //throw $th;
+                dump($th);
+            }
+
+       
 
         $repository = $this->getDoctrine()->getRepository(ProductModel::class)->findBy([], ['product_name' => 'ASC']);
 
@@ -206,10 +243,6 @@ class IndexController extends AbstractController
     }
 
 
-    /**
-     * @Route("/email", name="email_me")
-     */
-
      public function emailme(MailerInterface $mailer)
      {
 
@@ -263,28 +296,23 @@ class IndexController extends AbstractController
     /**
      * @Route("/test", name="tes")
      */
-    public function cookietest()
+    public function cookietest(Request $request)
     {
 
-        // $this->session->set('foo', [
-        //                              'name' => 'rotan',
-        //                              'kambing' => 'babu'
-                                   
-        //                                 ] );
-        // $test = $this->session->get('foo');
-        // $test = $this->session->getId('foo');5118cccedd16639cd30d53de23acfb19
+        $form = $this->createForm(TestType::class);
 
-        $tests =$this->session->get('_csrf_token');
 
-        // foreach ($tests as $csrt)
-        // {
-        //     if($csrt == '_csrf/form'){
-        //         $test = $csrt;
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
 
-        //     }
-        // }
+        }
 
-        return $this->render('v2/test.html.twig', ['test'=> $tests]);
+
+        $tests = $form->get('newPassword')->getData();
+
+       
+
+        return $this->render('v2/test.html.twig',['form' => $form->createView() , 'test' => $tests]);
     }
 
 }

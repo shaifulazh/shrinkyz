@@ -62,6 +62,15 @@ export default class Sidebar extends Component {
               <i class="fas fa-list-alt"></i> Devops
             </NavLink>
           </li>
+          <li>
+            <NavLink
+              to="/visitor"
+              activeClassName="active"
+              className="list-group-item list-group-item-action"
+            >
+              <i class="fas fa-list-alt"></i> Visitor
+            </NavLink>
+          </li>
         </ul>
       </div>
     );

@@ -1,23 +1,28 @@
  <nav class="navbar navbar-expand-xl navbar-dark bg-primary">
                 <div class="d-flex container-fluid my-1">
-                    <div class="mr-auto">
-                            {{app.request.get('_route') == 'app_home' ?  '   <button class="btn btn-primary " id="menu-toggle">Categories </button>' }}
-                            {{app.request.get('_route') == 'link_category' ?  '    <button class="btn btn-primary" id="menu-toggle">Categories </button>' }}
-                    </div>    
-                           <div class="m-3 p-3"> 
+                      
+                           <div class="m-0 p-0"> 
                                 <div class="navbar-brand m-3 m-auto">
-                                             <img src="{{asset('/images/navicon.jpeg')}}" width="30" height="30" class="" alt="">
-                                                  <a class="navbar-brand" href="#top">
+                                                  <a class="navbar-brand" href="{{path('app_home')}}">
+                                             <img src="{{asset('/images/navicon.png')}}" width="30" height="30" class="" alt="">
                                                                                  Shrinkyz
                                                         </a>
                                 </div>
                             </div>
+
+
+                                 <div class="mr-auto">
+                                        {{app.request.get('_route') == 'app_home' ?  '   <button class="btn btn-primary " id="menu-toggle">Categories </button>' }}
+                                        {{app.request.get('_route') == 'link_category' ?  '    <button class="btn btn-primary" id="menu-toggle">Categories </button>' }}
+                                </div> 
+
                                 <div class="ml-auto">
                                     <button aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor01" data-toggle="collapse" type="button">
                                                 <span class="navbar-toggler-icon"></span>
                                           </button>
                                 
                                 </div>
+
                             <div class="collapse navbar-collapse" id="navbarColor01">
                     
                   
