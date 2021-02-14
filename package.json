@@ -20,7 +20,7 @@
     "push:origin": "git push origin master",
     "pull": "git pull origin master",
     "router": "php bin/console debug:router",
-    "mobile": "php bin/console server:run *:80",
+    "mobile": "php bin/console server:run",
     "web": "concurrently \"npm run mobile\" \"npm run watch\"",
     "schema": "php bin/console doctrine:schema:update --force"
   },
