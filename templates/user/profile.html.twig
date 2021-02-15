@@ -13,8 +13,19 @@
 <div class="border p-3 my-3">
     
 <p style="font-weight:bold">
-    Email : {{user.email}} 
+    Email : {{user.email}}
 </p>
+
+    {% if user.isVerified  %} 
+    <p> Email verfication :  Verified </p>
+     {% else %}
+     <div>
+ Email verfication :  Not Verified  
+<a href="{{path('new_verification')}}"><p style="color:red;">Resend Email Verification</p></a> 
+     </div>
+    {% endif %}
+
+
 <p style="font-weight:bold">
     First Name : {{user.firstname }} 
     <p style="font-weight:bold" >

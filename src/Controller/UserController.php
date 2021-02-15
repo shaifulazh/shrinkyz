@@ -16,7 +16,9 @@ use App\Entity\OrderModel;
 use App\Entity\User;
 use App\Form\ChangePassType;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mime\Address;
+use App\Security\EmailVerifier;
 
 class UserController extends AbstractController
 {
@@ -177,6 +179,40 @@ class UserController extends AbstractController
     {
         $user = $this->getUser();
         return $this->render('user/profile.html.twig', ['user' => $user]);
+    }
+
+
+    /**
+     * @Route("/new_verification" , name="new_verification")
+     */
+    public function userVerificationProfile(EmailVerifier $emailVerifier)
+    {
+        $user = $this->getUser();
+
+        if($user->isVerified())
+        {
+
+            return $this->render('user/profile.html.twig', ['user' => $user]);
+        }
+        else{
+
+            $emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+            (new TemplatedEmail())
+                ->from(new Address($this->getParameter('webemail'), $this->getParameter('webemailname')))
+                ->to($user->getEmail())
+                ->subject('Please Confirm your Email')
+                ->htmlTemplate('registration/confirmation_email.html.twig')
+            );
+            // do anything else you need here, like send an email
+
+            $this->addFlash('success', 'U have Register Success. A link has been sent to your '. $user->getEmail() .'. Please Verified Your email to confirm registration. Link will expired in 30 minutes.');
+                
+            return $this->render('user/profile.html.twig', ['user' => $user]);
+
+        }
+
+
+
     }
 
     /**
