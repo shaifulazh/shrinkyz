@@ -5,9 +5,13 @@ import { Navbar } from "react-bootstrap";
 export default class MobileSideBar extends Component {
   render() {
     return (
-      <Navbar bg="dark" variant="dark" className="m-0 p-0 pl-3">
+      <Navbar
+        bg="dark"
+        variant="dark"
+        className="m-0 p-0 pl-3 justify-content-center"
+      >
         <div className="row">
-          <ul className="nav nav-pills justify-content-end">
+          <ul className="nav nav-pills ">
             <li className="nav-item p-1 m-1 ">
               <NavLink
                 to="/admin"

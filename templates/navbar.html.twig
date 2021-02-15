@@ -81,14 +81,21 @@
                                                 <a class="nav-link " href="{{ path('app_register') }}">Register</a>
                                             </li>
 
-
-                                        {% elseif is_granted('IS_AUTHENTICATED_FULLY') %}
+                                        {% endif %}
+                                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                                             <li class="nav-item dropdown ">
                                                 <a aria-expanded="true" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button">{{ app.user.email }}</a>
                                                 <div class="dropdown-menu " style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);" x-placement="bottom-start">
+                                                    {% if is_granted('ROLE_ADMIN') %}
+                                                    <a class="dropdown-item" href=" {{ path('dashboard') }}">Admin</a>
+                                                     {% endif %} 
                                                     <a class="dropdown-item" href="{{path('user_profile')}}">My Profile</a>
                                                     <a class="dropdown-item" href="{{path('user_orders')}}">My Orders</a>
                                                     <a class="dropdown-item" href=" {{ path('app_logout') }}">Logout</a>
+                                        {% endif %}
+                                        
+
+                                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                                                 </div>
                                             </li>
 

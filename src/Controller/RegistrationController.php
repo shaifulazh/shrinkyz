@@ -89,6 +89,7 @@ class RegistrationController extends AbstractController
 
        // Verify the user id exists and is not null
        if (null === $id) {
+        $this->addFlash('warning', 'id null');
            return $this->redirectToRoute('app_home');
        }
 
@@ -96,12 +97,9 @@ class RegistrationController extends AbstractController
 
        // Ensure the user exists in persistence
        if (null === $user) {
+        $this->addFlash('warning', 'user null');
            return $this->redirectToRoute('app_home');
        }
-
-
-
-
 
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
@@ -124,6 +122,8 @@ class RegistrationController extends AbstractController
      */
     public function adminRegister(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
+        //for admin only dev should open for registration
+        return $this->redirectToRoute('app_home');
         $user = new User();
         $form = $this->createForm(AdminFormType::class);
         $form->handleRequest($request);

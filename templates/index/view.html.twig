@@ -71,15 +71,15 @@
                 <h6>
                     {% if product.getProductStock > 2 %}
 
-                   <span style="color:black;font-style:italic"> {{product.getProductStock}} stocks left!  </span>
+                   <span style="color:black;font-style:italic"> {{product.getProductStock}}  left!  </span>
                   
                     {% elseif product.getProductStock == 1  %}
 
-                    <span style="color:black;font-style:italic"> Only {{product.getProductStock}} stock left!  </span>
+                    <span style="color:black;font-style:italic"> Only {{product.getProductStock}}  left!  </span>
                   
                     {% elseif product.getProductStock < 1 %}
 
-                    <span style="color:black;font-style:italic">No stocks left  </span>
+                    <span style="color:black;font-style:italic">Sold Out  </span>
                   
                     {% endif %}
                 </h6>
