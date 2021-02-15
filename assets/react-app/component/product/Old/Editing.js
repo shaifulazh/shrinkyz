@@ -46,17 +46,7 @@ export default class Editing extends Component {
 
 
       });
-      if (data.category) {
-        this.setState({
-          categoryId: data.category.id
-        });
-      }
-
-      if (data.productImage) {
-        this.setState({
-          image: data.productImage
-        });
-      }
+      
     });
   }
 
@@ -82,7 +72,7 @@ export default class Editing extends Component {
   };
 
   handleSave() {
-    const { data, name, price, stock, desc, categoryId, image , details} = this.state;
+    const { data, name, price, stock, desc} = this.state;
     console.log(data);
 
     if(name == null)
@@ -115,9 +105,7 @@ export default class Editing extends Component {
           price: price,
           stock: stock,
           desc: desc,
-          image: image,
-          category: categoryId,
-          details : details
+  
           
         }
       })
@@ -232,7 +220,6 @@ export default class Editing extends Component {
                       onChange={e => this.setState({ desc: e.target.value })}
                     />
 
-                   { (details && gotnulldata) ? <EditProductDetails fordetails={details} datachange={this.handleDetailChange}/>  : <ProductDetails detailname={this.handleDetailsNull} /> }            
 
 
                   </div>
@@ -242,58 +229,10 @@ export default class Editing extends Component {
               <div className="p-4 border rounded">
                 <div className="row">
                   <div className="col">
-                    {image ? (
-                      <div>
-                        <img
-                          src={"/images/" + image}
-                          style={{ width: "130px", height: "130px" }}
-                        />
-                        <div>
-                          <button 
-                          className="btn btn-primary"
-                          onClick={this.handleRemoveImage}>
-                          
-                            Remove Image
-                          </button>
-                        </div>
-                      </div>
-                    ) : (
-                      <div>
-                        <label>No Image</label>
-                        <div className="p-3">
-                          <button
-                          className="btn btn-primary"
-                            onClick={() =>
-                              this.setState({ showAddImage: true })
-                            }
-                          >
-                            Add Image
-                          </button>
-                        </div>
-                      </div>
-                    )}
+                    
                   </div>
 
-                  <div className="col">
-                    {categoryId ? (
-                      <div>
-                        <EditCat
-                          categoryId={categoryId}
-                          handleCategory={this.handleCategory}
-                        />
-                        <button
-                        className="btn btn-primary"
-                          onClick={() => this.setState({ categoryId: null })}
-                        >
-                          Remove Category
-                        </button>
-                      </div>
-                    ) : (
-                      <div>
-                        <Categories selected={this.handleSelect} />
-                      </div>
-                    )}
-                  </div>
+                
 
                   <div className="col">
                     <button

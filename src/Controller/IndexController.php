@@ -85,7 +85,7 @@ class IndexController extends AbstractController
 
        
 
-        $repository = $this->getDoctrine()->getRepository(ProductModel::class)->findBy([], ['product_name' => 'ASC']);
+        $repository = $this->getDoctrine()->getRepository(ProductModel::class)->findBy([], ['view' => 'DESC']);
 
         $pagination = $this->paginator->paginate(
             $repository, /* query NOT result */
@@ -239,6 +239,10 @@ class IndexController extends AbstractController
     public function viewProduct($id)
     {
         $repository = $this->getDoctrine()->getRepository(ProductModel::class)->find($id);
+        $repository->addView();
+        $this->getDoctrine()->getManager()->persist($repository);
+        $this->getDoctrine()->getManager()->flush();
+
         return $this->render('index/view.html.twig', ['product' => $repository]);
     }
 

@@ -68,7 +68,7 @@ export default class Sidebar extends Component {
               activeClassName="active"
               className="list-group-item list-group-item-action"
             >
-              <i class="fas fa-list-alt"></i> Visitor
+              <i class="far fa-eye"></i> Visitor
             </NavLink>
           </li>
         </ul>

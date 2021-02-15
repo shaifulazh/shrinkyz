@@ -5,6 +5,7 @@ import { Table } from "react-bootstrap";
 export default function Visitor() {
   const [data, setData] = useState(null);
   const [table, setTable] = useState(null);
+  const [dataname, setDataname] = useState(null);
 
   useEffect(() => {
     axios
@@ -37,20 +38,26 @@ export default function Visitor() {
         return ind.Country;
       });
       const countCountry = countObjs(country);
-
-      setTable({ Country: countCountry });
+      setDataname("Country")
+      setTable(countCountry);
     } else if (target === "State") {
       const state = data.map((ind) => {
         return ind.state;
       });
 
       const cstate = countObjs(state);
-      setTable({ State: cstate });
+      setDataname("State")
+      setTable(cstate);
     } else if (target === "City") {
       const city = data.map((ind) => ind.city);
       const ccity = countObjs(city);
-      setTable({ City: ccity });
+      setDataname("City")
+      setTable(ccity);
     } else if (target === "IP") {
+      const ips = data.map(dat=>dat.ip)
+      const ipd = countObjs(ips);
+      setDataname("IP")
+      setTable(ipd)
     }
   };
 
@@ -69,41 +76,49 @@ export default function Visitor() {
 
   console.log(table);
 
+
+  
+
+
   return (
     <div className="container">
       <div className="mt-3">
         {data && <h3>Total Visitor : {data.length}</h3>}
 
         <select
-          defaultValue={{ label: 2002, value: 2002 }}
+          className="mb-2"
           onChange={selectOnChange}
         >
+           <option value=""  defaultValue>Please select an Option</option>
           <option value="Country">Country</option>
           <option value="State">State</option>
           <option value="City">City</option>
           <option value="IP">IP</option>
         </select>
+        <br/>
 
-        {table && (
+        {table && dataname && (
           <div>
-            <Table striped bordered hover size="sm">
+            <Table striped bordered hover size="sm"  >
               <thead>
                 <tr>
-                  <th>{Object.keys(table)[0]}</th>
-                  <th>Table</th>
+                  <th>{dataname}</th>
+                  <th>Count</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  {table[Object.keys(table)[0]].map((x, i) => {
-                    return <th>{x[Object.keys(x)[i]]}</th>;
+                
+                  {Object.getOwnPropertyNames(table).map((x, i)=> {
+                     return( <tr key={i}>
+                       <td>{x}</td><td>{table[x]}</td> 
+                      </tr>)
                   })}
-                </tr>
+                
               </tbody>
             </Table>
+            
           </div>
         )}
-
         <div></div>
       </div>
     </div>

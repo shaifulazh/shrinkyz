@@ -19,6 +19,7 @@ export default class ProductList extends Component {
       categoryFilter: null,
       stockgreat: null,
       stockless: null,
+      toggled : false,
     };
     this.productInput = null;
     this.categoryInput = null;
@@ -28,9 +29,7 @@ export default class ProductList extends Component {
     this.product = (e) => {
       this.productInput = e;
     };
-    this.category = (e) => {
-      this.categoryInput = e;
-    };
+ 
     this.stockgreat = (e) => {
       this.stockgreatInput = e;
     };
@@ -116,7 +115,6 @@ export default class ProductList extends Component {
     console.log("clearing");
 
     if (this.product) this.productInput.value = "";
-    if (this.category) this.categoryInput.value = "";
     if (this.stockgreat) this.stockgreatInput.value = "";
     if (this.stockless) this.stocklessInput.value = "";
 
@@ -151,6 +149,24 @@ export default class ProductList extends Component {
 
     this.paginateData(data);
   };
+
+  handleSortView= (e)=>{
+    e.preventDefault();
+    let list = this.state.data
+    if(this.state.toggled){
+      list.sort((a, b) => a.view - b.view)
+      this.paginateData(list);
+      this.setState({toggled : false})
+
+    }else{
+      list.sort((a, b) => b.view - a.view)
+      this.paginateData(list);
+      this.setState({toggled : true})
+    }
+    
+
+
+  }
 
   render() {
     console.log(this.props);
@@ -190,7 +206,7 @@ export default class ProductList extends Component {
                 />
               </div>
             </Col>
-            <Col xs="12" sm="6" lg="3">
+            {/* <Col xs="12" sm="6" lg="3">
               <label>Category</label>
               <select
                 ref={this.category}
@@ -208,7 +224,7 @@ export default class ProductList extends Component {
                     </option>
                   ))}
               </select>
-            </Col>
+            </Col> */}
             <Col xs="12" sm="6" lg="3">
               <div>
                 <label>Stock Greater Than</label>
@@ -286,18 +302,20 @@ export default class ProductList extends Component {
             </div>
             <br />
 
-            <div className="overflow-auto">
-              <table class="table table-dark">
+            <div className="container overflow-auto">
+              <table class="table table-bordered">
                 <thead>
                   <tr>
                     <th scope="col">#</th>
                     <th scope="col">Image</th>
                     <th scope="col">Product</th>
                     <th scope="col">
-                      Category{" "}
-                      <Link className="btn btn-primary" to="/category">
-                        <i className="fas fa-edit" /> Edit
-                      </Link>
+                      <div className="d-flex">
+
+                      Views<a href="#"   onClick={this.handleSortView}>
+                        {this.state.toggled ?  <i class="fas fa-sort-amount-down"></i> :<i class="fas fa-sort-amount-up"></i> }</a>
+                      
+                      </div>
                     </th>
                     <th scope="col">Price</th>
                     <th scope="col">Stock</th>
@@ -309,7 +327,7 @@ export default class ProductList extends Component {
                   {pagination ? (
                     pagination.map((x, i) => (
                       <tr key={i}>
-                        <th scope="row">{i}</th>
+                        <th scope="row">{i+1}</th>
                         <td>
                           {x.pictures.map((a, b) =>
                             b === 0 ? (
@@ -323,7 +341,7 @@ export default class ProductList extends Component {
                           )}
                         </td>
                         <td>{x.productName}</td>
-                        <td>{x.category ? x.category.name : ""}</td>
+                        <td>{x.view ? x.view : null}</td>
                         <td>{x.productPrice}</td>
                         <td>{x.productStock}</td>
                         <td>

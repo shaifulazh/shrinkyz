@@ -463,15 +463,9 @@ class ApiAdminProductController extends AbstractFOSRestController
      * 
      * @Rest\RequestParam(name="price", description="product price", nullable=false)
      * 
-     * @Rest\RequestParam(name="image", description="product image", nullable=true)
-     * 
      * @Rest\RequestParam(name="stock", description="product stock", nullable=false)
      * 
      * @Rest\RequestParam(name="desc", description="product description", nullable=false)
-     * 
-     * @Rest\RequestParam(name="category", description="product category description", nullable=true)
-     * 
-     * @Rest\RequestParam(name="details", description="product  details", nullable=true)
      * 
      * @param ParamFetcher $paramFetcher
      */
@@ -481,64 +475,8 @@ class ApiAdminProductController extends AbstractFOSRestController
         $productModel->setProductPrice($paramFetcher->get('price'));
         $productModel->setProductStock($paramFetcher->get('stock'));
         $productModel->setProductDesc($paramFetcher->get('desc'));
-        $productModel->setProductImage($paramFetcher->get('image'));
-
-        if ($paramFetcher->get('category')) {
-
-            $category = $this->entityManager->getRepository(Category::class)->find($paramFetcher->get('category'));
-            $productModel->setCategory($category);
-        } else {
-            $productModel->setCategory(null);
-        }
         $this->entityManager->persist($productModel);
         $this->entityManager->flush();
-
-        $em = $this->entityManager;
-
-
-        $details = $paramFetcher->get('details');
-        if ($details)
-        {             
-            $id = 0;
-            foreach ($details as $detail) {
-                $obj = (Object)$detail;
-                if(isset($obj->id)){
-                    $found[$id] = $this->entityManager->getRepository(ProductDetails::class)->find($obj->id);
-                }
-                if ($found[$id]){
-                    //if product detail found
-                    $found[$id]->setDetailName($obj->detailname);
-                    $found[$id]->setDatadesc($obj->datadesc);
-                    $em->persist($found[$id]);
-                    $em->flush();
-                    
-                }
-                if (!$found[$id]){
-                    //if product details is new
-                    $prodetails = new ProductDetails();
-                    $prodetails->setProduct($productModel);
-                    if ($obj->detailname) {
-                        # code...
-                        $prodetails->setDetailName($obj->detailname);
-                    }
-                    if ($obj->datadesc)
-                    {
-                        $prodetails->setDatadesc($obj->datadesc);
-                    }
-                    $em->persist($prodetails);
-                    $em->flush();
-                    
-
-                }
-                $id++;
-
-                
-            }
-        }
-
-
-
-
         return $this->view($productModel, Response::HTTP_OK);
     }
 

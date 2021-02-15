@@ -72,6 +72,15 @@ class ProductModel
      */
     private $subtwocategories;
 
+    /**
+     * @ORM\Column(type="integer",nullable=true)
+     */
+    private $view;
+
+
+
+
+
     public function __construct()
     {
         $this->cart = new ArrayCollection();
@@ -297,6 +306,24 @@ class ProductModel
             $subtwocategory->removeProduct($this);
         }
 
+        return $this;
+    }
+
+    public function getView(): ?int
+    {
+        if ($this->view === null){
+            $this->view = 0;
+        }
+        return $this->view;
+    }
+
+
+    public function addView(): self
+    {
+        if ($this->view === null){
+            $this->view = 0;
+        }
+        $this->view = $this->view + 1;
         return $this;
     }
 

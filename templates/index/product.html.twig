@@ -1,7 +1,7 @@
       <div class="row ">
                 {% for product in products %}
                     <div class="col-6 col-xs-6 col-md-6 col-xl-3 my-2 mx-0">
-                        <div class="card border h-500">
+                        <div class="card border">
                             <a href="{{ path('app_view', { id: product.getId }) }}">
                                 <div class="img-container mb-2">
                                     {% for key, picture in product.pictures %}
