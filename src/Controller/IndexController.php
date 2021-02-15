@@ -72,18 +72,17 @@ class IndexController extends AbstractController
             //this function to register every person who visited homepage using database
             try {
 
-                dump($this->get_client_ip());
-                $user = $this->getDoctrine()->getRepository(VisitorOfPage::class)->findOneBy(['ip'=> $request->getClientIp()]);
+                $user = $this->getDoctrine()->getRepository(VisitorOfPage::class)->findOneBy(['ip'=> $this->get_client_ip()]);
                 if(!$user){
                     $newuser = new VisitorOfPage;
-                    $data = file_get_contents('https://geolocation-db.com/json/'. $this->getParameter('geotoken') .'/'. $request->getClientIp() );
+                    $data = file_get_contents('https://geolocation-db.com/json/'. $this->getParameter('geotoken') .'/'. $this->get_client_ip() );
                     $json = json_decode($data, true);
                     if ( $json['IPv4']){
              
-                        $newuser->setIp($request->getClientIp());
+                        $newuser->setIp($this->get_client_ip());
                     }
                     else{
-                        $newuser->setIp($request->getClientIp());
+                        $newuser->setIp($this->get_client_ip());
                     }
                     // $newuser->createdAt();
                     $newuser->setCountry($json['country_name']);
