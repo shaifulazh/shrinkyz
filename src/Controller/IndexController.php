@@ -37,6 +37,25 @@ class IndexController extends AbstractController
         $this->session = $session;
     }
 
+    public function get_client_ip() {
+        $ipaddress = '';
+        if (isset($_SERVER['HTTP_CLIENT_IP']))
+            $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
+        else if(isset($_SERVER['HTTP_X_FORWARDED_FOR']))
+            $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        else if(isset($_SERVER['HTTP_X_FORWARDED']))
+            $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
+        else if(isset($_SERVER['HTTP_FORWARDED_FOR']))
+            $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
+        else if(isset($_SERVER['HTTP_FORWARDED']))
+            $ipaddress = $_SERVER['HTTP_FORWARDED'];
+        else if(isset($_SERVER['REMOTE_ADDR']))
+            $ipaddress = $_SERVER['REMOTE_ADDR'];
+        else
+            $ipaddress = 'UNKNOWN';
+        return $ipaddress;
+    }
+
 
 
 
@@ -53,7 +72,8 @@ class IndexController extends AbstractController
             //this function to register every person who visited homepage using database
             try {
 
-                $user = $this->getDoctrine()->getRepository(VisitorOfPage::class)->findBy(['ip'=> $request->getClientIp()]);
+                dump($this->get_client_ip());
+                $user = $this->getDoctrine()->getRepository(VisitorOfPage::class)->findOneBy(['ip'=> $request->getClientIp()]);
                 if(!$user){
                     $newuser = new VisitorOfPage;
                     $data = file_get_contents('https://geolocation-db.com/json/'. $this->getParameter('geotoken') .'/'. $request->getClientIp() );
@@ -65,7 +85,7 @@ class IndexController extends AbstractController
                     else{
                         $newuser->setIp($request->getClientIp());
                     }
-                    $newuser->createdAt();
+                    // $newuser->createdAt();
                     $newuser->setCountry($json['country_name']);
                     $newuser->setState($json['state']);
                     $newuser->setLongitute($json['longitude']);
@@ -76,11 +96,18 @@ class IndexController extends AbstractController
                     $em->persist($newuser);
                     $em->flush();
 
+                }else{
+                    $user->updatedAt();
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($user);
+                    $em->flush(); 
                 }
+
+                
                 
             } catch (\Throwable $th) {
                 //throw $th;
-                dump($th);
+                // dump($th);
             }
 
        

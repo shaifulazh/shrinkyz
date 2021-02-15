@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=VisitorOfPageRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class VisitorOfPage
 {
