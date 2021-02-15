@@ -89,7 +89,7 @@ class RegistrationController extends AbstractController
 
        // Verify the user id exists and is not null
        if (null === $id) {
-        $this->addFlash('warning', 'id null');
+        $this->addFlash('warning', 'Link Broken cant find user');
            return $this->redirectToRoute('app_home');
        }
 
@@ -97,7 +97,7 @@ class RegistrationController extends AbstractController
 
        // Ensure the user exists in persistence
        if (null === $user) {
-        $this->addFlash('warning', 'user null');
+        $this->addFlash('warning', 'Link Broken, User not registered');
            return $this->redirectToRoute('app_home');
        }
 
