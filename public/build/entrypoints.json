@@ -2,47 +2,46 @@
   "entrypoints": {
     "app": {
       "js": [
-        "/build/runtime.js",
-        "/build/vendors-node_modules_popper_js_dist_esm_popper_js.js",
-        "/build/vendors-node_modules_bootstrap_dist_js_bootstrap_js-node_modules_bootswatch_dist_lux_bootstra-104c34.js",
-        "/build/app.js"
+        "/build/runtime.71e4f462.js",
+        "/build/981.68bff3ef.js",
+        "/build/467.36b3122b.js",
+        "/build/app.79b26aca.js"
       ],
       "css": [
-        "/build/vendors-node_modules_bootstrap_dist_js_bootstrap_js-node_modules_bootswatch_dist_lux_bootstra-104c34.css",
-        "/build/app.css"
+        "/build/467.ac38dbc5.css",
+        "/build/app.31d6cfe0.css"
       ]
     },
     "email": {
       "js": [
-        "/build/runtime.js",
-        "/build/vendors-node_modules_react-dom_index_js.js",
-        "/build/email.js"
+        "/build/runtime.71e4f462.js",
+        "/build/935.d81b126b.js",
+        "/build/email.6deede4b.js"
       ]
     },
     "reactApp": {
       "js": [
-        "/build/runtime.js",
-        "/build/vendors-node_modules_react-dom_index_js.js",
-        "/build/vendors-node_modules_material-ui_core_esm_AppBar_AppBar_js-node_modules_material-ui_core_esm_-63cddb.js",
-        "/build/vendors-node_modules_popper_js_dist_esm_popper_js.js",
-        "/build/vendors-node_modules_material-ui_core_esm_Button_Button_js-node_modules_material-ui_core_esm_-292055.js",
-        "/build/reactApp.js"
+        "/build/runtime.71e4f462.js",
+        "/build/935.d81b126b.js",
+        "/build/616.8dd7393b.js",
+        "/build/981.68bff3ef.js",
+        "/build/857.b603c4b2.js",
+        "/build/reactApp.02d6f504.js"
       ],
       "css": [
-        "/build/vendors-node_modules_material-ui_core_esm_Button_Button_js-node_modules_material-ui_core_esm_-292055.css",
-        "/build/reactApp.css"
+        "/build/reactApp.14971f10.css"
       ]
     },
     "mobile": {
       "js": [
-        "/build/runtime.js",
-        "/build/vendors-node_modules_react-dom_index_js.js",
-        "/build/vendors-node_modules_material-ui_core_esm_AppBar_AppBar_js-node_modules_material-ui_core_esm_-63cddb.js",
-        "/build/vendors-node_modules_material-ui_core_esm_Badge_Badge_js-node_modules_material-ui_core_esm_Bo-399753.js",
-        "/build/mobile.js"
+        "/build/runtime.71e4f462.js",
+        "/build/935.d81b126b.js",
+        "/build/616.8dd7393b.js",
+        "/build/744.8e19f053.js",
+        "/build/mobile.2e127a74.js"
       ],
       "css": [
-        "/build/vendors-node_modules_material-ui_core_esm_Badge_Badge_js-node_modules_material-ui_core_esm_Bo-399753.css"
+        "/build/744.88e89caa.css"
       ]
     }
   }

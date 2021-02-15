@@ -5,9 +5,9 @@ import { Navbar } from "react-bootstrap";
 export default class MobileSideBar extends Component {
   render() {
     return (
-      <Navbar fixed="bottom" bg="dark" variant="dark" className="m-0 p-0 pl-3">
+      <Navbar bg="dark" variant="dark" className="m-0 p-0 pl-3">
         <div className="row">
-          <ul className="nav nav-pills">
+          <ul className="nav nav-pills justify-content-end">
             <li className="nav-item p-1 m-1 ">
               <NavLink
                 to="/admin"
@@ -69,14 +69,11 @@ export default class MobileSideBar extends Component {
                 to="/visitor"
                 activeClassName="active"
                 className="nav-link p-1 m-1"
-              > <i class="far fa-eye"></i>
-                
+              >
+                {" "}
+                <i class="far fa-eye"></i>
               </NavLink>
             </li>
-
-
-
-           
           </ul>
         </div>
       </Navbar>
