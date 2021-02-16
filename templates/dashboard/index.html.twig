@@ -6,11 +6,17 @@
    {{ encore_entry_link_tags('reactApp') }}
 {% endblock %}
 
-{% block body %}
+{% block head %}{% endblock %}
 
+{% block body %}
+{% block nav %}{% endblock %}
 <div id="root">
    
 </div>
+
+{% block footer %}
+ {% endblock %} 
+
 {% block javascript %}
 
     {{ parent() }}
@@ -18,6 +24,8 @@
     {{ encore_entry_script_tags('reactApp') }}
 
 {% endblock %}
+
+
 {% endblock %}
 
 

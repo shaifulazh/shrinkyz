@@ -15,7 +15,7 @@ class DashboardController extends AbstractController
     {
 
         $device = $this->isMobile($request);
-        if($device && false ){
+        if($device && false){
             return $this->render('dashboard/mobile.html.twig');
 
         }

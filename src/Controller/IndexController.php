@@ -328,21 +328,24 @@ class IndexController extends AbstractController
      */
     public function cookietest(Request $request)
     {
-
-        $form = $this->createForm(TestType::class);
-
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-
-        }
-
-
-        $tests = $form->get('newPassword')->getData();
-
-       
-
-        return $this->render('v2/test.html.twig',['form' => $form->createView() , 'test' => $tests]);
+        return ;
     }
+
+    /**
+     * @Route("/privacy", name="privacy")
+     */
+    public function privacy(Request $request)
+    {   
+        return $this->render('index/privacy.html.twig');
+    }
+
+      /**
+     * @Route("/terms", name="terms")
+     */
+    public function terms(Request $request)
+    {   
+        return $this->render('index/terms.html.twig');
+    }
+
 
 }

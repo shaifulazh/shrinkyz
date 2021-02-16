@@ -91,7 +91,7 @@ export default class Dashboard extends Component {
     console.log(data, year, month);
 
     return (
-      <div className="container" style={{ padding: "10px" }}>
+      <div className="container-fluid" style={{ padding: "10px" }}>
         <div style={{ padding: "10px" }}>
           <Row>
             <Col xs="12" sm="6" lg="6">

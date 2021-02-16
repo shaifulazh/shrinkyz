@@ -19,6 +19,7 @@ import EasyCrop from "./mobilecomp/EasyCrop";
 import Cropperv2 from "./component/product/AddProducts/Cropperv2";
 import CategoryList from "./component/product/AddProducts/CategoryList";
 import Visitor from "./component/Visitor/Visitor";
+import "./index.css";
 
 export default class App extends Component {
   constructor(props) {

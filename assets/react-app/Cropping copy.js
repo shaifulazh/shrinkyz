@@ -11,7 +11,6 @@ export default class Cropping extends Component {
     this.state = {
       src: null,
       crop: {
-
         x: 0,
         y: 0,
         width: 100,
