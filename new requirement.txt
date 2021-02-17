@@ -4,8 +4,9 @@
 
 
 sudo service apache2 reload - relead server
-sudo nano /etc/apache2/sites-available/0* --- apache
+sudo nano /etc/apache2/sites-available/000-default.conf --- apache
 
+sudo systemctl status apache2
 
 
 ps aux | egrep '(apache|httpd)'
