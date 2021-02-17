@@ -17,6 +17,11 @@ test_api:
   resource: App\Controller\ApiAdminTestController
   prefix: api/admin/test
 
+email_api:
+  type: rest
+  resource: App\Controller\MailController
+  prefix: api/email/
+
 # user_api:
 #   type: rest
 #   resource: App\Controller\UserApiController

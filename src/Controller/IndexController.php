@@ -271,14 +271,15 @@ class IndexController extends AbstractController
 
         return $this->render('index/view.html.twig', ['product' => $repository]);
     }
-
+   /**
+     * @Route("/testmail", name="email_me")
+     */
 
      public function emailme(MailerInterface $mailer)
      {
 
-        return null;
         $sendmail = (new Email())
-        ->from('replacetr@gmail.com')
+        ->from('shaifulazhar.000@gmail.com')
         ->to('shaifulazhartalib@gmail.com')
         ->subject('Registration Complete')
         ->html('
@@ -305,7 +306,7 @@ class IndexController extends AbstractController
         return $this->render('request_product/request.html.twig',['message' => 'fail']);
     }
 
-   
+    return $this->render('request_product/request.html.twig',['message' => 'fail']);
     }
 
 
@@ -328,7 +329,7 @@ class IndexController extends AbstractController
      */
     public function cookietest(Request $request)
     {
-        return ;
+        return $this->render('v2/test.html.twig');
     }
 
     /**

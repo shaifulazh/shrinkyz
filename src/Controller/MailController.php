@@ -16,23 +16,31 @@ use PHPMailer\PHPMailer\Exception;
 
 class MailController extends AbstractFOSRestController
 {
+    private $mailer;
+
+    public function __construct(MailerInterface $mailer){
+        $this->mailer = $mailer;
+    }
+
+
     /**
      * @Rest\RequestParam(name="email", description="send email to", nullable=false)
      * @Rest\RequestParam(name="details", description="email details", nullable=false)
+     * @param ParamFetcher $paramFetcher
      */
-       public function postEmail(MailerInterface $mailer)
+       public function postEmailAction()
         {
-        // $email = (new Email())
-        //     ->from('shaifulazhar.000@gmail.com')
-        //     ->to($paramFetcher->get('email'))
-        //     ->subject('Special Request From Shrinkyz')
-        //     ->html('<p>We Notified by your request. Thank You for Requesting</p>');
-        // try {
-        //     //code...
-        //     $mailer->send($email);
-        // } catch (\Throwable $th) {
-        //     return $this->view(["message" => "error fail to send email"], Response::HTTP_INTERNAL_SERVER_ERROR);
-        // }
+        $email = (new Email())
+            ->from('shaifulazhar.000@gmail.com')
+            ->to($paramFetcher->get('email'))
+            ->subject('Special Request From Shrinkyz')
+            ->html('<p>We Notified by your request. Thank You for Requesting</p>');
+        try {
+            //code...
+            $this->mailer->send($email);
+        } catch (\Throwable $th) {
+            return $this->view(["message" => "error fail to send email"], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
 
     }
 
