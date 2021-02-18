@@ -68,11 +68,28 @@
             
         </div>
                 {{ knp_pagination_render(products) }}
+   {% include "request_product/request.html.twig" %}
+
+<script>
+function opensesame(params) {
+    document.querySelector(".request-top").classList.toggle("open-request"); 
    
-   <script>
+   document.querySelector(".request-top").style.display = "flex"
+   var element = document.querySelector(".request-content");
+    element.classList.toggle("open-request-content");
+}
+
+
+
     const requestprod = () => {
-        
-        console.log("requesting..")
+        opensesame()
     }
-    
-    </script>
+
+function handleclose (){
+  
+   
+   document.querySelector(".request-top").style.display = "none"
+  
+}
+
+</script>
