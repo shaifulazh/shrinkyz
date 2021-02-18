@@ -117,20 +117,7 @@ function handleTouchMove(evt) {
 };
 
 
-function name() {
-    setTimeout(() => {
-      
-        
-    }, 500);
-}
-// bitch();
-name();
-window.onload = function bitch(params) {
-    document.querySelector(".email-model").classList.toggle("open-content-model"); 
-    document.querySelector("body").style.overflow = "hidden"
-     var element = document.querySelector(".content-model");
-    element.classList.toggle("open-model");
-}
+
 
 // $(document).on('touchmove', function(e) {
 //     e.preventDefault();
@@ -152,11 +139,9 @@ x.style.top = "50px";
 x.style.left = "20px";
 setTimeout(() => {
     document.querySelector(".email-model").style.display = "none";
-    
+    enableScroll()
 }, 500);
-setTimeout(() => {
-    // document.querySelector("body").style.overflowY= "auto"
-}, 2000);
+
 }
 
 
@@ -170,8 +155,59 @@ document.getElementById('close').addEventListener('click', ()=>{
 
 })
 
+//disable scroll
+
+// left: 37, up: 38, right: 39, down: 40,
+// spacebar: 32, pageup: 33, pagedown: 34, end: 35, home: 36
+var keys = {37: 1, 38: 1, 39: 1, 40: 1};
+
+function preventDefault(e) {
+  e.preventDefault();
+}
+
+function preventDefaultForScrollKeys(e) {
+  if (keys[e.keyCode]) {
+    preventDefault(e);
+    return false;
+  }
+}
+
+// modern Chrome requires { passive: false } when adding event
+var supportsPassive = false;
+try {
+  window.addEventListener("test", null, Object.defineProperty({}, 'passive', {
+    get: function () { supportsPassive = true; } 
+  }));
+} catch(e) {}
+
+var wheelOpt = supportsPassive ? { passive: false } : false;
+var wheelEvent = 'onwheel' in document.createElement('div') ? 'wheel' : 'mousewheel';
+
+// call this to Disable
+function disableScroll() {
+  window.addEventListener('DOMMouseScroll', preventDefault, false); // older FF
+  window.addEventListener(wheelEvent, preventDefault, wheelOpt); // modern desktop
+  window.addEventListener('touchmove', preventDefault, wheelOpt); // mobile
+  window.addEventListener('keydown', preventDefaultForScrollKeys, false);
+}
+
+// call this to Enable
+function enableScroll() {
+  window.removeEventListener('DOMMouseScroll', preventDefault, false);
+  window.removeEventListener(wheelEvent, preventDefault, wheelOpt); 
+  window.removeEventListener('touchmove', preventDefault, wheelOpt);
+  window.removeEventListener('keydown', preventDefaultForScrollKeys, false);
+}
 
 
+
+window.onload = function bitch(params) {
+    disableScroll()
+    document.querySelector(".email-model").classList.toggle("open-content-model"); 
+   /* document.querySelector("body").style.overflow = "hidden"*/
+     var element = document.querySelector(".content-model");
+    element.classList.toggle("open-model");
+}
 </script>
 </div>
 
