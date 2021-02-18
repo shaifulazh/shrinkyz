@@ -44,7 +44,7 @@
                                             <div class="mt-2"> 
                                             <div class="row pl-3 mb-4">
                                         {% if product.productStock < 1 %}
-                                            <a href="" onclick="reqfunction()" class="btn btn-outline-secondary btn-sm ">Request</a>
+                                            <button onClick="requestprod()" class="btn btn-outline-secondary btn-sm ">Request</button>
                                             <p style="color:blue; font-size:90%;"class="m-2" >Sold, available upon request.</p>
                                         {% else %} 
 
@@ -69,4 +69,10 @@
         </div>
                 {{ knp_pagination_render(products) }}
    
-   
+   <script>
+    const requestprod = () => {
+        
+        console.log("requesting..")
+    }
+    
+    </script>

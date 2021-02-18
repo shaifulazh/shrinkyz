@@ -5,12 +5,7 @@
 
 {% block head %}
     {{ parent() }}
-
-    {# <style>
-        .active-{{app.request.get('id')}}{
-            background: #dadada !important;
-        }
-    </style> #}
+    
 
 {% endblock %}
 
@@ -35,6 +30,7 @@
                 </div>
                 </div>
             {{include('index/product.html.twig')}}
+           
         </div>
     
     </div>
@@ -55,28 +51,9 @@
 
    
 
-
-        {# $(document).ready(function() { 
-            
-             if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-                  $("#wrapper").toggleClass("toggled");
-            console.log('this is mobile');
- 
-}
-
-         }); #}
-
-{#        
-window.onload = (event) => {
- 
-   if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-                  $("#wrapper").toggleClass("toggled");
-            console.log('onload');
- 
-}
-  
-}; #}
-        
     </script>
 
+{% endblock %}
+{% block model %}
+    {% include ('index/email.html.twig') %}
 {% endblock %}

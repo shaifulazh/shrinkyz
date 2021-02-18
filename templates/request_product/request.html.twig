@@ -1,25 +1,48 @@
-{% extends 'base.html.twig' %}
+<style>
+.request-top {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 0;
+    background-color: rgb(0,0,0,0,0);
+    -webkit-transition: all 0.6s ease;
+    -moz-transition: all 0.6s ease;
+    transition: all 0.6s ease;
 
-{% block title %}Dashboard!{% endblock %}
+}
+.request-content {
+    position: absolute;
+    width: 0;
+    height: 0;
+    top : 25px;
+    left : 10px;
+    border-radius: 20px;
+    background-color: white;
+    -webkit-transition: all 0.6s ease;
+    -moz-transition: all 0.6s ease;
+    transition: all 0.6s ease;
+}
+.open-request{
+    background-color: rgb(0,0,0,0.7);
+    height: 100%;
+}
 
-{% block stylesheets %}
-
-{{ parent() }}
-
-
-{% endblock %}
-
-
-{% block body %}
+.open-request-content {
+    width: 300px;
+    height: 150px;
+    top : calc(50vh - 250px);
+    left : calc(50vw - 150px);
+}
 
 
-{{dump(message)}}
 
-{% block javascript %}
 
-    {{ parent() }}
+</style>
 
-    {{ encore_entry_script_tags('email') }}
+<div class="reqeust-top">
+<div class="request-content">
 
-{% endblock %}
-{% endblock %}
+
+</div>
+
+</div>

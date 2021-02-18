@@ -22,7 +22,9 @@
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div style="height: 100vh; width: 100vw; background-color: blue;"> 
+
+                <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Welcome To Shrinkyz</h5>
@@ -33,20 +35,20 @@
         <div class="modal-body">
             <div class="container-fluid">
                 Hellow
-
+                
 
                 <button onClick="sendmail()" >Send Email</button>
             </div>
         </div>
     </div>
-  </div>
+  </div></div>
 </div>  
 
 {% block javascript %}
 
     {{ parent() }}
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
- <!-- JavaScript Bundle with Popper -->
+ 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
 <script>
  window.onload =  ()=>{
@@ -61,16 +63,25 @@
 
      console.log('sending mail')
 
-     fetch('{{path('email_me')}}')
+     const data = { email: 'example@kambing.com' };
+
+    fetch('/api/email/emails', {
+      method: 'POST', // or 'PUT'
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
     .then(response => response.json())
-    .then(data => console.log(data));
+    .then(data => {
+      console.log('Success:', data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
  }
    
  
- {# $("#exampleModal").click(function (e) {
-            console.log("hello")
-}); #}
-
 
 </script>
         
