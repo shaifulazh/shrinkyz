@@ -11,8 +11,43 @@
     <div class="mt-3">
     
     <div class="container">
+     <div class="row">
+         <div class="ml-3">
+            <ul class="nav nav-tabs">
+            {% if subcategories is defined %}
 
-    
+            {% for subcategoryz in subcategories %}
+
+            {% if subcategory.id is same as(subcategoryz.id) %}
+            <li class="nav-item">
+                <a href="{{path('subcategories_link', {id : subcategory.id})}}" class="nav-link active"> {{ subcategory.subcategoryname }}</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                    <a href="{{path('subcategories_link', {id : subcategoryz.id})}}" class="nav-link"> {{ subcategoryz.subcategoryname }}</a>
+                </li>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+
+
+            <div style="border-left: 1px solid black;" ></div>
+                {% if subtwocategories  is defined %}
+                {% for subtwocategoryz in subtwocategories %}
+                    {% if subtwocategory.id is same as(subtwocategoryz.id) %}
+                           <li class="nav-item">
+                                <a href="{{path('subtwocategories_link', {id : subtwocategory.id})}}" class="nav-link active"> {{ subtwocategory.subtwocategoryname }}</a>
+                        </li>                      
+                     {% else %}
+                        <li class="nav-item">
+                                <a href="{{path('subtwocategories_link', {id : subtwocategoryz.id})}}" class="nav-link"> {{ subtwocategoryz.subtwocategoryname }}</a>
+                        </li>
+                     {% endif %}
+                {% endfor %}
+                {% endif %}
+            </ul>   
+     </div>
+    </div>
     
   
 {{include('index/product.html.twig')}}

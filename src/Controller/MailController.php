@@ -126,6 +126,56 @@ class MailController extends AbstractFOSRestController
 
     }
 
+
+    public function emailme(MailerInterface $mailer)
+    {
+
+       $sendmail = (new Email())
+       ->from('shaifulazhar.000@gmail.com')
+       ->to('shaifulazhartalib@gmail.com')
+       ->subject('Registration Complete')
+       ->html('
+  
+       <p> Dear valued Customer,,<p/>
+       
+       <p>Thank you for registering for an account at Shrinkyz.com. Before we can</p>
+       <p>activate your account one last step must be taken to complete your</p> 
+       <p>registration. </p>
+       </br>
+       <p>To confirm your registration, please visit this URL:</p>
+       <p><a href="#">http://shrinkyz.com/FMfcgxwLsJvLLTNmSGcTClnZdwQjMplg</a></p>
+       <p>Note: This email is auto-post mail. Please do not reply.></p>
+
+       ');
+   try {
+       //code...
+       $mailer->send($sendmail);
+       return $this->render('request_product/request.html.twig',['message' => 'sucess']);
+
+
+
+   } catch (\Throwable $th) {
+       return $this->render('request_product/request.html.twig',['message' => 'fail']);
+   }
+
+   return $this->render('request_product/request.html.twig',['message' => 'fail']);
+   }
+
+
+   // ->html('
+  
+   // <p> Welcome,<p/>
+   
+   // <p>Thank you for registering your email account with us. You ID is CustomerID and email customer@cust.com.</p>
+   // <p>To unsubscribe your email please use this link <a href="# ">https://www.shrinyz.com/unsubscribe/user?87d607af26cd51bb887a2414b </a>.</p> 
+   // <p>You can access your account area to view orders and change your detail and more at: <a href="# ">https://www.shrinkyz.com/user/profile </a> </p>
+   // <p>We look forward to seeing you soon.</p>
+   // <p>Note: This email is auto-post mail. Please do not reply</p>
+   // <p><a href="# ">Unsubscribe</a></p>
+
+   
+   // </p>');
+
 }
     
 

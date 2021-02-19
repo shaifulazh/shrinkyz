@@ -13,20 +13,7 @@
  
         <div class="container">
 
-                    <div class="row">
-                <div class="ml-3">
-                <ul class="nav nav-tabs">
-                {% if subcategories  is defined %}
-                {% for subcategory in subcategories %}
-                     <li class="nav-item">
-                    <a href="{{path('subcategories_link', {id : subcategory.id})}}" class="nav-link"> {{ subcategory.subcategoryname }}</a>
-                    </li>
-                {% endfor %}
-                {% endif %}
-                </ul>
-                </div>
-                </div>
-            {{include('index/product.html.twig')}}
+                {{include('index/product.html.twig')}}
            
         </div>
     
@@ -47,5 +34,5 @@
 
 {% endblock %}
 {% block model %}
-    {% include ('index/email.html.twig') %}
+{% include ('index/email.html.twig') %}
 {% endblock %}

@@ -120,7 +120,7 @@ class IndexController extends AbstractController
         );
 
         return $this->render('index/index.html.twig', [
-            'products' => $pagination, 'category' => null, 'active' => null
+            'products' => $pagination, 'active' => null
         ]);
 
     }
@@ -191,9 +191,8 @@ class IndexController extends AbstractController
                 $request->query->getInt('page', 1),
                 8 /*limit per page*/
             );
-            return $this->render('index/index.html.twig',[
+            return $this->render('index/category.html.twig',[
                 'products' => $pagination,
-                'category' => $category , 
                 'subcategories'=> $subcategory ,
                 'active' => $id,
                 ]);
@@ -211,9 +210,9 @@ class IndexController extends AbstractController
 
                 $repository = $this->getDoctrine()->getRepository(ProductModel::class)->findBySubtwocategoryId($id);
                 $cat = $this->getDoctrine()->getRepository(Category::class)->findOneBySubtwocategoryId($id);
-                // dump($cat);
-                
-                
+                $subtwocategory = $this->getDoctrine()->getRepository(Subtwocategory::class)->find($id);
+                $subtwocategories = $this->getDoctrine()->getRepository(Subtwocategory::class)->findBySubCategory($subtwocategory->getSubcategory()->getId());
+                $subcategories= $this->getDoctrine()->getRepository(Subcategory::class)->findByCategory($cat->getId());
             }
             $pagination = $this->paginator->paginate(
                 $repository, /* query NOT result */
@@ -223,6 +222,10 @@ class IndexController extends AbstractController
             return $this->render('index/subtwocategory.html.twig',[
                 'products' => $pagination,
                 'active' => $cat->getId(),
+                'subtwocategory'=> $subtwocategory,
+                'subtwocategories'=> $subtwocategories,
+                'subcategory' => $subtwocategory->getSubcategory(),
+                'subcategories' => $subcategories
              
                 ]);
             
@@ -239,6 +242,9 @@ class IndexController extends AbstractController
                 $repository = $this->getDoctrine()->getRepository(ProductModel::class)->findBySubcategoryId($id);
                 $subtwocategory = $this->getDoctrine()->getRepository(Subtwocategory::class)->findBySubCategory($id);
                 $cat = $this->getDoctrine()->getRepository(Category::class)->findOneBySubcategoryId($id);
+                $subcategory = $this->getDoctrine()->getRepository(Subcategory::class)->find($id);
+                $subcategories = $this->getDoctrine()->getRepository(Subcategory::class)->findByCategory($cat->getId());
+                
                 
 
                 
@@ -249,6 +255,8 @@ class IndexController extends AbstractController
                 8 /*limit per page*/
             );
             return $this->render('index/subcategory.html.twig',[
+                'subcategory' => $subcategory,
+                'subcategories' => $subcategories,
                 'products' => $pagination,
                 'subtwocategories'=> $subtwocategory ,
                 'active' => $cat->getId(),
@@ -271,65 +279,15 @@ class IndexController extends AbstractController
 
         return $this->render('index/view.html.twig', ['product' => $repository]);
     }
-   /**
-     * @Route("/testmail", name="email_me")
-     */
-
-     public function emailme(MailerInterface $mailer)
-     {
-
-        $sendmail = (new Email())
-        ->from('shaifulazhar.000@gmail.com')
-        ->to('shaifulazhartalib@gmail.com')
-        ->subject('Registration Complete')
-        ->html('
-   
-        <p> Dear valued Customer,,<p/>
-        
-        <p>Thank you for registering for an account at Shrinkyz.com. Before we can</p>
-        <p>activate your account one last step must be taken to complete your</p> 
-        <p>registration. </p>
-        </br>
-        <p>To confirm your registration, please visit this URL:</p>
-        <p><a href="#">http://shrinkyz.com/FMfcgxwLsJvLLTNmSGcTClnZdwQjMplg</a></p>
-        <p>Note: This email is auto-post mail. Please do not reply.></p>
-
-        ');
-    try {
-        //code...
-        $mailer->send($sendmail);
-        return $this->render('request_product/request.html.twig',['message' => 'sucess']);
-
-
-
-    } catch (\Throwable $th) {
-        return $this->render('request_product/request.html.twig',['message' => 'fail']);
-    }
-
-    return $this->render('request_product/request.html.twig',['message' => 'fail']);
-    }
-
-
-    // ->html('
-   
-    // <p> Welcome,<p/>
+  
     
-    // <p>Thank you for registering your email account with us. You ID is CustomerID and email customer@cust.com.</p>
-    // <p>To unsubscribe your email please use this link <a href="# ">https://www.shrinyz.com/unsubscribe/user?87d607af26cd51bb887a2414b </a>.</p> 
-    // <p>You can access your account area to view orders and change your detail and more at: <a href="# ">https://www.shrinkyz.com/user/profile </a> </p>
-    // <p>We look forward to seeing you soon.</p>
-    // <p>Note: This email is auto-post mail. Please do not reply</p>
-    // <p><a href="# ">Unsubscribe</a></p>
-
-    
-    // </p>');
 
     /**
      * @Route("/test", name="tes")
      */
     public function cookietest(Request $request)
     {
-        return $this->render('v2/test.html.twig');
+       // return $this->render('v2/test.html.twig');
     }
 
     /**
