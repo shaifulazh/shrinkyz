@@ -76,9 +76,17 @@
 
     @keyframes example {
       50% {
-        transform: rotate3d(0,0,1,360deg);
+        -webkit-transform: rotateZ(360deg);
+        -moz-transform: rotateZ(360deg);
+        -ms-transform: rotateZ(360deg);
+        -o-transform: rotateZ(360deg);
+        transform: rotateZ(360deg);
       }
       100%{
+        -webkit-transform: scale(0.1);
+        -moz-transform: scale(0.1);
+        -ms-transform: scale(0.1);
+        -o-transform: scale(0.1);
         transform : scale(0.1);
       }
     }
@@ -160,19 +168,14 @@ function handleTouchMove(evt) {
     yDown = null;                                             
 };
 
-// $(document).on('touchmove', function(e) {
-//     e.preventDefault();
-//     console.log('touchmovess')
-// });
+
+
+//close modal
 function closebar() {
-    
-
-console.log('clcked');
-
 document.querySelector(".email-model").style.backgroundColor = "rgb(0,0,0,0)";
 document.getElementById("close").style.display = "none";
 var x = document.querySelector(".content-model")
-
+document.querySelector(".midd").style.display = "none";
 x.style.height =  "0px";
 x.style.width =  "0px";
 x.style.top = "50px";
@@ -181,7 +184,6 @@ setTimeout(() => {
     document.querySelector(".email-model").style.display = "none";
     enableScroll()
 }, 500);
-
 }
 
 document.getElementById('close').addEventListener('click', ()=>{
