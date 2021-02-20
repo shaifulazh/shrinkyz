@@ -22,7 +22,9 @@
     "router": "php bin/console debug:router",
     "mobile": "php bin/console server:run *:80",
     "web": "concurrently \"npm run mobile\" \"npm run watch\"",
-    "schema": "php bin/console doctrine:schema:update --force"
+    "schema": "php bin/console doctrine:schema:update --force",
+    "ssh": "ssh -i \"shaiful.pem\" ubuntu@ec2-13-228-29-11.ap-southeast-1.compute.amazonaws.com"
+
   },
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.12.1",
