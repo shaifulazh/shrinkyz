@@ -17,3 +17,38 @@ sudo chmod 755 /var/www/html/v2
 sudo chmod g+rwx -R /var/www/html/v2/shrinkyz/public
 
 sudo a2enmod rewrite
+
+
+option for ssl 
+https://certbot.eff.org/lets-encrypt/ubuntufocal-apache
+
+
+
+/etc/letsencrypt/live/shrinkyznetwork.ddns.net/fullchain.pem
+   Your key file has been saved at:
+   /etc/letsencrypt/live/shrinkyznetwork.ddns.net/privkey.pem
+
+
+
+
+
+ubuntu server
+1. sudo apt update ;   sudo apt install apache2;
+
+2. Install mysql https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-20-04
+
+3. https://certbot.eff.org/lets-encrypt/ubuntufocal-apache
+
+4. Install Pphp
+   sudo apt install php[any like 7.4]
+   sudo apt install php-[extname, xml,sql,etc] 
+
+5. install composer -> https://getcomposer.org/download/
+   cd ~
+   curl -sS https://getcomposer.org/installer -o composer-setup.php 
+
+   notes : should check SHA-384 hash
+
+   sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+
+6. 
