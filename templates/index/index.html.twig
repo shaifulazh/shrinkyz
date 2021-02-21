@@ -34,5 +34,6 @@
 
 {% endblock %}
 {% block model %}
+  {{ parent() }}
 {% include ('index/email.html.twig') %}
 {% endblock %}

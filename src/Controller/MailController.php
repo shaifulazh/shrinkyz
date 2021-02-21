@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-
+use App\Entity\ProductModel;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -25,22 +25,27 @@ class MailController extends AbstractFOSRestController
 
     /**
      * @Rest\RequestParam(name="email", description="email", nullable=false)
+     * @Rest\RequestParam(name="product", description="product", nullable=false)
      * 
      * @param ParamFetcher $paramFetcher
      */
     public function postEmailAction(ParamFetcher $paramFetcher)
     {
-        // $email = (new Email())
-        //     ->from('shaifulazhar.000@gmail.com')
-        //     ->to($paramFetcher->get('email'))
-        //     ->subject('Special Request From Shrinkyz')
-        //     ->html('<p>We Notified by your request. Thank You for Requesting</p>');
-        // try {
-        //     //code...
-        //     $this->mailer->send($email);
-        // } catch (\Throwable $th) {
-        //     return $this->view(["message" => "error fail to send email"], Response::HTTP_INTERNAL_SERVER_ERROR);
-        // }
+
+        $product = $this->getDoctrine()->getRepository(ProductModel::class)->find($paramFetcher->get('product'));
+        $email = (new Email())
+            ->from($this->getParameter('webemail'))
+            ->to($this->getParameter('requestemail'))
+            ->subject('Special Request For Shrinkyz')
+            ->html('<p>There is new Request from customer !!</p><p> Email : ' . $paramFetcher->get('email') .' </p> <p> Requested product : 
+                '. $product->getProductName() .' </p> 
+                <p>Notes : this is automated mail, do not reply</p>');
+        try {
+            //code...
+            $this->mailer->send($email);
+        } catch (\Throwable $th) {
+            return $this->view(["message" => "error fail to send email"], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
         $data = $paramFetcher->get('email');
 
         return $this->view($data, Response::HTTP_OK);

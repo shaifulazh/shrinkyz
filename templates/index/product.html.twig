@@ -44,7 +44,7 @@
                                             <div class="mt-2"> 
                                             <div class="row pl-3 mb-4">
                                         {% if product.productStock < 1 %}
-                                            <button onClick="requestprod()" class="btn btn-outline-secondary btn-sm ">Request</button>
+                                            <button onClick="requestprod({{product.id}})" class="btn btn-outline-secondary btn-sm ">Request</button>
                                             <p style="color:blue; font-size:90%;"class="m-2" >Sold, available upon request.</p>
                                         {% else %} 
 
@@ -68,28 +68,76 @@
             
         </div>
                 {{ knp_pagination_render(products) }}
-   {% include "request_product/request.html.twig" %}
 
+
+   
 <script>
 function opensesame(params) {
-    document.querySelector(".request-top").classList.toggle("open-request"); 
+   document.querySelector(".request-top").style.display = "flex";
+   document.querySelector(".request-top").classList.toggle("open-request"); 
+
+   setTimeout(() => {
+   document.querySelector(".request-content").classList.toggle("open-request-content");
+
+
+   }, 1);
+
    
-   document.querySelector(".request-top").style.display = "flex"
-   var element = document.querySelector(".request-content");
-    element.classList.toggle("open-request-content");
+   
 }
 
+var productid = null;
 
-
-    const requestprod = () => {
+    const requestprod = (e) => {
         opensesame()
+        productid = e;
     }
 
 function handleclose (){
-  
-   
-   document.querySelector(".request-top").style.display = "none"
+   document.querySelector(".request-top").classList.toggle("open-request"); 
+   document.querySelector(".request-content").classList.toggle("open-request-content");
+   setTimeout(()=>{
+    document.querySelector(".request-top").style.display = "none";
+
+   },300);
   
 }
+function submitemail () {
+    console.log(productid);
+    var email = document.getElementById('email').value;
+    console.log(email);
+    sendmail(email);
+    handleclose();
+
+}
+
+const sendmail = (emails) =>{
+
+     console.log('sending mail')
+
+     const data = { email: emails, product: productid };
+
+    fetch('/api/email/emails', {
+      method: 'POST', // or 'PUT'
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Success:', data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+ }
+   
+
+function onsub(e){
+   e.preventDefault();
+   submitemail();
+}
+ 
 
 </script>
