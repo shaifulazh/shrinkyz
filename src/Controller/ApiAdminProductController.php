@@ -322,6 +322,7 @@ class ApiAdminProductController extends AbstractFOSRestController
     }
 
     public function getProductSubcategoriesAction(Category $category){
+       
         $subcategory =  $this->getDoctrine()->getRepository(Subcategory::class)->findSubcategoryByCategory($category);
         return $this->view($subcategory, Response::HTTP_OK);
     }
