@@ -287,7 +287,8 @@ class IndexController extends AbstractController
      */
     public function cookietest(Request $request)
     {
-       // return $this->render('v2/test.html.twig');
+        return $this->redirectToRoute('app_home');
+    //    return $this->render('v2/test.html.twig');
     }
 
     /**

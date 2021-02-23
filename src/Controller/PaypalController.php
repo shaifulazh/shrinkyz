@@ -10,17 +10,23 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
-
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 class PaypalController
 {
+    
+    private $params;
 
-
+    public function __construct(ContainerBagInterface $params)
+    {
+        $this->params = $params;
+    }
     public function paymentpaypal()
     {
 
-        $clientId =  $this->getParameter('clientid');
-        $clientSecret = $this->getParameter('csecret');
+        $clientId =  $this->params->get('clientid');
+        $clientSecret = $this->params->get('csecret');
 
         $environment = new SandboxEnvironment($clientId, $clientSecret);
         $client = new PayPalHttpClient($environment);
@@ -59,12 +65,10 @@ class PaypalController
             // If call returns body in response, you can get the deserialized version from the result attribute of the response
             return $response;
         } catch (HttpException $ex) {
-            echo $ex->statusCode;
-            print_r($ex->getMessage());
-            return $ex->getMessage();
+            
+            return null;
         }
 
-        return null;
     }
 
     public function captureOrder($orderId)
@@ -79,11 +83,10 @@ class PaypalController
             // If call returns body in response, you can get the deserialized version from the result attribute of the response
             return ($response);
         } catch (HttpException $ex) {
-            echo $ex->statusCode;
-            print_r($ex->getMessage());
-            return $ex->getMessage();
+            
+            return null;
         }
-        return null;
+       
     }
     
 }

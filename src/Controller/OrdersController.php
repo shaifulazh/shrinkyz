@@ -27,6 +27,11 @@ use Symfony\Component\Serializer\Serializer;
 
 class OrdersController extends AbstractController
 {
+    private $paypal;
+    public function __construct(PaypalController $paypal)
+    {
+        $this->paypal = $paypal;
+    }
     /**
      * @Route("/orders/checkout", name="check_out")
      */
@@ -75,7 +80,7 @@ class OrdersController extends AbstractController
             $data = $form->getData();
             $session->set('paymentType', $data['payment_type']);
 
-            return $this->redirectToRoute('check_complete');
+            return $this->redirectToRoute('confirm_order');
         }
 
 
@@ -127,8 +132,26 @@ class OrdersController extends AbstractController
 
             $carts = $this->getDoctrine()->getRepository(CartModel::class)->findBy(['customer' => $this->getUser()]);
             if (empty($carts)) {
+                $this->addFlash('warning', 'Cart Empty');
                 return $this->redirectToRoute('view_cart');
             }
+
+            //check stock
+
+            $notEnoughStock = 0;
+            //check cart if stock is enough
+            foreach ($carts as $cart) {
+                if (($cart->getProduct()->getProductStock() - $cart->getQty()) < 0) {
+                    $notEnoughStock += 1;
+                }
+            }
+
+            if ($notEnoughStock !== 0) {
+            $this->addFlash('warning', 'Sorry we dont have enough Stock');
+                return $this->redirectToRoute('view_cart');
+            }
+   
+            //total 
             $total = 0;
             foreach ($carts as $cart) {
                 $total = $total + ($cart->getProduct()->getProductPrice() * $cart->getQty());
@@ -137,8 +160,8 @@ class OrdersController extends AbstractController
             $returnUrl = $this->generateUrl('register_order', [], UrlGenerator::ABSOLUTE_URL);
             $cancelUrl = $this->generateUrl('cancel_order', [], UrlGenerator::ABSOLUTE_URL);
 
-            $paypal = new PaypalController;
-            $responsed = $paypal->paymentexecute($total, $cancelUrl, $returnUrl);
+            
+            $responsed = $this->paypal->paymentexecute($total, $cancelUrl, $returnUrl);
             // $results = json_encode($responsed->result, JSON_PRETTY_PRINT);
 
             $arr = $responsed->result;
@@ -201,10 +224,11 @@ class OrdersController extends AbstractController
     public function registerOrder(Session $session, Request $request)
     {
         $token = $request->query->get('token'); //capture paypal order-id
-
-        $pp = new PaypalController;
-        $paypal = $pp->captureOrder($token);
-
+        $paypal = $this->paypal->captureOrder($token);
+        if($paypal === null){
+            $this->addFlash('warning', 'Payment Failed');
+            return $this->redirectToRoute('check_payment');
+        }
         $arr = $paypal->result;
         $obj = (object)$arr;
         $paypalid = $obj->id;
@@ -223,8 +247,6 @@ class OrdersController extends AbstractController
         $paypalfee = $seller_receivable_breakdown->paypal_fee;
         $valuefee = $paypalfee->value;
 
-
-
         $links = $captures[0]->links;
 
         foreach ($links as $link) {
@@ -233,7 +255,7 @@ class OrdersController extends AbstractController
                 $refundhref = $link->href;
             }
         }
-        if ($paypalid == $token) {
+        if ($paypalid === $token) {
 
             $order = $this->createOrder($session->get('paymentType'), $session->get('address'), $token);
             $paypal = $this->getDoctrine()->getRepository(PaypalModel::class)->findOneBy(['paypalid' => $token]);
@@ -262,24 +284,10 @@ class OrdersController extends AbstractController
 
         $paypal->setStatus("CANCEL");
         $em->flush();
-        return $this->redirectToRoute('check_complete');
+        return $this->redirectToRoute('check_payment');
     }
 
 
-
-
-
-
-    // {
-
-    //     $carts = $this->getDoctrine()->getRepository(CartModel::class)->findBy(['customer' => $this->getUser()]);
-    //     if (empty($carts)) {
-    //         return $this->redirectToRoute('view_cart');
-    //     }
-    //     $order = $this->createOrder($session->get('paymentType'), $session->get('address'));
-
-
-    // }
     //function to create an order to database
     private function createOrder($paymentMethod, $address, $token)
     {
@@ -326,6 +334,19 @@ class OrdersController extends AbstractController
     }
 
     /**
+     * @Route("/placeorder", name="place_order")
+     */
+    public function placeOrder(){
+
+
+    }
+
+    
+
+
+
+
+    /**
      * @Route("/orders", name="user_orders")
      */
 
@@ -336,4 +357,6 @@ class OrdersController extends AbstractController
 
         return $this->render('user/order.html.twig', ['orders' => $order]);
     }
+
+
 }
