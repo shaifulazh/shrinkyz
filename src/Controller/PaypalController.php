@@ -58,8 +58,6 @@ class PaypalController
         try {
             // Call API with your client and get a response for your call
 
-
-
             $response = $this->paymentpaypal()->execute($request);
 
             // If call returns body in response, you can get the deserialized version from the result attribute of the response
@@ -88,5 +86,8 @@ class PaypalController
         }
        
     }
+
+
+    
     
 }

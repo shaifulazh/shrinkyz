@@ -16,59 +16,20 @@
 
 
         <div class="mt-3">
-            <div class="list-group list-group-horizontal">
-                <a href="{{path('check_out')}}" class="list-group-item list-group-item-action {{ app.request.get('_route') == 'check_out' ? 'active'}}">
-                    <div class="row">
-                        <div class="col-auto">
-                            <i class="fas {{ app.request.get('_route') == 'check_out' ? 'fa-map' : 'fa-check'}} fa-4x" style="{{ app.request.get('_route') == 'check_out' ? '' : 'color :red'}}"></i>
-
-                        </div>
-                        <div class="col-auto">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1">Step 1 : Address</h5>
-                            </div>
-                            <p class="mb-1">Fill in Your Shipping Address</p>
-
-                        </div>
-
-                    </div>
-
-
-                </a>
-                <a href="{{path('check_payment')}}" class="list-group-item list-group-item-action {{ app.request.get('_route') == 'check_payment' ? 'active' }}  {{ app.request.get('_route') == 'check_out' ? 'disabled'}}">
-                    <div class="row">
-                        <div class="col-auto">
-                            <i class="fas {{ app.request.get('_route') == 'check_complete' ? 'fa-check ' : 'fa-money-check' }}  fa-4x" style="{{ app.request.get('_route') == 'check_complete' ? 'color:red ' }}"></i>
-                        </div>
-                        <div class="col-auto">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1">Step 2 : Payment</h5>
-                            </div>
-                            <p class="mb-1">Complete Your Payment</p>
-
-                        </div>
-
-                    </div>
-                </a>
-                <a class="list-group-item list-group-item-action {{ app.request.get('_route') == 'check_complete' ? 'active' : 'disabled'}}" href="#">
-                    <h5>
-                        <div class="row">
-                            <div class="col-auto">
-                                <i class="fas fa-clipboard-list fa-4x"></i>
-                            </div>
-                            <div class="col-auto">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">Step 3: Confirm Order</h5>
-                                </div>
-                                <p class="mb-1">Review Order</p>
-
-                            </div>
-
-                        </div>
-                    </h5>
-                </a>
+           <div class="row ">
+            <div class="col-md-4 d-flex justify-content-end ">
+                <a href="#" class="btn btn-block btn-primary">
+                <i class="fas {{ app.request.get('_route') == 'chekingout' ? 'fa-map' : 'fa-check'}} fa-4x" style="{{ app.request.get('_route') == 'chekingout' ? '' : 'color :red'}}"></i>
+                 </a>
+               
             </div>
-
+            <div class="col-md-4 d-flex justify-content-center ">
+                <a  href="#" class="btn btn-block btn-primary"><i class="fas {{ app.request.get('_route') == 'check_complete' ? 'fa-check ' : 'fa-money-check' }}  fa-4x" style="{{ app.request.get('_route') == 'check_complete' ? 'color:red ' }}"></i></a>
+            </div>
+            <div class="col-md-4 d-flex justify-content-center ">
+                <a href="#" class="btn btn-block btn-primary"><i class="fas fa-clipboard-list fa-4x"></i></a>
+            </div>
+           </div>
         </div>
 
 

@@ -23,8 +23,13 @@ class OrderTest extends KernelTestCase
         $poslajuClient = self::$kernel->getContainer()->get('pos-laju-client');
 
         $response = $poslajuClient->fetchPriceCheck(1,2,3,4);
-        dump($response);
+        // $response = $poslajuClient->fecthPoscodeDetails('52721');
+        $priceCheck = json_decode($response);
+        dump($priceCheck);
         $this->assertTrue(true);
 
     }
+
+
+
 }

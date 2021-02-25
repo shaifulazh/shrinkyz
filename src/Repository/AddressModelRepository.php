@@ -36,15 +36,15 @@ class AddressModelRepository extends ServiceEntityRepository
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?AddressModel
+    
+    public function findOneByUser($value): ?AddressModel
     {
         return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
+            ->andWhere('a.user = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
-    */
+    
 }

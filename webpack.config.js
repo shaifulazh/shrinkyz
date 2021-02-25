@@ -1,7 +1,5 @@
 var Encore = require("@symfony/webpack-encore");
 
-
-
 Encore
   // directory where compiled assets will be stored
   .setOutputPath("public/build")
@@ -21,9 +19,10 @@ Encore
    */
   .addEntry("app", "./assets/js/app.js")
   // .addEntry('new', './assets/js/new.js')
-  .addEntry('email', './assets/email-app/email-app.js')
+  .addEntry("email", "./assets/email-app/email-app.js")
   .addEntry("reactApp", "./assets/react-app/react-app.js")
   .addEntry("mobile", "./assets/mobile-dash-app/index.js")
+  .addEntry("shipping", "./assets/shipping/Shipping.js")
 
   // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
   .splitEntryChunks()

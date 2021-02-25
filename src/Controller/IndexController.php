@@ -282,15 +282,7 @@ class IndexController extends AbstractController
   
     
 
-    /**
-     * @Route("/test", name="tes")
-     */
-    public function cookietest(Request $request)
-    {
-        return $this->redirectToRoute('app_home');
-    //    return $this->render('v2/test.html.twig');
-    }
-
+    
     /**
      * @Route("/privacy", name="privacy")
      */

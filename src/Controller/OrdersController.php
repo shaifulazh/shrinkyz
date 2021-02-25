@@ -33,7 +33,7 @@ class OrdersController extends AbstractController
         $this->paypal = $paypal;
     }
     /**
-     * @Route("/orders/checkout", name="check_out")
+     * @Route("/orders/checkout", name="check_out_other")
      */
     public function checkOut(Request $request, Session $session)
     {
@@ -47,7 +47,6 @@ class OrdersController extends AbstractController
         } else {
             $address = new AddressModel();
         }
-
 
         $form = $this->createForm(AddressModelType::class, $address);
 
@@ -128,9 +127,7 @@ class OrdersController extends AbstractController
     public function confirmOrder(Session $session, Request $r)
     {
 
-        if ($session->get('paymentType') == 'PAYPAL') {
-
-            $carts = $this->getDoctrine()->getRepository(CartModel::class)->findBy(['customer' => $this->getUser()]);
+                   $carts = $this->getDoctrine()->getRepository(CartModel::class)->findBy(['customer' => $this->getUser()]);
             if (empty($carts)) {
                 $this->addFlash('warning', 'Cart Empty');
                 return $this->redirectToRoute('view_cart');
@@ -165,6 +162,7 @@ class OrdersController extends AbstractController
             // $results = json_encode($responsed->result, JSON_PRETTY_PRINT);
 
             $arr = $responsed->result;
+
 
 
             $obj = (object)$arr;
@@ -204,11 +202,11 @@ class OrdersController extends AbstractController
 
 
             // return $this->render('orders/paypal.html.twig', ['paypal' => $paypalid]);
-        }
+        
 
 
 
-        return $this->redirectToRoute('register_order');
+       
 
 
 
@@ -257,7 +255,8 @@ class OrdersController extends AbstractController
         }
         if ($paypalid === $token) {
 
-            $order = $this->createOrder($session->get('paymentType'), $session->get('address'), $token);
+            $address = $this->getDoctrine()->getRepository(AddressModel::class)->findOneByUser($this->getUser());
+            $order = $this->createOrder('paypal',$address, $token);
             $paypal = $this->getDoctrine()->getRepository(PaypalModel::class)->findOneBy(['paypalid' => $token]);
             $em = $this->getDoctrine()->getManager();
             $paypal->setStatus($status);
@@ -291,6 +290,8 @@ class OrdersController extends AbstractController
     //function to create an order to database
     private function createOrder($paymentMethod, $address, $token)
     {
+
+        // TODO deduct product stock!!
         $user = $this->getUser();
         $carts = $this->getDoctrine()->getRepository(CartModel::class)->findBy(['customer' => $this->getUser()]);
         $em = $this->getDoctrine()->getManager();
@@ -316,7 +317,7 @@ class OrdersController extends AbstractController
             $em->persist($product);
             $orderDetails = new OrderDetails();
             $orderDetails->setProductName(($cart->getProduct())->getProductName());
-            $orderDetails->setProductImage(($cart->getProduct())->getProductImage());
+            $orderDetails->setProductImage(($cart->getProduct())->getPictures()[0]->getFilename());
             $orderDetails->setProductPrice(($cart->getProduct())->getProductPrice());
             $orderDetails->setQty($cart->getQty());
             $orderDetails->setOrders($order);
@@ -340,11 +341,6 @@ class OrdersController extends AbstractController
 
 
     }
-
-    
-
-
-
 
     /**
      * @Route("/orders", name="user_orders")
