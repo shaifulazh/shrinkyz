@@ -20,3 +20,5 @@ framework:
     serializer:
         circular_reference_handler: App\Serializer\CircularReferenceHandler
         enabled: true
+
+    
