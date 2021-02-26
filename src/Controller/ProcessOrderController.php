@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\DomainModel\CartOperation;
 use App\Entity\AddressModel;
 use App\Entity\CartModel;
 use App\Form\AddressModelType;
@@ -12,9 +13,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProcessOrderController extends AbstractController
 {
-    public function __construct()
+    private $cartOperation;
+    public function __construct(CartOperation $cartOperation)
     {
-        
+        $this->cartOperation = $cartOperation;
     }
 
     /**
@@ -61,23 +63,20 @@ class ProcessOrderController extends AbstractController
      */
 
     public function customer_doing_payment(Request $request){
-        $carts = $this->getDoctrine()->getRepository(CartModel::class)->findBy(['customer' => $this->getUser()]);
-        if (empty($carts)) {
+        $carts = $this->cartOperation->getProductFromCart($this->getUser());
+        if (!$carts) {
+
             return $this->redirectToRoute('view_cart');
         }
-        $form = $this->createForm(PaymentType::class);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-
-            return $this->redirectToRoute('confirm_order');
-        }
 
 
 
+        
+        
 
-        return $this->render('/orders/payment.html.twig', ['form' => $form->createView()]);
+
+
+        return $this->render('/orders/payment.html.twig', ['products' => $carts]);
 
     }
 }

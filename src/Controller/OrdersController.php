@@ -127,7 +127,7 @@ class OrdersController extends AbstractController
     public function confirmOrder(Session $session, Request $r)
     {
 
-                   $carts = $this->getDoctrine()->getRepository(CartModel::class)->findBy(['customer' => $this->getUser()]);
+            $carts = $this->getDoctrine()->getRepository(CartModel::class)->findBy(['customer' => $this->getUser()]);
             if (empty($carts)) {
                 $this->addFlash('warning', 'Cart Empty');
                 return $this->redirectToRoute('view_cart');
@@ -199,20 +199,6 @@ class OrdersController extends AbstractController
 
             // 1/7/2021 -> paypal intergration need capture page and update status page , add paypal detail in ordermodel
 
-
-
-            // return $this->render('orders/paypal.html.twig', ['paypal' => $paypalid]);
-        
-
-
-
-       
-
-
-
-
-        // $session->remove('paymentType');
-        // $session->remove('address');
     }
 
     /**
@@ -221,10 +207,25 @@ class OrdersController extends AbstractController
 
     public function registerOrder(Session $session, Request $request)
     {
+
+
+
         $token = $request->query->get('token'); //capture paypal order-id
-        $paypal = $this->paypal->captureOrder($token);
+        if($token){
+            $paypal = $this->paypal->captureOrder($token);
+        }else {
+            $this->addFlash('warning', 'prohibited area');
+            return $this->redirectToRoute('check_payment');
+        }
+        
+        $paypaldata = $this->getDoctrine()->getRepository(PaypalModel::class)->findOneBy(['paypalid' => $token]);
+        if (!$paypaldata){
+            $this->addFlash('warning', 'Not valid');
+            return $this->redirectToRoute('check_payment');
+        }
+        
         if($paypal === null){
-            $this->addFlash('warning', 'Payment Failed');
+            $this->addFlash('warning', 'error transaction');
             return $this->redirectToRoute('check_payment');
         }
         $arr = $paypal->result;
@@ -232,9 +233,11 @@ class OrdersController extends AbstractController
         $paypalid = $obj->id;
         $status = $obj->status;
 
-        // print("<pre>" . print_r($obj, true) . "</pre>");
+        //TODO need to check if amount is the same as order total
+
+
+
         $purchase_units = $obj->purchase_units;
-        // $purchase_units = (object)$pu;
         $amount = $purchase_units[0]->amount;
         $value = $amount->value;
         $currency = $amount->currency_code;
@@ -257,14 +260,16 @@ class OrdersController extends AbstractController
 
             $address = $this->getDoctrine()->getRepository(AddressModel::class)->findOneByUser($this->getUser());
             $order = $this->createOrder('paypal',$address, $token);
-            $paypal = $this->getDoctrine()->getRepository(PaypalModel::class)->findOneBy(['paypalid' => $token]);
+            
             $em = $this->getDoctrine()->getManager();
-            $paypal->setStatus($status);
-            $paypal->setAmount($value);
-            $paypal->setCurrency($currency);
-            $paypal->setPaypalfee($valuefee);
-            $paypal->setRefundhref($refundhref);
+            $paypaldata->setStatus($status);
+            $paypaldata->setAmount($value);
+            $paypaldata->setCurrency($currency);
+            $paypaldata->setPaypalfee($valuefee);
+            $paypaldata->setRefundhref($refundhref);
+            $em->persist($paypaldata);
             $em->flush();
+           
         }
 
         return $this->render('orders/ThankYou.html.twig', ['order' => $order]);

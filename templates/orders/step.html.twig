@@ -18,13 +18,14 @@
         <div class="mt-3">
            <div class="row ">
             <div class="col-md-4 d-flex justify-content-end ">
-                <a href="#" class="btn btn-block btn-primary">
+                <a href="#" class="btn btn-block {{ app.request.get('_route') == 'chekingout' ? 'btn-info' : 'btn-primary'}}">
                 <i class="fas {{ app.request.get('_route') == 'chekingout' ? 'fa-map' : 'fa-check'}} fa-4x" style="{{ app.request.get('_route') == 'chekingout' ? '' : 'color :red'}}"></i>
                  </a>
                
             </div>
             <div class="col-md-4 d-flex justify-content-center ">
-                <a  href="#" class="btn btn-block btn-primary"><i class="fas {{ app.request.get('_route') == 'check_complete' ? 'fa-check ' : 'fa-money-check' }}  fa-4x" style="{{ app.request.get('_route') == 'check_complete' ? 'color:red ' }}"></i></a>
+                <a  href="#" class="btn btn-block {{ app.request.get('_route') == 'customer_pay' ? 'btn-info' : 'btn-primary'}}">
+                    <i class="fas {{ app.request.get('_route') == 'customer_pay' ? 'fa-money-check' : 'fa-check '  }}  fa-4x" style="{{ app.request.get('_route') == 'check_complete' ? 'color:red ' }}"></i></a>
             </div>
             <div class="col-md-4 d-flex justify-content-center ">
                 <a href="#" class="btn btn-block btn-primary"><i class="fas fa-clipboard-list fa-4x"></i></a>

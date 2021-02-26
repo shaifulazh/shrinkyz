@@ -10,13 +10,12 @@ import Editing from "./component/product/Old/Editing";
 import Cropping from "./Cropping";
 import Order from "./component/order/Order";
 import CategoryEdit from "./component/product/Old/CategoryEdit";
-import FormRedux from "./component/product/reduxForm/FormRedux";
+
 import ProductAdd from "./component/product/AddProducts/ProductAdd";
 import MobileSideBar from "./router/MobileSideBar";
-import MobileUpload from "./mobilecomp/MobileUpload";
-import MobileDashboard from "./mobilecomp/MobileDashboard";
-import EasyCrop from "./mobilecomp/EasyCrop";
-import Cropperv2 from "./component/product/AddProducts/Cropperv2";
+i
+
+
 import CategoryList from "./component/product/AddProducts/CategoryList";
 import Visitor from "./component/Visitor/Visitor";
 import "./index.css";
