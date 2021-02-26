@@ -7,14 +7,21 @@
         </tr>
     </thead>
 
-    <tbody>
+    <tbody>{% set total = 0 %}
         {% for cart in carts %}
             <tr>
                 <td>{{cart.product.getProductName}}</td>
                 <td>{{cart.qty}}</td>
-                <td>{{cart.product.getProductPrice * cart.qty}}</td>
-
+                <td>{{(cart.product.getProductPrice * cart.qty) |number_format(2, '.', ',')}}</td>
+                {% set total = total + (cart.product.getProductPrice * cart.qty) %}
             </tr>
-        {% endfor %}
+            {% endfor %}
+            <tr>
+                <td></td>
+                <td>TOTAL </td>
+                <td>RM{{total  |number_format(2, '.', ',')}} </td>
+                    
+               
+            </tr>
     </tbody>
 </table>

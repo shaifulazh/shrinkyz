@@ -20,7 +20,7 @@ class MailController extends AbstractFOSRestController
 
     public function __construct(MailerInterface $mailer){
         $this->mailer = $mailer;
-    }
+}
 
 
     /**

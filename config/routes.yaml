@@ -30,3 +30,7 @@ email_api:
 user_:
   resource: App\Controller\UserController
   prefix: user
+
+apporder_:
+  resource: App\Controller\ProcessOrderController
+  prefix: apporder

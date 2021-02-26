@@ -23,10 +23,12 @@
                     </div>
 
                     {{form_row(form.address, {'attr' : {'class' : 'form-control'}})}}
+                    {{form_label(form.countrydata,'Country')}}
+                    {{form_widget(form.countrydata, {'attr' : {'class' : 'form-control'}})}}
+                    {{form_label(form.state,'State / Province / Territory')}}
+                    {{form_widget(form.state, {'attr' : {'class' : 'form-control'}})}}
                     {{form_row(form.city, {'attr' : {'class' : 'form-control'}})}}
-                    {{form_row(form.state, {'attr' : {'class' : 'form-control'}})}}
                     {{form_row(form.postcode, {'attr' : {'class' : 'form-control'}})}}
-                    {{form_row(form.country, {'attr' : {'class' : 'form-control'}})}}
                     {{form_row(form.phone_number, {'attr' : {'class' : 'form-control'}})}}
                     <br>
 

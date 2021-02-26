@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\DomainModel\AddProductToCart;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,6 +24,12 @@ use App\Security\EmailVerifier;
 class UserController extends AbstractController
 {
 
+    private $addProductToCart;
+    public function __construct(AddProductToCart $addProductToCart)
+    {
+        $this->addProductToCart = $addProductToCart;
+    }
+
 
     /**
      * @Route("/cart/{id}", name="add_cart")
@@ -36,6 +43,11 @@ class UserController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
         $product = $em->getRepository(ProductModel::class)->find($id);
+
+        $this->addProductToCart->execute($product,$user);
+        return $this->redirectToRoute('view_cart');
+
+
         $carts = $em->getRepository(CartModel::class)->findby(['customer' => $user]);
         $i = 0;
         foreach ($carts as $cart) {
@@ -203,8 +215,7 @@ class UserController extends AbstractController
                 ->subject('Please Confirm your Email')
                 ->htmlTemplate('registration/confirmation_email.html.twig')
             );
-            // do anything else you need here, like send an email
-
+            
             $this->addFlash('success', 'U have Register Success. A link has been sent to your '. $user->getEmail() .'. Please Verified Your email to confirm registration. Link will expired in 30 minutes.');
                 
             return $this->render('user/profile.html.twig', ['user' => $user]);

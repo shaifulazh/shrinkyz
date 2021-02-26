@@ -56,10 +56,11 @@ class OrderModel
     private $paypal;
 
     /**
-     * @ORM\OneToOne(targetEntity=AddressModel::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity=AddressModel::class)
      */
     private $address;
+
+
 
 
 
@@ -171,10 +172,12 @@ class OrderModel
         return $this->address;
     }
 
-    public function setAddress(AddressModel $address): self
+    public function setAddress(?AddressModel $address): self
     {
         $this->address = $address;
 
         return $this;
     }
+
+
 }
