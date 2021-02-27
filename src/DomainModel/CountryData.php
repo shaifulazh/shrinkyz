@@ -52,4 +52,31 @@ class CountryData
         
         return true;
     }
+
+    public function removeCountryData()
+    {   
+        $data = $this->entityManager->getRepository(Country::class)->findAll();
+        
+        $em = $this->entityManager;
+        
+        if($data){
+        
+            foreach ($data as $country) {
+
+                $em->remove($country);
+
+                $em->flush();
+
+                
+            }
+            return true;
+
+        }
+        else{
+
+            throw new \Exception('Data country not Exist!');
+
+        }
+
+    }
 }
