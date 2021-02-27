@@ -16,6 +16,7 @@ use App\Form\PaymentType;
 use App\Entity\ProductModel;
 use Hoa\Compiler\Visitor\Dump;
 use App\Controller\PaypalController;
+use App\DomainModel\EmailOperation;
 use App\DomainModel\PaypalOperation;
 use App\Entity\CheckOutData;
 use SebastianBergmann\CodeCoverage\Report\Xml\Totals;
@@ -30,91 +31,15 @@ use Symfony\Component\Serializer\Serializer;
 class OrdersController extends AbstractController
 {
     private $paypal;
-    public function __construct(PaypalOperation $paypal)
+    private $email;
+    public function __construct(PaypalOperation $paypal,EmailOperation $email)
     {
         $this->paypal = $paypal;
+
+        $this->email = $email;
+
     }
-    /**
-     * @Route("/orders/checkout", name="check_out_other")
-     */
-    public function checkOut(Request $request, Session $session)
-    {
-        $carts = $this->getDoctrine()->getRepository(CartModel::class)->findBy(['customer' => $this->getUser()]);
-        if (empty($carts)) {
-            return $this->redirectToRoute('view_cart');
-        }
-
-        if ($session->get('address')) {
-            $address = $session->get('address');
-        } else {
-            $address = new AddressModel();
-        }
-
-        $form = $this->createForm(AddressModelType::class, $address);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $session->set('address', $address);
-            return $this->redirectToRoute('check_payment');
-        }
-
-
-
-
-        return $this->render('/orders/index.html.twig', ['form' => $form->createView()]);
-    }
-    /**
-     * @Route("/orders/payment", name="check_payment")
-     */
-    public function checkPayment(Request $request, Session $session)
-    {
-        $carts = $this->getDoctrine()->getRepository(CartModel::class)->findBy(['customer' => $this->getUser()]);
-        if (empty($carts)) {
-            return $this->redirectToRoute('view_cart');
-        }
-
-
-        $form = $this->createForm(PaymentType::class);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-            $session->set('paymentType', $data['payment_type']);
-
-            return $this->redirectToRoute('confirm_order');
-        }
-
-
-
-
-        return $this->render('/orders/payment.html.twig', ['form' => $form->createView()]);
-    }
-
-    /**
-     * @Route("/orders/complete", name="check_complete")
-     */
-
-    public function completeOrder(Session $session)
-    {
-
-        if ($session->get('paymentType') == null) {
-
-            return $this->redirectToRoute('check_out');
-        }
-        $carts = $this->getDoctrine()->getRepository(CartModel::class)->findBy(['customer' => $this->getUser()]);
-        if (empty($carts)) {
-            return $this->redirectToRoute('view_cart');
-        }
-
-        $paymentType = $session->get('paymentType');
-        $address =  $session->get('address');
-
-
-        return $this->render('/orders/complete.html.twig', ['carts' => $carts, 'payment' => $paymentType, 'address' => $address]);
-    }
-
-
-
+     
     public function miniCart()
     {
         $carts = $this->getDoctrine()->getRepository(CartModel::class)->findBy(['customer' => $this->getUser()]);
@@ -126,7 +51,7 @@ class OrdersController extends AbstractController
      * @Route("/orders/confirm", name="confirm_order")
      */
 
-    public function confirmOrder(Session $session, Request $r)
+    public function confirmOrder_create_order(Session $session, Request $r)
     {
 
             $carts = $this->getDoctrine()->getRepository(CartModel::class)->findBy(['customer' => $this->getUser()]);
@@ -156,15 +81,27 @@ class OrdersController extends AbstractController
             $returnUrl = $this->generateUrl('register_order', [], UrlGenerator::ABSOLUTE_URL);
             $cancelUrl = $this->generateUrl('cancel_order', [], UrlGenerator::ABSOLUTE_URL);
 
-            
-            $responsed = $this->paypal->paymentexecute($total, $cancelUrl, $returnUrl);
-            // $results = json_encode($responsed->result, JSON_PRETTY_PRINT);
+            $payment = $session->get('payment');
 
-            // dd($responsed);
+            
+            $url = [
+                'return' => $returnUrl,
+                'cancel' => $cancelUrl
+            ];
+            
+            $responsed = $this->paypal->paymentexecute($this->getUser(),$payment,$url);
+            
+            
             $arr = $responsed->result;
 
             $obj = (object)$arr;
 
+            if($obj->purchase_units[0]->reference_id !== $payment['reference_id'])
+            {   
+                $this->addFlash('warning', 'not valid transaction');
+                return $this->redirectToRoute('customer_pay');
+            }
+            
             $paypalid = $obj->id;
             $links = $obj->links;
 
@@ -180,7 +117,6 @@ class OrdersController extends AbstractController
             }
 
 
-            if ($paypalid != null) {
 
                 // $this->createOrder($session->get('paymentType'), $session->get('address'), $paypalid);
 
@@ -191,7 +127,6 @@ class OrdersController extends AbstractController
                 $paypalReg->setHref($capture);
                 $em->persist($paypalReg);
                 $em->flush();
-            }
 
             return $this->redirect($approve, 301); // capture href paypal approve
 
@@ -205,34 +140,34 @@ class OrdersController extends AbstractController
 
     public function registerOrder(Session $session, Request $request)
     {
+        $paymentSession = $session->get('payment');
 
-
+        $session->clear();
 
         $token = $request->query->get('token'); //capture paypal order-id
         if($token){
             $paypal = $this->paypal->captureOrder($token);
         }else {
             $this->addFlash('warning', 'prohibited area');
-            return $this->redirectToRoute('check_payment');
+            return $this->redirectToRoute('chekingout');
         }
         
         $paypaldata = $this->getDoctrine()->getRepository(PaypalModel::class)->findOneBy(['paypalid' => $token]);
         if (!$paypaldata){
             $this->addFlash('warning', 'Not valid');
-            return $this->redirectToRoute('check_payment');
+            return $this->redirectToRoute('chekingout');
         }
         
         if($paypal === null){
             $this->addFlash('warning', 'error transaction');
-            return $this->redirectToRoute('check_payment');
+            return $this->redirectToRoute('chekingout');
         }
         $arr = $paypal->result;
         $obj = (object)$arr;
         $paypalid = $obj->id;
         $status = $obj->status;
-
         
-        //TODO need to check if amount is the same as order total
+        //paynow
 
         $purchase_units = $obj->purchase_units;
         $amount = $purchase_units[0]->amount;
@@ -256,26 +191,17 @@ class OrdersController extends AbstractController
             }
         }
 
-        $checkoutdata = $this->getDoctrine()->getRepository(CheckOutData::class)->findOneBy(['user'=>$this->getUser()]);
-
-        $finaltotal =  $checkoutdata->getFinaltotal();
-
-        $float_value = floatval($value);
-
-        if($float_value !== $finaltotal)
+        if($purchase_units[0]->reference_id !== $paymentSession['reference_id'])
         {
-            $this->addFlash('warning', 'Payment Incomplete. Data inacurate');
-
-            
+            $this->addFlash('warning', 'Invalid Order');
+            return $this->redirectToRoute('chekingout');
         }
 
-
-
-               
+            
         if ($paypalid === $token) {
 
             $address = $this->getDoctrine()->getRepository(AddressModel::class)->findOneByUser($this->getUser());
-            $order = $this->createOrder('paypal',$address, $token);
+            $order = $this->createOrder('paypal',$address, $token, $paymentSession['reference_id']);
             
             $em = $this->getDoctrine()->getManager();
             $paypaldata->setStatus($status);
@@ -291,6 +217,12 @@ class OrdersController extends AbstractController
             $paypaldata->setNetAmount(floatval($netAmount->value));
             $em->persist($paypaldata);
             $em->flush();
+
+
+            $this->email->sendEmailConfirmOrder($this->getUser(),$order);
+
+
+
            
         }
 
@@ -315,7 +247,7 @@ class OrdersController extends AbstractController
 
 
     //function to create an order to database
-    private function createOrder($paymentMethod, $address, $token)
+    private function createOrder($paymentMethod, $address, $token,$referenceId)
     {
 
 
@@ -329,6 +261,7 @@ class OrdersController extends AbstractController
         $order->setStatus('PROCESSING');
         $order->setAddress($address);
         $order->setUser($user);
+        $order->setReferenceId($referenceId);
         $order->setPaymentMethod($paymentMethod);
         $order->setTotal($total);
 
@@ -358,15 +291,13 @@ class OrdersController extends AbstractController
         $order->setTotal($total);
         $em->persist($order);
         $em->flush();
+
+        //send email to client
+
+
+
+
         return $order;
-    }
-
-    /**
-     * @Route("/placeorder", name="place_order")
-     */
-    public function placeOrder(){
-
-
     }
 
     /**

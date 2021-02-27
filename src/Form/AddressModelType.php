@@ -18,6 +18,7 @@ class AddressModelType extends AbstractType
             ->add('first_name')
             ->add('last_name')
             ->add('address')
+            ->add('address_line_2')
             ->add('countrydata', EntityType::class, [
                 'class' => Country::class,
                 'query_builder' => function (EntityRepository $er) {

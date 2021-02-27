@@ -12,6 +12,7 @@ use App\Form\AddressModelType;
 use App\Form\PaymentType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ShippingController extends AbstractController
@@ -72,7 +73,7 @@ class ShippingController extends AbstractController
      * @Route("/custpay", name="customer_pay")
      */
 
-    public function customer_doing_payment(Request $request){
+    public function customer_doing_payment(Request $request, Session $session){
         $carts = $this->cartOperation->getProductFromCart($this->getUser());
         if (!$carts) {
             return $this->redirectToRoute('view_cart');
@@ -92,9 +93,6 @@ class ShippingController extends AbstractController
         {
 
             $postcode = $address->getPostcode();
-
-            
-
             
             try {
 
@@ -104,15 +102,11 @@ class ShippingController extends AbstractController
 
                 $shippingprice = $object->data->prices[0]->normal_price;
 
-              
 
             } catch (\Throwable $th) {
                 $this->addFlash('warning', 'Postcode not Valid');
                 return $this->redirectToRoute('chekingout');
             }
-
-           
-
 
         }
 
@@ -142,6 +136,10 @@ class ShippingController extends AbstractController
            
         }
 
+
+        $shippingprice = $shippingprice + $shippingprice*3.9/100 + 2; //3.9% paypal fee + 2 flat fee
+
+
         $checkout = $em->getRepository(CheckOutData::class)->findOneBy(['user'=>$this->getUser()]);
 
         if(!$checkout)
@@ -163,6 +161,22 @@ class ShippingController extends AbstractController
         $em->persist($checkout);
 
         $em->flush();
+
+        $referenceId = md5(uniqid());
+
+        $payment = [
+           
+                'shipping' => $shippingprice,
+                'total' => $totalprice,
+                'finaltotal' => ($totalprice + $shippingprice),
+                'reference_id'=> $referenceId
+           
+        ];
+
+        $session->set('payment', $payment);
+
+
+        
 
         return $this->render('/orders/payment.html.twig', [
             'products' => $carts , 

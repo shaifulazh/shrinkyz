@@ -2,6 +2,9 @@
 
 namespace App\DomainModel;
 
+use App\Entity\AddressModel;
+use App\Entity\CheckOutData;
+use Doctrine\ORM\EntityManagerInterface;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalCheckoutSdk\Core\SandboxEnvironment;
 use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
@@ -14,10 +17,12 @@ class PaypalOperation
 {
     
     private $params;
+    private $entityManager;
 
-    public function __construct(ContainerBagInterface $params)
+    public function __construct(ContainerBagInterface $params,EntityManagerInterface $entityManager)
     {
         $this->params = $params;
+        $this->entityManager = $entityManager;
     }
     public function paymentpaypal()
     {
@@ -30,42 +35,50 @@ class PaypalOperation
         return  $client;
     }
 
-    public function paymentexecute($price, $cancelUrls, $returnUrl)
+    public function paymentexecute($user,$payment,$url)
+
+
     {
 
+        $method = 'Pos Laju Malaysia';
+
+        $currencyCode = 'MYR';
+
+        $address = $this->entityManager->getRepository(AddressModel::class)->findOneBy(['user'=>$user]); 
+        
         $request = new OrdersCreateRequest();
 
-        // $url =  $urls->generateUrl('register_order', [], UrlGenerator::ABSOLUTE_URL);
         $request->prefer('return=representation');
+
         $request->body = [
             "intent" => "CAPTURE",
             "purchase_units" => [[
-                "reference_id" => "test_ref_id1",
+                "reference_id" => $payment['reference_id'],
                 "amount" => [
-                    "value" => number_format($price, 2),
-                    "currency_code" => "MYR"
+                    "value" => number_format($payment['finaltotal'], 2),
+                    "currency_code" => $currencyCode
                 ],
                 "shipping" => [
                     
-                        'method' => 'Pos Laju Malaysia',
+                        'method' => $method,
                         'name' =>
                             [
-                                'full_name' => 'John Doe',
+                                'full_name' => "{$address->getFirstName()} {$address->getLastName()}",
                             ],
                         'address' =>
                             [
-                                'address_line_1' => '123 Townsend St',
-                                'address_line_2' => 'Floor 6',
-                                'admin_area_2' => 'San Francisco',
-                                'admin_area_1' => 'CA',
-                                'postal_code' => '94107',
-                                'country_code' => 'US',
+                                'address_line_1' => $address->getAddress(),
+                                'address_line_2' =>  $address->getAddressLine2(),
+                                'admin_area_2' => $address->getState(),
+                                'admin_area_1' => $address->getCity(),
+                                'postal_code' => $address->getPostcode(),
+                                'country_code' => $address->getCountryData()->getCountrycode(),
                             ],
                 ],
             ]],
             "application_context" => [
-                "cancel_url" => $cancelUrls,
-                "return_url" => $returnUrl,
+                "cancel_url" => $url['cancel'],
+                "return_url" => $url['return'],
                 "user_action" => "PAY_NOW",
                 "shipping_preference" => "SET_PROVIDED_ADDRESS"
 

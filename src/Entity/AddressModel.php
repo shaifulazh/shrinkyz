@@ -66,6 +66,11 @@ class AddressModel
      */
     private $user;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $address_line_2;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -187,6 +192,18 @@ class AddressModel
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getAddressLine2(): ?string
+    {
+        return $this->address_line_2;
+    }
+
+    public function setAddressLine2(?string $address_line_2): self
+    {
+        $this->address_line_2 = $address_line_2;
 
         return $this;
     }

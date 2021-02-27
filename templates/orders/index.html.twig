@@ -21,8 +21,9 @@
                             {{form_row(form.last_name, {'attr' : {'class' : 'form-control'}})}}
                         </div>
                     </div>
-
-                    {{form_row(form.address, {'attr' : {'class' : 'form-control'}})}}
+                    {{form_label(form.address,'Address Line 1' )}}
+                    {{form_widget(form.address, {'attr' : {'class' : 'form-control'}})}}
+                    {{form_row(form.address_line_2, {'attr' : {'class' : 'form-control'}})}}
                     {{form_label(form.countrydata,'Country')}}
                     {{form_widget(form.countrydata, {'attr' : {'class' : 'form-control'}})}}
                     {{form_label(form.state,'State / Province / Territory')}}

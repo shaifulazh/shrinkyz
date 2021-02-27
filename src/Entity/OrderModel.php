@@ -41,14 +41,10 @@ class OrderModel
      */
     private $status;
 
-
-
     /**
      * @ORM\Column(type="string", length=255)
      */
     private $payment_method;
-
-
 
     /**
      * @ORM\OneToOne(targetEntity=PaypalModel::class, cascade={"persist", "remove"})
@@ -59,6 +55,11 @@ class OrderModel
      * @ORM\ManyToOne(targetEntity=AddressModel::class)
      */
     private $address;
+
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $reference_id;
 
 
 
@@ -175,6 +176,18 @@ class OrderModel
     public function setAddress(?AddressModel $address): self
     {
         $this->address = $address;
+
+        return $this;
+    }
+
+    public function getReferenceId(): ?string
+    {
+        return $this->reference_id;
+    }
+
+    public function setReferenceId(string $reference_id): self
+    {
+        $this->reference_id = $reference_id;
 
         return $this;
     }
