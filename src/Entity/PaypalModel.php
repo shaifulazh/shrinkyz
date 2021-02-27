@@ -62,6 +62,36 @@ class PaypalModel
      */
     private $refundhref;
 
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $gross_amount;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $net_amount;
+
+    /**
+     * @ORM\Column(type="string", length=10, nullable=true)
+     */
+    private $gross_amount_currency;
+
+    /**
+     * @ORM\Column(type="string", length=10, nullable=true)
+     */
+    private $net_amount_currency;
+
+    /**
+     * @ORM\Column(type="string", length=10, nullable=true)
+     */
+    private $amount_currency;
+
+    /**
+     * @ORM\Column(type="string", length=10, nullable=true)
+     */
+    private $paypal_fee_currency;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -171,6 +201,78 @@ class PaypalModel
     public function setRefundhref(?string $refundhref): self
     {
         $this->refundhref = $refundhref;
+
+        return $this;
+    }
+
+    public function getGrossAmount(): ?float
+    {
+        return $this->gross_amount;
+    }
+
+    public function setGrossAmount(float $gross_amount): self
+    {
+        $this->gross_amount = $gross_amount;
+
+        return $this;
+    }
+
+    public function getNetAmount(): ?float
+    {
+        return $this->net_amount;
+    }
+
+    public function setNetAmount(float $net_amount): self
+    {
+        $this->net_amount = $net_amount;
+
+        return $this;
+    }
+
+    public function getGrossAmountCurrency(): ?string
+    {
+        return $this->gross_amount_currency;
+    }
+
+    public function setGrossAmountCurrency(?string $gross_amount_currency): self
+    {
+        $this->gross_amount_currency = $gross_amount_currency;
+
+        return $this;
+    }
+
+    public function getNetAmountCurrency(): ?string
+    {
+        return $this->net_amount_currency;
+    }
+
+    public function setNetAmountCurrency(?string $net_amount_currency): self
+    {
+        $this->net_amount_currency = $net_amount_currency;
+
+        return $this;
+    }
+
+    public function getAmountCurrency(): ?string
+    {
+        return $this->amount_currency;
+    }
+
+    public function setAmountCurrency(?string $amount_currency): self
+    {
+        $this->amount_currency = $amount_currency;
+
+        return $this;
+    }
+
+    public function getPaypalFeeCurrency(): ?string
+    {
+        return $this->paypal_fee_currency;
+    }
+
+    public function setPaypalFeeCurrency(?string $paypal_fee_currency): self
+    {
+        $this->paypal_fee_currency = $paypal_fee_currency;
 
         return $this;
     }

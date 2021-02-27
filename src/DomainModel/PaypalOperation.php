@@ -44,12 +44,35 @@ class PaypalOperation
                 "amount" => [
                     "value" => number_format($price, 2),
                     "currency_code" => "MYR"
-                ]
+                ],
+                "shipping" => [
+                    
+                        'method' => 'Pos Laju Malaysia',
+                        'name' =>
+                            [
+                                'full_name' => 'John Doe',
+                            ],
+                        'address' =>
+                            [
+                                'address_line_1' => '123 Townsend St',
+                                'address_line_2' => 'Floor 6',
+                                'admin_area_2' => 'San Francisco',
+                                'admin_area_1' => 'CA',
+                                'postal_code' => '94107',
+                                'country_code' => 'US',
+                            ],
+                ],
             ]],
             "application_context" => [
                 "cancel_url" => $cancelUrls,
                 "return_url" => $returnUrl,
+                "user_action" => "PAY_NOW",
+                "shipping_preference" => "SET_PROVIDED_ADDRESS"
+
+
             ]
+            
+            
         ];
 
         try {

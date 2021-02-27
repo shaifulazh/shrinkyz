@@ -12,6 +12,7 @@ use stdClass;
 use Symfony\Component\HttpFoundation\Response;
 use Test;
 use App\Entity\Category;
+use App\Entity\Country;
 use App\Entity\Subcategory;
 use App\Entity\Subtwocategory;
 use App\Entity\VisitorOfPage;
@@ -55,6 +56,14 @@ class ApiAdminTestController extends AbstractFOSRestController
         ];
 
         return $this->view($data, Response::HTTP_OK);
+    }
+
+
+    public function getCountryAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $country = $em->getRepository(Country::class)->findAll();
+        return $this->view($country, Response::HTTP_OK);
     }
 
     

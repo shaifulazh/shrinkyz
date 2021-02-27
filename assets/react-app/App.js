@@ -13,8 +13,6 @@ import CategoryEdit from "./component/product/Old/CategoryEdit";
 
 import ProductAdd from "./component/product/AddProducts/ProductAdd";
 import MobileSideBar from "./router/MobileSideBar";
-i
-
 
 import CategoryList from "./component/product/AddProducts/CategoryList";
 import Visitor from "./component/Visitor/Visitor";

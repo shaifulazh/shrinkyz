@@ -14,6 +14,9 @@ parameters:
   webemailname: "%env(WEB_EMAIL_NAME)%"
   geotoken: "%env(GEO_TOKEN)%"
   requestemail: "%env(REQUEST_EMAIL)%"
+  localdir: "%kernel.project_dir%"
+  poslaju_api_key: "%env(POSLAJU_API_KEY)%"
+  local_postcode: "%env(LOCAL_POSTCODE)%"
   
 services:
   # default configuration for services in *this* file
@@ -35,6 +38,3 @@ services:
 
   # add more service definitions when explicit configuration is needed
   # please note that last definitions always *replace* previous ones
-  pos-laju-client:
-    class: App\DomainModel\PosLajuClient
-    public: true

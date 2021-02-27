@@ -16,6 +16,8 @@ use App\Form\PaymentType;
 use App\Entity\ProductModel;
 use Hoa\Compiler\Visitor\Dump;
 use App\Controller\PaypalController;
+use App\DomainModel\PaypalOperation;
+use App\Entity\CheckOutData;
 use SebastianBergmann\CodeCoverage\Report\Xml\Totals;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
@@ -28,7 +30,7 @@ use Symfony\Component\Serializer\Serializer;
 class OrdersController extends AbstractController
 {
     private $paypal;
-    public function __construct(PaypalController $paypal)
+    public function __construct(PaypalOperation $paypal)
     {
         $this->paypal = $paypal;
     }
@@ -149,11 +151,8 @@ class OrdersController extends AbstractController
             }
    
             //total 
-            $total = 0;
-            foreach ($carts as $cart) {
-                $total = $total + ($cart->getProduct()->getProductPrice() * $cart->getQty());
-            }
-
+            $data = $this->getDoctrine()->getRepository(CheckOutData::class)->findOneBy(['user'=>$this->getUser()]);
+            $total = $data->getFinaltotal();
             $returnUrl = $this->generateUrl('register_order', [], UrlGenerator::ABSOLUTE_URL);
             $cancelUrl = $this->generateUrl('cancel_order', [], UrlGenerator::ABSOLUTE_URL);
 
@@ -161,9 +160,8 @@ class OrdersController extends AbstractController
             $responsed = $this->paypal->paymentexecute($total, $cancelUrl, $returnUrl);
             // $results = json_encode($responsed->result, JSON_PRETTY_PRINT);
 
+            // dd($responsed);
             $arr = $responsed->result;
-
-
 
             $obj = (object)$arr;
 
@@ -233,9 +231,8 @@ class OrdersController extends AbstractController
         $paypalid = $obj->id;
         $status = $obj->status;
 
+        
         //TODO need to check if amount is the same as order total
-
-
 
         $purchase_units = $obj->purchase_units;
         $amount = $purchase_units[0]->amount;
@@ -246,6 +243,8 @@ class OrdersController extends AbstractController
 
         $seller_receivable_breakdown = $captures[0]->seller_receivable_breakdown;
         $paypalfee = $seller_receivable_breakdown->paypal_fee;
+        $grossAmount = $seller_receivable_breakdown->gross_amount;
+        $netAmount =$seller_receivable_breakdown->net_amount;
         $valuefee = $paypalfee->value;
 
         $links = $captures[0]->links;
@@ -256,6 +255,23 @@ class OrdersController extends AbstractController
                 $refundhref = $link->href;
             }
         }
+
+        $checkoutdata = $this->getDoctrine()->getRepository(CheckOutData::class)->findOneBy(['user'=>$this->getUser()]);
+
+        $finaltotal =  $checkoutdata->getFinaltotal();
+
+        $float_value = floatval($value);
+
+        if($float_value !== $finaltotal)
+        {
+            $this->addFlash('warning', 'Payment Incomplete. Data inacurate');
+
+            
+        }
+
+
+
+               
         if ($paypalid === $token) {
 
             $address = $this->getDoctrine()->getRepository(AddressModel::class)->findOneByUser($this->getUser());
@@ -263,10 +279,16 @@ class OrdersController extends AbstractController
             
             $em = $this->getDoctrine()->getManager();
             $paypaldata->setStatus($status);
+            $paypaldata->setAmountCurrency($amount->currency_code);
             $paypaldata->setAmount($value);
             $paypaldata->setCurrency($currency);
+            $paypaldata->setPaypalFeeCurrency($paypalfee->currency_code);
             $paypaldata->setPaypalfee($valuefee);
             $paypaldata->setRefundhref($refundhref);
+            $paypaldata->setGrossAmountCurrency($grossAmount->currency_code);
+            $paypaldata->setGrossAmount(floatval($grossAmount->value));
+            $paypaldata->setNetAmountCurrency($netAmount->currency_code);
+            $paypaldata->setNetAmount(floatval($netAmount->value));
             $em->persist($paypaldata);
             $em->flush();
            
@@ -288,7 +310,7 @@ class OrdersController extends AbstractController
 
         $paypal->setStatus("CANCEL");
         $em->flush();
-        return $this->redirectToRoute('check_payment');
+        return $this->redirectToRoute('customer_pay');
     }
 
 
@@ -296,7 +318,7 @@ class OrdersController extends AbstractController
     private function createOrder($paymentMethod, $address, $token)
     {
 
-        // TODO deduct product stock!!
+
         $user = $this->getUser();
         $carts = $this->getDoctrine()->getRepository(CartModel::class)->findBy(['customer' => $this->getUser()]);
         $em = $this->getDoctrine()->getManager();

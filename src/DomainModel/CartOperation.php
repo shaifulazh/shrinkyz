@@ -16,6 +16,7 @@ class CartOperation
     {
         $this->entityManager = $entityManager;
         $this->flash = $flash;
+        
     }
 
     public function productInCarts($user)
@@ -63,5 +64,6 @@ class CartOperation
         }
 
     }
+
 }
 

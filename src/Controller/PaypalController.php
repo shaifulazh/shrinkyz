@@ -49,10 +49,18 @@ class PaypalController
                     "value" => number_format($price, 2),
                     "currency_code" => "MYR"
                 ]
+                
+
+
+
+
             ]],
             "application_context" => [
                 "cancel_url" => $cancelUrls,
                 "return_url" => $returnUrl,
+                'landing_page' => 'NO_PREFERENCE',
+                'shipping_preference' => 'NO_SHIPPING', //beter to have shipping if anything wrong 
+                'user_action' => 'PAY_NOW',
             ]
         ];
 
