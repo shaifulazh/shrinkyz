@@ -85,9 +85,7 @@ class TestController extends AbstractController
        return $this->render('v2/test.html.twig');
     }
 
-     /**
-     * @Route("/country", name="coutny")
-     */
+     
     public function labasudatukar()
     {
       $test = file_get_contents($this->getParameter('localdir') . '/country.csv');
@@ -134,6 +132,23 @@ class TestController extends AbstractController
       // }
     
       // dd(array_diff($list2,$list3),$countrylist[37],$countrylist[172]);
+
+      $encoders = [new XmlEncoder(), new JsonEncoder()];
+      $normalizers = [new ObjectNormalizer()];
+
+      $serializer = new Serializer($normalizers, $encoders);
+
+      $jsonContent = $serializer->serialize($country, 'json');
+      file_put_contents($this->getParameter('localdir') . '/country_paypal.json',$jsonContent);
+      dd($jsonContent);
+    }
+
+    /**
+     * @Route("/country", name="coutny")
+     */
+    public function create_country_by_paypal(){
+      dd($this->countryData->insertCountryData('country_paypal.json'));
+
     }
 
 }

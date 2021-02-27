@@ -22,13 +22,13 @@ class CountryData
     }
 
 
-    public function insertCountryData(){
+    public function insertCountryData($file){
 
         if($this->entityManager->getRepository(Country::class)->findAll()){
             throw new \Exception('Data Already Exist!');
         }
 
-        $file = file_get_contents($this->parameter->get('localdir') . '/country.json');
+        $file = file_get_contents($this->parameter->get('localdir') . '/'. $file);
 
         if(!$file)
         {
