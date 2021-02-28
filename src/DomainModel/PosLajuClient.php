@@ -8,19 +8,28 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class PosLajuClient
 {
     private HttpClientInterface $httpclient;
+
     private $parameter;
+
+    private const URL_CHECK_PRICE = 'https://sendparcel.poslaju.com.my/apiv1/check_price';
+
+    private const URL_POSCODE = 'https://sendparcel.poslaju.com.my/apiv1/get_postcode_details';
+
+    private const URL_TEST_400 = 'https://httpstat.us/400';
+
   
     public function __construct(HttpClientInterface $httpclient,ContainerBagInterface $parameter)
     {
         $this->httpclient = $httpclient;
         $this->parameter = $parameter;
+        
     }
 
     public function fetchPriceCheck($country,$postcode,$weight)
     {
-        $urlCheckPrice = 'https://sendparcel.poslaju.com.my/apiv1/check_price';
+        
 
-        $response = $this->httpclient->request('POST',$urlCheckPrice,[
+        $response = $this->httpclient->request('POST',self::URL_CHECK_PRICE,[
             'body' => [
                 'api_key' => $this->parameter->get('poslaju_api_key'),
                 'sender_postcode' =>  $this->parameter->get('local_postcode'),
@@ -29,21 +38,35 @@ class PosLajuClient
                 'declared_weight' => $weight
             ],
 
-
-           
         ]);
+
+        if($response->getStatusCode() !== 200)
+        {
+            return null;
+        }
+
         return $response->getContent();
     }
 
     public function fecthPoscodeDetails($postcode){
-        $urlPostcode = 'https://sendparcel.poslaju.com.my/apiv1/get_postcode_details';
 
-        $response = $this->httpclient->request('POST', $urlPostcode,[
+        $response = $this->httpclient->request('POST', self::URL_POSCODE,[
             'body' =>[
                 'api_key' => $this->parameter->get('poslaju_api_key'),
                 'postcode' => $postcode
             ]
         ]);
+
+        if($response->getStatusCode() !== 200)
+        {
+            return null;
+        }
+
+
+        $content = $response->toArray();
+        
+        $content = (Object)$content;
+        dd($content->data['city']);
 
         return $response->getContent();
 

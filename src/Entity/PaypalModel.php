@@ -92,6 +92,11 @@ class PaypalModel
      */
     private $paypal_fee_currency;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $payment_date;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -273,6 +278,18 @@ class PaypalModel
     public function setPaypalFeeCurrency(?string $paypal_fee_currency): self
     {
         $this->paypal_fee_currency = $paypal_fee_currency;
+
+        return $this;
+    }
+
+    public function getPaymentDate(): ?\DateTimeInterface
+    {
+        return $this->payment_date;
+    }
+
+    public function setPaymentDate(?\DateTimeInterface $payment_date): self
+    {
+        $this->payment_date = $payment_date;
 
         return $this;
     }

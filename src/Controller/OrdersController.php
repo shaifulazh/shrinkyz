@@ -20,6 +20,9 @@ use App\DomainModel\EmailOperation;
 use App\DomainModel\PaypalOperation;
 use App\Entity\CheckOutData;
 use SebastianBergmann\CodeCoverage\Report\Xml\Totals;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -116,8 +119,6 @@ class OrdersController extends AbstractController
                 }
             }
 
-
-
                 // $this->createOrder($session->get('paymentType'), $session->get('address'), $paypalid);
 
                 $paypalReg = new PaypalModel;
@@ -138,7 +139,7 @@ class OrdersController extends AbstractController
      * @Route("/orders/register", name="register_order")
      */
 
-    public function registerOrder(Session $session, Request $request)
+    public function registerOrder(Session $session, Request $request, MailerInterface $mailer)
     {
         $paymentSession = $session->get('payment');
 
@@ -166,8 +167,8 @@ class OrdersController extends AbstractController
         $obj = (object)$arr;
         $paypalid = $obj->id;
         $status = $obj->status;
+
         
-        //paynow
 
         $purchase_units = $obj->purchase_units;
         $amount = $purchase_units[0]->amount;
@@ -181,6 +182,11 @@ class OrdersController extends AbstractController
         $grossAmount = $seller_receivable_breakdown->gross_amount;
         $netAmount =$seller_receivable_breakdown->net_amount;
         $valuefee = $paypalfee->value;
+
+        $datepay = $obj->update_time;
+        $date =  date('Y-m-d H:i:s', strtotime ($datepay));
+        $paymentDate = date_create_from_format('Y-m-d H:i:s', $date);
+
 
         $links = $captures[0]->links;
 
@@ -201,7 +207,7 @@ class OrdersController extends AbstractController
         if ($paypalid === $token) {
 
             $address = $this->getDoctrine()->getRepository(AddressModel::class)->findOneByUser($this->getUser());
-            $order = $this->createOrder('paypal',$address, $token, $paymentSession['reference_id']);
+            $order = $this->createOrder('paypal',$address, $token, $paymentSession);
             
             $em = $this->getDoctrine()->getManager();
             $paypaldata->setStatus($status);
@@ -215,12 +221,12 @@ class OrdersController extends AbstractController
             $paypaldata->setGrossAmount(floatval($grossAmount->value));
             $paypaldata->setNetAmountCurrency($netAmount->currency_code);
             $paypaldata->setNetAmount(floatval($netAmount->value));
+            $paypaldata->setPaymentDate($paymentDate);
             $em->persist($paypaldata);
             $em->flush();
 
-
-            $this->email->sendEmailConfirmOrder($this->getUser(),$order);
-
+            $this->email->sendEmailConfirmOrder($this->getUser(),$order);       
+            
 
 
            
@@ -247,7 +253,7 @@ class OrdersController extends AbstractController
 
 
     //function to create an order to database
-    private function createOrder($paymentMethod, $address, $token,$referenceId)
+    private function createOrder($paymentMethod, $address, $token,$payment)
     {
 
 
@@ -261,8 +267,11 @@ class OrdersController extends AbstractController
         $order->setStatus('PROCESSING');
         $order->setAddress($address);
         $order->setUser($user);
-        $order->setReferenceId($referenceId);
+        $order->setReferenceId($payment['reference_id']);
         $order->setPaymentMethod($paymentMethod);
+        $order->setShipping($payment['shipping']);
+        $order->setSubtotal($payment['total']);
+        $order->setAmount($payment['finaltotal']);
         $order->setTotal($total);
 
         $paypal = $this->getDoctrine()->getRepository(PaypalModel::class)->findOneBy(['paypalid' => $token]);
@@ -292,8 +301,7 @@ class OrdersController extends AbstractController
         $em->persist($order);
         $em->flush();
 
-        //send email to client
-
+       
 
 
 

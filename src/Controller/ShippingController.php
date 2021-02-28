@@ -100,6 +100,12 @@ class ShippingController extends AbstractController
 
                 $object = json_decode($response);
 
+                if(!$object)
+                {
+                    $this->addFlash('warning', 'Pos laju is offline!!');
+                    return $this->redirectToRoute('chekingout');
+                }
+
                 $shippingprice = $object->data->prices[0]->normal_price;
 
 
@@ -162,7 +168,7 @@ class ShippingController extends AbstractController
 
         $em->flush();
 
-        $referenceId = md5(uniqid());
+        $referenceId = uniqid();
 
         $payment = [
            

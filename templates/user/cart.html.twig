@@ -41,17 +41,17 @@
 
             {% set total = 0 %}{% set i = 0 %}{% set notEnoughStock = 0 %}
                 {% for product in products %}
-          
                   <div class="row mb-4">
                     <div class="col-md-5 col-lg-3 col-xl-3">
                       <div class="view zoom overlay z-depth-1 rounded mb-3 mb-md-0">
+          <a href="{{path('app_view', {'id': product.product.getId })}}" class="">
                         <img class="img-fluid w-100"
                         {% for key, picture in product.product.pictures %}
                             {% if key == 0 %}
                           src="{{ asset( '/images/' ~ picture.filename ) }}" alt="Sample">
                         {% endif %}
                         {% endfor %}
-                      </div>
+                      </div> </a>
                     </div>
                     <div class="col-md-7 col-lg-9 col-xl-9">
                       <div>
@@ -92,6 +92,7 @@
                   {# to calculate the cart total #}
                    {% set total = total + (product.product.getProductPrice * product.qty ) %}
                   {% set i = i + 1 %}
+                 
                 {% endfor %}
           <p class="text-primary mb-0"><i class="fas fa-info-circle mr-1"></i> Do not delay the purchase, adding
             items to your cart does not mean booking them.</p>

@@ -3,10 +3,15 @@
 namespace App\Controller;
 
 use App\DomainModel\CountryData;
+use App\DomainModel\EmailOperation;
 use App\DomainModel\PosLajuClient;
 use App\Entity\Country;
+use App\Entity\OrderModel;
+use App\Kernel;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,12 +28,10 @@ use Symfony\Component\Serializer\Serializer;
 class TestController extends AbstractController
 {
     private $countryData;
-    private $posLajuClient;
-    public function __construct(CountryData $countryData, PosLajuClient $posLajuClient)
+    public function __construct(CountryData $countryData)
     {
       $this->countryData=$countryData;
-      $this->posLajuClient = $posLajuClient;
-
+     
     }
  
    
@@ -149,6 +152,27 @@ class TestController extends AbstractController
     public function create_country_by_paypal(){
       dd($this->countryData->insertCountryData('country_paypal.json'));
 
+    }
+
+    /**
+     * @Route("/testa", name="testa")
+     */
+    public function testa(EmailOperation $email){
+      $s = '2021-02-28T14:46:36Z';
+        $date = date('Y-m-d H:i:s', strtotime ($s));
+        $d = date_create_from_format('Y-m-d H:i:s', $date);
+
+        $user = $this->getUser();
+
+        $order = $this->getDoctrine()->getRepository(OrderModel::class)->findOneBy(['user'=>$user]);
+
+        $email->sendEmailConfirmOrder($user,$order);
+
+
+
+
+
+      return $this->render('email/test.html.twig', ['time'=> $d]);
     }
 
 }

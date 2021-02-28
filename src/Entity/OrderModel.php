@@ -61,6 +61,21 @@ class OrderModel
      */
     private $reference_id;
 
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $shipping;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $amount;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $subtotal;
+
 
 
 
@@ -188,6 +203,42 @@ class OrderModel
     public function setReferenceId(string $reference_id): self
     {
         $this->reference_id = $reference_id;
+
+        return $this;
+    }
+
+    public function getShipping(): ?float
+    {
+        return $this->shipping;
+    }
+
+    public function setShipping(?float $shipping): self
+    {
+        $this->shipping = $shipping;
+
+        return $this;
+    }
+
+    public function getAmount(): ?float
+    {
+        return $this->amount;
+    }
+
+    public function setAmount(?float $amount): self
+    {
+        $this->amount = $amount;
+
+        return $this;
+    }
+
+    public function getSubtotal(): ?float
+    {
+        return $this->subtotal;
+    }
+
+    public function setSubtotal(?float $subtotal): self
+    {
+        $this->subtotal = $subtotal;
 
         return $this;
     }
