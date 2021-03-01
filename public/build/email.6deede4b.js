@@ -1,0 +1,1 @@
+(self.webpackChunk=self.webpackChunk||[]).push([[41],{86776:(e,l,n)=>{"use strict";var t=n(67294),r=n(73935);class u extends t.Component{render(){return t.createElement("div",null,t.createElement("div",null,t.createElement("h1",null,"hello")))}}r.render(t.createElement(u,null),document.getElementById("email"))}},0,[[86776,666,935]]]);

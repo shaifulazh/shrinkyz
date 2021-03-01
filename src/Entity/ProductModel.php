@@ -327,4 +327,11 @@ class ProductModel
         return $this;
     }
 
+    public function setView(?int $view): self
+    {
+        $this->view = $view;
+
+        return $this;
+    }
+
 }

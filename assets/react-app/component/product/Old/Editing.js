@@ -188,6 +188,7 @@ export default class Editing extends Component {
                       className="form-control"
                       style={{ width: "10em" }}
                       min="0"
+                      step=".01"
                       defaultValue={data.productPrice}
                       onChange={e => {
                         if (e.target.value < 0) {

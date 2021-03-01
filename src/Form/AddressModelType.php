@@ -7,6 +7,7 @@ use App\Entity\Country;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -30,7 +31,7 @@ class AddressModelType extends AbstractType
             ->add('state')
             ->add('city')
             ->add('postcode')
-            ->add('phone_number')
+            ->add('phone_number',NumberType::class,['html5'=> true, 'invalid_message'=> 'Please put number value only'])
 
         ;
     }

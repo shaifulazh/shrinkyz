@@ -27,8 +27,10 @@ class OrderTest extends KernelTestCase
         $date = date('Y-m-d H:i:s', strtotime ($s));
         $d = date_create_from_format('Y-m-d H:i:s', $date);
         $crc = crc32(md5(uniqid()));
+
+        $version = curl_version();
         
-        dd(uniqid());
+        dd($version);
 
         $this->assertTrue(true);
         

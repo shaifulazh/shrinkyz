@@ -17,6 +17,7 @@ parameters:
   localdir: "%kernel.project_dir%"
   poslaju_api_key: "%env(POSLAJU_API_KEY)%"
   local_postcode: "%env(LOCAL_POSTCODE)%"
+  admin_route: "%env(ADMIN_ROUTE)%"
   
 services:
   # default configuration for services in *this* file

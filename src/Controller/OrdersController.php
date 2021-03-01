@@ -19,6 +19,7 @@ use App\Controller\PaypalController;
 use App\DomainModel\EmailOperation;
 use App\DomainModel\PaypalOperation;
 use App\Entity\CheckOutData;
+use App\Entity\User;
 use SebastianBergmann\CodeCoverage\Report\Xml\Totals;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
@@ -35,14 +36,13 @@ class OrdersController extends AbstractController
 {
     private $paypal;
     private $email;
-    public function __construct(PaypalOperation $paypal,EmailOperation $email)
+    public function __construct(PaypalOperation $paypal, EmailOperation $email)
     {
         $this->paypal = $paypal;
 
         $this->email = $email;
-
     }
-     
+
     public function miniCart()
     {
         $carts = $this->getDoctrine()->getRepository(CartModel::class)->findBy(['customer' => $this->getUser()]);
@@ -57,81 +57,80 @@ class OrdersController extends AbstractController
     public function confirmOrder_create_order(Session $session, Request $r)
     {
 
-            $carts = $this->getDoctrine()->getRepository(CartModel::class)->findBy(['customer' => $this->getUser()]);
-            if (empty($carts)) {
-                $this->addFlash('warning', 'Cart Empty');
-                return $this->redirectToRoute('view_cart');
+        $carts = $this->getDoctrine()->getRepository(CartModel::class)->findBy(['customer' => $this->getUser()]);
+        if (empty($carts)) {
+            $this->addFlash('warning', 'Cart Empty');
+            return $this->redirectToRoute('view_cart');
+        }
+
+        //check stock
+
+        $notEnoughStock = 0;
+        //check cart if stock is enough
+        foreach ($carts as $cart) {
+            if (($cart->getProduct()->getProductStock() - $cart->getQty()) < 0) {
+                $notEnoughStock += 1;
             }
+        }
 
-            //check stock
-
-            $notEnoughStock = 0;
-            //check cart if stock is enough
-            foreach ($carts as $cart) {
-                if (($cart->getProduct()->getProductStock() - $cart->getQty()) < 0) {
-                    $notEnoughStock += 1;
-                }
-            }
-
-            if ($notEnoughStock !== 0) {
+        if ($notEnoughStock !== 0) {
             $this->addFlash('warning', 'Sorry we dont have enough Stock');
-                return $this->redirectToRoute('view_cart');
-            }
-   
-            //total 
-            $data = $this->getDoctrine()->getRepository(CheckOutData::class)->findOneBy(['user'=>$this->getUser()]);
-            $total = $data->getFinaltotal();
-            $returnUrl = $this->generateUrl('register_order', [], UrlGenerator::ABSOLUTE_URL);
-            $cancelUrl = $this->generateUrl('cancel_order', [], UrlGenerator::ABSOLUTE_URL);
+            return $this->redirectToRoute('view_cart');
+        }
 
-            $payment = $session->get('payment');
+        //total 
+        $data = $this->getDoctrine()->getRepository(CheckOutData::class)->findOneBy(['user' => $this->getUser()]);
+        $total = $data->getFinaltotal();
+        $returnUrl = $this->generateUrl('register_order', [], UrlGenerator::ABSOLUTE_URL);
+        $cancelUrl = $this->generateUrl('cancel_order', [], UrlGenerator::ABSOLUTE_URL);
 
-            
-            $url = [
-                'return' => $returnUrl,
-                'cancel' => $cancelUrl
-            ];
-            
-            $responsed = $this->paypal->paymentexecute($this->getUser(),$payment,$url);
-            
-            
-            $arr = $responsed->result;
+        $payment = $session->get('payment');
 
-            $obj = (object)$arr;
 
-            if($obj->purchase_units[0]->reference_id !== $payment['reference_id'])
-            {   
-                $this->addFlash('warning', 'not valid transaction');
-                return $this->redirectToRoute('customer_pay');
-            }
-            
-            $paypalid = $obj->id;
-            $links = $obj->links;
+        $url = [
+            'return' => $returnUrl,
+            'cancel' => $cancelUrl
+        ];
 
-            foreach ($links as $link) {
+        $responsed = $this->paypal->paymentexecute($this->getUser(), $payment, $url);
 
-                if ($link->rel == 'approve') {
-                    $approve = $link->href;
-                }
 
-                if ($link->rel == 'capture') {
-                    $capture = $link->href;
-                }
+        $arr = $responsed->result;
+
+        $obj = (object)$arr;
+
+        if ($obj->purchase_units[0]->reference_id !== $payment['reference_id']) {
+            $this->addFlash('warning', 'not valid transaction');
+            return $this->redirectToRoute('customer_pay');
+        }
+
+        $paypalid = $obj->id;
+        $links = $obj->links;
+
+        foreach ($links as $link) {
+
+            if ($link->rel == 'approve') {
+                $approve = $link->href;
             }
 
-                // $this->createOrder($session->get('paymentType'), $session->get('address'), $paypalid);
+            if ($link->rel == 'capture') {
+                $capture = $link->href;
+            }
+        }
 
-                $paypalReg = new PaypalModel;
-                $em = $this->getDoctrine()->getManager();
-                $paypalReg->setPaypalid($paypalid);
-                $paypalReg->setUserid($this->getUser()->getId());
-                $paypalReg->setHref($capture);
-                $em->persist($paypalReg);
-                $em->flush();
+        // $this->createOrder($session->get('paymentType'), $session->get('address'), $paypalid);
 
-            return $this->redirect($approve, 301); // capture href paypal approve
+        $paypalReg = new PaypalModel;
+        $em = $this->getDoctrine()->getManager();
+        $paypalReg->setPaypalid($paypalid);
+        $paypalReg->setUserid($this->getUser()->getId());
+        $paypalReg->setHref($capture);
+        $em->persist($paypalReg);
+        $em->flush();
 
-            // 1/7/2021 -> paypal intergration need capture page and update status page , add paypal detail in ordermodel
+        return $this->redirect($approve, 301); // capture href paypal approve
+
+        // 1/7/2021 -> paypal intergration need capture page and update status page , add paypal detail in ordermodel
 
     }
 
@@ -146,20 +145,20 @@ class OrdersController extends AbstractController
         $session->clear();
 
         $token = $request->query->get('token'); //capture paypal order-id
-        if($token){
+        if ($token) {
             $paypal = $this->paypal->captureOrder($token);
-        }else {
+        } else {
             $this->addFlash('warning', 'prohibited area');
             return $this->redirectToRoute('chekingout');
         }
-        
+
         $paypaldata = $this->getDoctrine()->getRepository(PaypalModel::class)->findOneBy(['paypalid' => $token]);
-        if (!$paypaldata){
+        if (!$paypaldata) {
             $this->addFlash('warning', 'Not valid');
             return $this->redirectToRoute('chekingout');
         }
-        
-        if($paypal === null){
+
+        if ($paypal === null) {
             $this->addFlash('warning', 'error transaction');
             return $this->redirectToRoute('chekingout');
         }
@@ -168,7 +167,7 @@ class OrdersController extends AbstractController
         $paypalid = $obj->id;
         $status = $obj->status;
 
-        
+
 
         $purchase_units = $obj->purchase_units;
         $amount = $purchase_units[0]->amount;
@@ -180,11 +179,11 @@ class OrdersController extends AbstractController
         $seller_receivable_breakdown = $captures[0]->seller_receivable_breakdown;
         $paypalfee = $seller_receivable_breakdown->paypal_fee;
         $grossAmount = $seller_receivable_breakdown->gross_amount;
-        $netAmount =$seller_receivable_breakdown->net_amount;
+        $netAmount = $seller_receivable_breakdown->net_amount;
         $valuefee = $paypalfee->value;
 
         $datepay = $obj->update_time;
-        $date =  date('Y-m-d H:i:s', strtotime ($datepay));
+        $date =  date('Y-m-d H:i:s', strtotime($datepay));
         $paymentDate = date_create_from_format('Y-m-d H:i:s', $date);
 
 
@@ -197,18 +196,17 @@ class OrdersController extends AbstractController
             }
         }
 
-        if($purchase_units[0]->reference_id !== $paymentSession['reference_id'])
-        {
+        if ($purchase_units[0]->reference_id !== $paymentSession['reference_id']) {
             $this->addFlash('warning', 'Invalid Order');
             return $this->redirectToRoute('chekingout');
         }
 
-            
+
         if ($paypalid === $token) {
 
             $address = $this->getDoctrine()->getRepository(AddressModel::class)->findOneByUser($this->getUser());
-            $order = $this->createOrder('paypal',$address, $token, $paymentSession);
-            
+            $order = $this->createOrder('paypal', $address, $token, $paymentSession);
+
             $em = $this->getDoctrine()->getManager();
             $paypaldata->setStatus($status);
             $paypaldata->setAmountCurrency($amount->currency_code);
@@ -225,12 +223,19 @@ class OrdersController extends AbstractController
             $em->persist($paypaldata);
             $em->flush();
 
-            $this->email->sendEmailConfirmOrder($this->getUser(),$order);       
-            
 
 
-           
+
+            $this->email->sendEmailConfirmOrder($this->getUser(), $order);
+
+            $admins = $em->getRepository(User::class)->findByRole('ROLE_ADMIN');
+
+            foreach ($admins as $admin) {
+
+                $this->email->sendAdminPaymentOrder($admin, $order, $this->getUser());
+            }
         }
+
 
         return $this->render('orders/ThankYou.html.twig', ['order' => $order]);
     }
@@ -253,7 +258,7 @@ class OrdersController extends AbstractController
 
 
     //function to create an order to database
-    private function createOrder($paymentMethod, $address, $token,$payment)
+    private function createOrder($paymentMethod, $address, $token, $payment)
     {
 
 
@@ -301,7 +306,7 @@ class OrdersController extends AbstractController
         $em->persist($order);
         $em->flush();
 
-       
+
 
 
 
@@ -319,6 +324,4 @@ class OrdersController extends AbstractController
 
         return $this->render('user/order.html.twig', ['orders' => $order]);
     }
-
-
 }

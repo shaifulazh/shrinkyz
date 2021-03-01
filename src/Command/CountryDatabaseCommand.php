@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class CountryDatabaseCommand extends Command
@@ -46,6 +47,31 @@ class CountryDatabaseCommand extends Command
         }
 
         if ($input->getOption('delete')) {
+
+            $helper = $this->getHelper('question');
+            $question = new ConfirmationQuestion('<fg=red;options=bold>This action will delete All country data table and the associates. Do you wish to continue?</> <fg=yellow>y</>[<fg=red>yes</>]/n[<fg=green>no</>]', false);
+
+            if (!$helper->ask($input, $output, $question)) {
+                return 0;
+            }
+            $address = $this->country->checkAddressData();
+            
+
+
+            if ($address)
+            {
+                
+
+                $helper = $this->getHelper('question');
+                $question = new ConfirmationQuestion('<fg=red>Data Address exist, do you with to remove? </>y[yes]/n[no]', false);
+
+                if (!$helper->ask($input, $output, $question)) {
+                    return 0;
+                }
+
+                $this->country->deleteAddressData($address);
+
+            }
             
             $delete = $this->country->removeCountryData();
 

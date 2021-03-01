@@ -33,8 +33,7 @@ class EmailOperation
     public function sendEmailConfirmOrder(User $user,OrderModel $order):void
     {   
         $orderdetails = $this->entityManager->getRepository(OrderDetails::class)->findBy(['orders' =>$order]);
-
-
+      
         $template = (new TemplatedEmail())
         ->from(new Address($this->parameter->get('webemail'), $this->parameter->get('webemailname')))
         ->to($user->getEmail())
@@ -47,39 +46,29 @@ class EmailOperation
             'paypal' => $order->getPaypal(),
             'orderdetails' => $orderdetails,
         ]);
-
-       
-        
-       
-
         $this->mailer->send($template);
     
     }
 
 
-    public function sendAdminPaymentOrder($admin,$order):void
+    public function sendAdminPaymentOrder($admin,$order,$user):void
     {
+        $orderdetails = $this->entityManager->getRepository(OrderDetails::class)->findBy(['orders' =>$order]);
+        $dashboard = $this->urlGenerator->generate('dashboard', [], UrlGenerator::ABSOLUTE_URL);
         $template = new TemplatedEmail();
         $template->from(new Address($this->parameter->get('webemail'), $this->parameter->get('webemailname')))
-        ->to($admin)
-        // ->to($admin->getEmail())
-        ->subject('Payment Confirmation for Order ')
-        ->htmlTemplate('orders/notify_admin_order.html.twig');
-
-        $context = $template->getContext();
-        // $context['admin'] = $admin->getFirstname();
-        // $context['order'] = $order->getReferenceId();
-        // $context['customer'] = $order->getUser()->getEmail();
-
-        $dashboard = $this->urlGenerator->generate('dashboard', [], UrlGenerator::ABSOLUTE_URL);
-
-        $context['admin'] = $admin;
-        $context['order'] = $order;
-        $context['customer'] = 'customer@customer.com';
-        $context['dashboard'] = $dashboard;
-
-        $template->context($context);
-
+        ->to($admin->getEmail())
+        ->subject('You Have Order ')
+        ->htmlTemplate('orders/notify_admin_order.html.twig')
+        ->context([
+            'admin' => $admin->getFirstname(),
+            'customer'=> $user->getEmail(),
+            'order' => $order,
+            'address' => $order->getAddress(),
+            'paypal' => $order->getPaypal(),
+            'orderdetails' => $orderdetails,
+            'dashboard'=> $dashboard
+        ]);
         $this->mailer->send($template);
     
     }

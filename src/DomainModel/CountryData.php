@@ -2,7 +2,10 @@
 
 namespace App\DomainModel;
 
+use App\Entity\AddressModel;
 use App\Entity\Country;
+use App\Entity\OrderDetails;
+use App\Entity\OrderModel;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -55,9 +58,16 @@ class CountryData
 
     public function removeCountryData()
     {   
+        
+
+
         $data = $this->entityManager->getRepository(Country::class)->findAll();
         
         $em = $this->entityManager;
+
+        
+
+
         
         if($data){
         
@@ -76,6 +86,52 @@ class CountryData
 
             throw new \Exception('Data country not Exist!');
 
+        }
+
+    }
+
+    public function checkAddressData(){
+        $address = $this->entityManager->getRepository(AddressModel::class)->findAll();
+        if($address)
+        {
+            return $address;
+        }
+        return false;
+    }
+
+    public function deleteAddressData($address) :void
+    {
+        $address = $this->entityManager->getRepository(AddressModel::class)->findAll();
+        $em = $this->entityManager;
+        foreach ($address as $single) {
+            $em->remove($single);
+            $em->flush();
+        }
+    }
+
+    public function checkOrdersData()
+    {
+        $orders = $this->entityManager->getRepository(OrderModel::class)->findAll();
+        if($orders)
+        {
+
+            return $orders;
+        } 
+        return false;
+
+    }
+
+    public function deleteOrdersData($orders):void
+    {
+        $em = $this->entityManager;
+        $orderDetails = $em->getRepository(OrderDetails::class)->findAll();
+        foreach ($orderDetails as $orderDetail) {
+            $em->remove($orderDetail);
+            $em->flush();
+        }
+        foreach ($orders as $order) {
+            $em->remove($order);
+            $em->flush();
         }
 
     }

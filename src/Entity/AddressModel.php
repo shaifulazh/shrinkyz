@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -62,7 +64,7 @@ class AddressModel
     private $countrydata;
 
     /**
-     * @ORM\OneToOne(targetEntity=User::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=User::class)
      */
     private $user;
 
@@ -70,6 +72,16 @@ class AddressModel
      * @ORM\Column(type="string", length=255)
      */
     private $address_line_2;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\OrderModel", mappedBy="address", cascade={"REMOVE"})
+     */
+    private $order;
+
+    public function __construct()
+    {
+        $this->order = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -204,6 +216,36 @@ class AddressModel
     public function setAddressLine2(?string $address_line_2): self
     {
         $this->address_line_2 = $address_line_2;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|OrderModel[]
+     */
+    public function getOrder(): Collection
+    {
+        return $this->order;
+    }
+
+    public function addOrder(OrderModel $order): self
+    {
+        if (!$this->order->contains($order)) {
+            $this->order[] = $order;
+            $order->setAddress($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(OrderModel $order): self
+    {
+        if ($this->order->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getAddress() === $this) {
+                $order->setAddress(null);
+            }
+        }
 
         return $this;
     }

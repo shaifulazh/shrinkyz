@@ -1,0 +1,82 @@
+{% extends '/orders/step.html.twig' %}
+
+{% block title %}Payment Sucess!!
+{% endblock %}
+
+{% block head %}
+<style>
+    .column-1 {
+        height: 400px;
+        border: 1px solid darkgray;
+
+
+
+    }
+
+    .column-2 {
+      
+        border: 1px solid darkgray;
+       
+
+    }
+</style>
+
+{% endblock %}
+
+
+{% block main %}
+<div class="alert alert-success mt-3" role="alert">
+    Payment Sucess!!, Thank You for the order. Kindly wait for your order to be shipped. 
+  </div>
+<div class="mt-4 d-flex">
+    <h3 class="mx-auto">Order Summary</h3>
+
+</div>
+<div class="row mt-4 ">
+    <div class="col-lg-8  mb-4">
+        <div class="column-1">
+                <div class="row">
+                    <div class="col-md-6">
+                        PICTURE
+                    </div>
+                    <div class="col-md-6">
+                        Details
+                    </div>
+                </div>
+
+
+
+        </div>
+
+
+    </div>
+
+    <div class="col-lg-4  ">
+
+        <div class="column-2 py-0 px-3">
+            <div class="row p-3 d-flex border-bottom">
+                <span class="mx-auto" style="font-size: 18px;font-weight: 999;">Order Total</span>
+                
+
+            </div>
+            <div class="row p-3 d-flex border-bottom">
+                <span>Subtotal Price:</span>
+                <span class="ml-auto">RM&nbsp;XXX.XX</span>
+
+            </div>
+            <div class="row p-3 d-flex border-bottom">
+                <span>Shipping Price:</span>
+                <span class="ml-auto">RM&nbsp;XXX.XX</span>
+            </div>
+            <div class="row p-3 d-flex border-bottom">
+                <span>Total Price:</span>
+                <span class="ml-auto">RM&nbsp;XXX.XX</span>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+{% endblock %}

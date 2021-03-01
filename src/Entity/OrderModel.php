@@ -52,7 +52,7 @@ class OrderModel
     private $paypal;
 
     /**
-     * @ORM\ManyToOne(targetEntity=AddressModel::class)
+     * @ORM\ManyToOne(targetEntity=AddressModel::class, inversedBy="order", cascade={"persist", "remove"})
      */
     private $address;
 

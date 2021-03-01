@@ -6,8 +6,11 @@ use App\DomainModel\CountryData;
 use App\DomainModel\EmailOperation;
 use App\DomainModel\PosLajuClient;
 use App\Entity\Country;
+use App\Entity\OrderDetails;
 use App\Entity\OrderModel;
+use App\Entity\User;
 use App\Kernel;
+use Doctrine\ORM\EntityManagerInterface;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -31,6 +34,7 @@ class TestController extends AbstractController
     public function __construct(CountryData $countryData)
     {
       $this->countryData=$countryData;
+      
      
     }
  
@@ -147,17 +151,37 @@ class TestController extends AbstractController
     }
 
     /**
-     * @Route("/country", name="coutny")
+     * @Route("/ordered", name="coutny")
      */
-    public function create_country_by_paypal(){
-      dd($this->countryData->insertCountryData('country_paypal.json'));
+    public function order_display(){
+
+      $user = $this->getUser();
+
+      $order = $this->getDoctrine()->getRepository(OrderModel::class)->findOneBy(['user'=>$user]);
+
+      $orderdetails = $this->getDoctrine()->getRepository(OrderDetails::class)->findBy(['orders' =>$order]);
+
+      $admin = $this->getDoctrine()->getRepository(User::class)->findByRole('ROLE_ADMIN');
+
+      return $this->render('orders/complete_order.html.twig',[
+        'user' => $user->getFirstname(),
+        'order' => $order,
+        'address' => $order->getAddress(),
+        'paypal' => $order->getPaypal(),
+        'orderdetails' => $orderdetails,
+      ]);
+
+      
+
 
     }
+
+    
 
     /**
      * @Route("/testa", name="testa")
      */
-    public function testa(EmailOperation $email){
+    public function testa(EmailOperation $email, EntityManagerInterface $EntiyManager){
       $s = '2021-02-28T14:46:36Z';
         $date = date('Y-m-d H:i:s', strtotime ($s));
         $d = date_create_from_format('Y-m-d H:i:s', $date);
@@ -166,7 +190,24 @@ class TestController extends AbstractController
 
         $order = $this->getDoctrine()->getRepository(OrderModel::class)->findOneBy(['user'=>$user]);
 
-        $email->sendEmailConfirmOrder($user,$order);
+        $roles = "ROLE_ADMIN";
+        $query =  $EntiyManager->createQuery('
+        SELECT 
+        a.id,a.email,a.createdAt,a.roles,a.firstname,a.lastname
+        FROM App\Entity\User a WHERE a.roles like :roles 
+        ORDER BY a.createdAt DESC');
+        $query->setParameters(array(
+            'roles' => '%' . $roles . '%'
+
+        ));
+
+        $admins = $query->getResult();
+        $test = $this->getDoctrine()->getRepository(User::class)->findByRole($roles);
+        dd($test);
+
+        foreach ($admins as $admin) {
+          $email->sendAdminPaymentOrder($admin,$order,$user);
+        }
 
 
 

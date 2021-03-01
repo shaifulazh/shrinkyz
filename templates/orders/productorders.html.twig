@@ -94,12 +94,20 @@
       <div class="mb-3">
         <div class="pt-4">
 
-          <h5 class="mb-4"></h5>
+          <h5 class="mb-4">We Only Accept Paypal</h5>
 
-          
+          <img class="mr-2" width="45px"
+              src=" {{ asset( '/images/visa.svg') }}"
+            alt="Visa">
+        
+          <img class="mr-2" width="45px"
+            src=" {{ asset( '/images/mastercard.svg')}}"
+            alt="Mastercard">
+          <img class="mr-2" width="45px"
+            src=" {{ asset( '/images/paypal.png') }}"
+            alt="PayPal acceptance mark">
         </div>
       </div>
-   
       <!-- Card -->
 
     </div>
@@ -147,16 +155,13 @@
           </ul>
 
           <div class="d-flex justify-content-center">
-          <a href="{{path('confirm_order')}}">
-          
-            <img src="https://www.paypalobjects.com/webstatic/en_US/developer/docs/login/connectwithpaypalbutton.png" alt="">
+            <a class="btn btn-block btn-primary" style="background-color:#0070ba " href="{{path('confirm_order')}}"> <img src="{{ asset( '/images/paypal.png') }}" style="width:50px;" alt="paypal">  PAY NOW RM&nbsp;{{finaltotal |number_format(2, '.', ',')}}</a>
          
-            </a>
             
           </div>
 
                     <div class="d-flex justify-content-center mt-2">
-             <a href="{{path('chekingout')}}" class="btn btn-primary " style="border-radius : 30px; width : 228px" ><i class="fas fa-chevron-circle-left"></i> Back to Address</a>
+             <a href="{{path('chekingout')}}" class="btn btn-primary btn-block" style="" ><i class="fas fa-chevron-circle-left"></i> Back to Address</a>
           </div>
 
        
