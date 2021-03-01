@@ -18,7 +18,11 @@ use Hoa\Compiler\Visitor\Dump;
 use App\Controller\PaypalController;
 use App\DomainModel\EmailOperation;
 use App\DomainModel\PaypalOperation;
+use App\Entity\Category;
 use App\Entity\CheckOutData;
+use App\Entity\ProductDetails;
+use App\Entity\Subcategory;
+use App\Entity\Subtwocategory;
 use App\Entity\User;
 use SebastianBergmann\CodeCoverage\Report\Xml\Totals;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -234,10 +238,17 @@ class OrdersController extends AbstractController
 
                 $this->email->sendAdminPaymentOrder($admin, $order, $this->getUser());
             }
+
+            $orderdetails = $em->getRepository(OrderDetails::class)->findBy(['orders'=>$order]);
         }
 
 
-        return $this->render('orders/ThankYou.html.twig', ['order' => $order]);
+        return $this->render('orders/complete_order.html.twig', ['order' => $order,
+        'orderdetails'=>$orderdetails, 
+        'address'=>$order->getAddress(),
+        'paypal'=>$order->getPaypal()
+      
+      ]);
     }
 
     /**
@@ -295,6 +306,30 @@ class OrdersController extends AbstractController
             $orderDetails->setProductPrice(($cart->getProduct())->getProductPrice());
             $orderDetails->setQty($cart->getQty());
             $orderDetails->setOrders($order);
+            $orderDetails->setDescription($cart->getProduct()->getProductDesc());
+
+            $prod = $product; 
+
+            $details = $em->getRepository(ProductDetails::class)->findBy(['product'=>$prod]); 
+            
+            $data[] = json_encode($details);
+
+            $categories = $em->getRepository(Category::class)->findBy(['product_model'=>$prod]);
+
+            $data[] = json_encode($categories);
+
+            $subcategories = $em->getRepository(Subcategory::class)->findBy([$prod]);
+
+            $data[] = json_encode($subcategories);
+            $subtwocategories = $em->getRepository(Subtwocategory::class)->findBy([$prod]);
+
+            $data[] = json_encode($subtwocategories);
+
+            $orderDetails->setJsondata($data);
+
+         
+
+            
             $em->persist($orderDetails);
             //removing cart
             $em->remove($cart);
@@ -323,5 +358,92 @@ class OrdersController extends AbstractController
         $order = $this->getDoctrine()->getRepository(OrderModel::class)->findBy(['user' => $user], ['createdAt' => 'DESC']);
 
         return $this->render('user/order.html.twig', ['orders' => $order]);
+    }
+
+
+    private function nothing(){
+        $details = $cart->getProduct()->getProductDetailss();
+        if($details){
+            
+        
+            foreach ($details as $value) {
+                $detail[] =[
+                    'detailname' => $value->getDetailname(),
+                    'datadesc'=>$value->getDatadesc()
+                ]; 
+            }
+        }else{
+            $detail[] =[
+                'detailname' => null,
+                'datadesc'=>null,
+            ]; 
+        }
+
+
+
+        $categories = $cart->getProduct()->getCategories();
+        if($categories)
+        {
+
+            foreach ($categories as $value) {
+                $category[] = [
+                    'category' => $value->getname(),
+                ];
+                
+            }
+        }else{
+            $category[] = [
+                'category' => null
+            ];
+            
+        }
+        
+
+        $subcategories = $cart->getProduct()->getSubcategories();
+        dump($subcategories);
+        if($subcategories)
+        {
+           foreach ($subcategories as $value) {
+            $subcategory[] = [
+                'subcategory' => $value->getSubcategoryname(),
+            ];
+            dump($subcategory);
+        
+            } 
+        }else{
+            $subcategory = uniqid();
+            dump($subcategory);
+        }
+        
+
+        $subtwocategories = $cart->getProduct()->getSubtwocategories();
+        if($subtwocategories)
+        {
+            foreach ($subtwocategories as $value) {
+            $subtwocategory[] = [
+                'subtwocategory' => $value->getSubtwocategoryname(),
+            ];
+        
+        }
+        }else{
+            $subtwocategory[] = [
+                'subtwocategory' => null,
+            ];
+        }
+
+        $data = [
+            'details' => $detail,
+            'categories'=> $category,
+            'subcategories'=>$subcategory,
+            'Subtwocategories'=>$subtwocategory,
+        ];
+
+        $data[] = json_encode($data);
+
+
+
+
+        $orderDetails->setJsondata($data);
+        
     }
 }

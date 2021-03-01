@@ -1,27 +1,46 @@
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th>Items</th>
-            <th>Quantity</th>
-            <th>SubTotal</th>
-        </tr>
-    </thead>
 
-    <tbody>{% set total = 0 %}
-        {% for cart in carts %}
-            <tr>
-                <td>{{cart.product.getProductName}}</td>
-                <td>{{cart.qty}}</td>
-                <td>{{(cart.product.getProductPrice * cart.qty) |number_format(2, '.', ',')}}</td>
-                {% set total = total + (cart.product.getProductPrice * cart.qty) %}
-            </tr>
-            {% endfor %}
-            <tr>
-                <td></td>
-                <td>TOTAL </td>
-                <td>RM{{total  |number_format(2, '.', ',')}} </td>
-                    
-               
-            </tr>
-    </tbody>
-</table>
+<div>
+<div class="">
+<div class="d-flex m-2 justify-content-between"><h5>Cart Summary  </h5>
+ <a href="{{path('view_cart')}}" class="btn-sm btn-primary">Edit</a>
+</div>
+{% set total = 0%}
+{% for cart in carts %}
+<div class="d-flex m-2 justify-content-between">
+{%  for key, picture in cart.product.pictures %}
+    {% if key == 0 %}
+<img src="{{asset('/images/'~ picture.filename)}}"  style="width:100px;" alt="">
+    {% endif %}
+{% endfor %}
+    <div class="">
+   <p>
+    {{cart.product.getProductName}}
+   </p>
+    </div>
+<div class="">
+    <p>
+    RM&nbsp;{{cart.product.productPrice|number_format(2, '.', ',')}}
+    </p>
+    <p>
+    Qty&nbsp;{{cart.qty}} 
+    </p>    
+    <p>
+   RM&nbsp;{{(cart.product.productPrice * cart.qty)|number_format(2, '.', ',')}}
+    </p>
+    </div>
+
+</div>
+{% set total = total +  cart.product.productPrice * cart.qty %}
+{% endfor %}
+<div class="d-flex mt-3 justify-content-center" >
+<h6>Subtotal</h6>
+</div>
+
+<div class="d-flex justify-content-between">
+<p>Order Subtotal</p>
+<p>RM&nbsp;{{total|number_format(2, '.', ',')}}</p>
+</div>
+
+
+</div>
+</div>

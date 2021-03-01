@@ -44,6 +44,18 @@ class OrderDetails
      */
     private $product_image;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $description;
+
+    /**
+     * @ORM\Column(type="json")
+     */
+    private $jsondata = [];
+
+ 
+
     public function getId(): ?int
     {
         return $this->id;
@@ -108,6 +120,35 @@ class OrderDetails
 
         return $this;
     }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getJsondata(): ?array
+    {
+        return $this->jsondata;
+    }
+
+    public function setJsondata(array $jsondata): self
+    {
+        $this->jsondata = $jsondata;
+
+        return $this;
+    }
+
+
+
+
+ 
 
 
 }

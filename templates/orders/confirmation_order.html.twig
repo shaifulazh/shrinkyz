@@ -353,6 +353,22 @@
                                                                 {{ paypal.paymentDate|date("d M Y H:i:s") }}
 															</td>
 														</tr>
+															<tr>
+															<td style="padding-left:10px;font-family:helvetica,arial,sans-serif;font-size:13px;width:300px;">
+																Subtotal
+															</td>
+															<td style="padding-right:10px;padding-left:10px;font-family:helvetica,arial,sans-serif;font-size:13px;width:300px;">
+																{{paypal.grossAmountCurrency}}&nbsp;{{ paypal.netAmount| number_format(2, '.', ',') }}
+															</td>
+														</tr>
+														<tr>
+															<td style="padding-left:10px;font-family:helvetica,arial,sans-serif;font-size:13px;width:300px;">
+																Shipping fee
+															</td>
+															<td style="padding-right:10px;padding-left:10px;font-family:helvetica,arial,sans-serif;font-size:13px;width:300px;">
+																{{paypal.grossAmountCurrency}}&nbsp;{{ (paypal.grossAmount - paypal.netAmount)| number_format(2, '.', ',') }}
+															</td>
+														</tr>
 														<tr>
 															<td style="padding-left:10px;font-family:helvetica,arial,sans-serif;font-size:13px;width:300px;">
 																Amount

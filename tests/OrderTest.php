@@ -2,8 +2,10 @@
 
 namespace App\Tests;
 
+use App\Entity\OrderJson;
 use App\Entity\OrderModel;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Serializer\Encoder\JsonEncode;
 
 class OrderTest extends KernelTestCase
 {
@@ -15,29 +17,31 @@ class OrderTest extends KernelTestCase
         DatabasePrimer::prime($kernel);
         $this->entityManager = $kernel->getContainer()->get('doctrine')->getManager();
     }
+
+
     /**
      * @test
+     * 
      */
-    public function check_postClient_sending(){
 
-        $poslajuClient = self::$kernel->getContainer()->get('poslaju-api-client');
+    public function check_json_can_begood(){
+        $json = new OrderJson;
 
-        // $response = $poslajuClient->fetchPriceCheck(1,2,3,4);
-        $s = '2021-02-28T14:46:36Z';
-        $date = date('Y-m-d H:i:s', strtotime ($s));
-        $d = date_create_from_format('Y-m-d H:i:s', $date);
-        $crc = crc32(md5(uniqid()));
+        for ($i=0; $i < 5; $i++) { 
+            $data[] = [
+                uniqid()=> uniqid()
+            ];
+        }
 
-        $version = curl_version();
         
-        dd($version);
-
-        $this->assertTrue(true);
-        
-        
-
+       
+       
     }
 
+    
+
+    
+      
 
 
 }

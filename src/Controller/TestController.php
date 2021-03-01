@@ -5,12 +5,16 @@ namespace App\Controller;
 use App\DomainModel\CountryData;
 use App\DomainModel\EmailOperation;
 use App\DomainModel\PosLajuClient;
+use App\Entity\CartModel;
+use App\Entity\Category;
 use App\Entity\Country;
 use App\Entity\OrderDetails;
 use App\Entity\OrderModel;
+use App\Entity\ProductModel;
 use App\Entity\User;
 use App\Kernel;
 use Doctrine\ORM\EntityManagerInterface;
+use PhpParser\Node\Stmt\Foreach_;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -163,12 +167,15 @@ class TestController extends AbstractController
 
       $admin = $this->getDoctrine()->getRepository(User::class)->findByRole('ROLE_ADMIN');
 
-      return $this->render('orders/complete_order.html.twig',[
-        'user' => $user->getFirstname(),
-        'order' => $order,
-        'address' => $order->getAddress(),
-        'paypal' => $order->getPaypal(),
-        'orderdetails' => $orderdetails,
+      $d = (array) $orderdetails;
+
+      dd($d);
+
+      return $this->render('orders/complete_order.html.twig',['order' => $order,
+        'orderdetails'=>$orderdetails, 
+        'address'=>$order->getAddress(),
+        'paypal'=>$order->getPaypal()
+      
       ]);
 
       
@@ -215,6 +222,27 @@ class TestController extends AbstractController
 
       return $this->render('email/test.html.twig', ['time'=> $d]);
     }
+
+    
+    /**
+     * @Route("/findcart", name="tetes")
+     */
+
+     public function sdlfjkhasd(){
+      $em = $this->getDoctrine()->getManager();
+
+      $carts = $this->getDoctrine()->getRepository(CartModel::class)->findBy(['customer'=>$this->getUser()]);
+      foreach ($carts as $key) {
+        # code...
+        $prod = $key->getProduct();
+        $prod = $em->getRepository(ProductModel::class)->findOneBy(['id'=>$prod->getId()]);
+
+        
+
+
+      }
+
+     }
 
 }
 
