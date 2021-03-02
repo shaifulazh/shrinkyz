@@ -18,6 +18,7 @@ use Hoa\Compiler\Visitor\Dump;
 use App\Controller\PaypalController;
 use App\DomainModel\EmailOperation;
 use App\DomainModel\PaypalOperation;
+use App\DomainModel\SerializerOperation;
 use App\Entity\Category;
 use App\Entity\CheckOutData;
 use App\Entity\ProductDetails;
@@ -32,6 +33,7 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
@@ -95,11 +97,19 @@ class OrdersController extends AbstractController
             'return' => $returnUrl,
             'cancel' => $cancelUrl
         ];
+        
 
         $responsed = $this->paypal->paymentexecute($this->getUser(), $payment, $url);
 
+        if(!$responsed){
+            $this->addFlash('warning', 'Paypal server problem..contact admin');
+            return $this->redirectToRoute('view_cart');
+        }
+        
+
 
         $arr = $responsed->result;
+
 
         $obj = (object)$arr;
 
@@ -271,6 +281,7 @@ class OrdersController extends AbstractController
     //function to create an order to database
     private function createOrder($paymentMethod, $address, $token, $payment)
     {
+        
 
 
         $user = $this->getUser();
@@ -308,33 +319,39 @@ class OrdersController extends AbstractController
             $orderDetails->setOrders($order);
             $orderDetails->setDescription($cart->getProduct()->getProductDesc());
 
-            $prod = $product; 
+            $serial = new SerializerOperation;
+            $details = $product->getProductDetailss();
+            $array[] = [
+                'details' => $serial->details_toArray($details)
+            ];
+            $categories = $product->getCategories();
 
-            $details = $em->getRepository(ProductDetails::class)->findBy(['product'=>$prod]); 
+            $array[] =[
+                'categories' => $serial->categories_toArray($categories)
+            ];
+
+            $subcategories = $product->getSubcategories();
+            $array[] = [
+                'subcategories' =>
+                $serial->subcategories_toArray($subcategories)
+            ];
+
+
+            $subtwocategories = $product->getSubtwocategories();
+            $array[] = [
+                'subtwocategories' =>
+                $serial->subtwocategoris_toArray($subtwocategories)
+            ];
             
-            $data[] = json_encode($details);
 
-            $categories = $em->getRepository(Category::class)->findBy(['product_model'=>$prod]);
-
-            $data[] = json_encode($categories);
-
-            $subcategories = $em->getRepository(Subcategory::class)->findBy([$prod]);
-
-            $data[] = json_encode($subcategories);
-            $subtwocategories = $em->getRepository(Subtwocategory::class)->findBy([$prod]);
-
-            $data[] = json_encode($subtwocategories);
-
-            $orderDetails->setJsondata($data);
-
-         
-
+            $orderDetails->setJsondata($array);
             
             $em->persist($orderDetails);
             //removing cart
             $em->remove($cart);
             $em->flush();
             $total = $total + ($cart->getProduct()->getProductPrice() * $cart->getQty());
+            unset($array);
         }
 
         $order->setTotal($total);

@@ -25,17 +25,10 @@ class OrderTest extends KernelTestCase
      */
 
     public function check_json_can_begood(){
-        $json = new OrderJson;
+        $pattern = "/^((-?[0-9]+)|(-?([0-9]+)?[.][0-9]+))$/";
 
-        for ($i=0; $i < 5; $i++) { 
-            $data[] = [
-                uniqid()=> uniqid()
-            ];
-        }
-
-        
-       
-       
+        $b = preg_match($pattern, '246346454565456546532.43676767');
+        dd($b);
     }
 
     

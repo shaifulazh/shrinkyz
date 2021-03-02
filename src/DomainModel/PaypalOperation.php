@@ -55,7 +55,7 @@ class PaypalOperation
             "purchase_units" => [[
                 "reference_id" => $payment['reference_id'],
                 "amount" => [
-                    "value" => number_format($payment['finaltotal'], 2),
+                    "value" => number_format($payment['finaltotal'], 2, '.', ''),
                     "currency_code" => $currencyCode
                 ],
                 "shipping" => [
@@ -97,8 +97,10 @@ class PaypalOperation
             return $response;
         } catch (HttpException $ex) {
             
+            
             return null;
         }catch (PayPalHttpHttpException $exp) {
+            
   
             return null;
         }
