@@ -5,7 +5,15 @@
 
 {% block main %}
 	<div class="alert alert-success mt-3" role="alert">
-		<i class="fas fa-check fa-3x"></i>Thank You, your order has been placed. An Email confirmation has been sent to you. Kindly wait for your order to be shipped.
+		<div class="d-flex">
+			<div class="m-2 ml-auto">
+				<i class="fas fa-check fa-3x"></i>
+
+			</div>
+			<div class="m-auto">
+				Thank You, your order has been placed. An Email confirmation has been sent to you. Kindly wait for your order to be shipped.
+			</div>
+		</div>
 	</div>
 	<div class="mt-4 d-flex">
 		<h3 class="mx-auto">Order Summary</h3>
@@ -47,10 +55,11 @@
 						
                         <p>Payment Method :&nbsp;{{order.paymentMethod}}
 							<br>
-							Date of Payment :&nbsp;{{ paypal.paymentDate|date("d M Y H:i:s") }}
+							Date of Payment :<br>{{ paypal.paymentDate|date("d M Y H:i:s T",'Asia/Kuala_Lumpur') }}
 							<br>
 							Currency :&nbsp;{{paypal.grossAmountCurrency}}<br>
-							Amount<br>
+							Amount :&nbsp;{{paypal.grossAmountCurrency}}&nbsp;{{ paypal.grossAmount| number_format(2, '.', ',') }}<br>
+							updted at {{order.updatedAt|date("d M Y H:i:s T",'Asia/Kuala_Lumpur')}}
 						</p>
                         </div>
 					</div>
@@ -67,13 +76,15 @@
 	<div class="row mt-4 ">
 		<div class="col-lg-8  mb-4">
 			<div class="border">
-{% for orderdetail in orderdetails %}
 				<h5 class="m-3">Product</h5>
-				<div class="row px-3">
-					<div class="col-md-6">
+{% for orderdetail in orderdetails %}
+
+
+			<div class="row px-3">
+					<div class="col-2 col-md-2">
 						<img class="img-fluid w-100" src="{{asset('/images/'~ orderdetail.productImage) }}" alt="">
 					</div>
-					<div class="col-md-6 ">
+					<div class="col-10 col-md-10 ">
 						<div class="row p-3 d-flex ">
 							<h6>{{orderdetail.productName}}</h6>
 
@@ -96,6 +107,7 @@
 						</div>
 					</div>
 				</div>
+			
                 {% endfor %}
 
 
@@ -114,16 +126,16 @@
 				</div>
 				<div class="row p-3 d-flex border-bottom">
 					<span>Subtotal Price: </span>
-					<span class="ml-auto">RM&nbsp;{{ paypal.netAmount| number_format(2, '.', ',') }}</span>
+					<span class="ml-auto">RM&nbsp;{{ order.subtotal| number_format(2, '.', ',') }}</span>
 
 				</div>
 				<div class="row p-3 d-flex border-bottom">
 					<span>Shipping Price:</span>
-					<span class="ml-auto">RM&nbsp;{{ (paypal.grossAmount - paypal.netAmount)| number_format(2, '.', ',') }}</span>
+					<span class="ml-auto">RM&nbsp;{{ order.shipping| number_format(2, '.', ',') }}</span>
 				</div>
 				<div class="row p-3 d-flex border-bottom">
 					<span>Total Price:</span>
-					<span class="ml-auto">RM&nbsp;{{ paypal.grossAmount| number_format(2, '.', ',') }}</span>
+					<span class="ml-auto">RM&nbsp;{{ order.amount| number_format(2, '.', ',') }}</span>
 				</div>
 			</div>
 
