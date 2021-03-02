@@ -65,7 +65,7 @@ class AdminApiController extends AbstractFOSRestController
         'status' => $status
     ));
         $sum = $sumquery->getSingleScalarResult();
-// 
+        // 
         // if($sumTotal == NULL){
 
         //     $sumTotal = "10";
@@ -121,8 +121,6 @@ class AdminApiController extends AbstractFOSRestController
         return $this->view($msg, Response::HTTP_OK);
     }
 
-
-
     public function getOrderDetailsAction(OrderDetails $orderDetails)
     {
         return $this->view($orderDetails, Response::HTTP_OK);
@@ -137,6 +135,7 @@ class AdminApiController extends AbstractFOSRestController
         SELECT 
         a
         FROM App\Entity\OrderModel a 
+        
         ORDER BY a.createdAt DESC');
         $data = $query->getResult();
 
@@ -173,32 +172,26 @@ class AdminApiController extends AbstractFOSRestController
     }
 
     /**
-     * @Rest\QueryParam(name="page",  default="1",description="page number", nullable=false)
-     * @Rest\QueryParam(name="limit",  default="10",description="limit per page", nullable=false)
      * @param ParamFetcher $paramFetcher
      */
-
     public function getCustomerAction(ParamFetcher $paramFetcher)
     {
-        // $query = $this->getDoctrine()->getRepository(User::class)->findByRole('ROLE_USER');
-        // $pagination = $this->paginator->paginate(
-        //     $query, /* query NOT result */
-        //     $paramFetcher->get('page'),
-        //     $paramFetcher->get('limit') /*limit per page*/
-        // );
 
-        // return $this->view($pagination, Response::HTTP_OK);
         $roles = "ROLE_USER";
         $query =  $this->em->createQuery('
         SELECT 
-        a.id,a.email,a.createdAt,a.roles,a.firstname,a.lastname
+        a.id,a.email,a.createdAt,a.firstname,a.lastname
         FROM App\Entity\User a WHERE a.roles like :roles 
         ORDER BY a.createdAt DESC');
         $query->setParameters(array(
             'roles' => '%' . $roles . '%'
 
         ));
-        $data = $query->getResult();
+        $arr = $query->getResult();
+
+        $data = [
+            'obj'=> $arr
+        ];
 
         return $this->view($data, Response::HTTP_OK);
     }
@@ -206,6 +199,7 @@ class AdminApiController extends AbstractFOSRestController
     public function getAdminAction()
     {
         $user = $this->getDoctrine()->getRepository(User::class)->findByRole('ROLE_ADMIN');
-        return $this->view($user, Response::HTTP_OK);
+        $data = ['obj'=>$user];
+        return $this->view($data, Response::HTTP_OK);
     }
 }

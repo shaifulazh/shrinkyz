@@ -26,7 +26,10 @@ class ApiAdminTestController extends AbstractFOSRestController
     }
 
     public function getTestAction(){
-        $data = $this->getDoctrine()->getRepository(VisitorOfPage::class)->findAll();
+        $arr = $this->getDoctrine()->getRepository(VisitorOfPage::class)->findAll();
+        $data = [
+            'data'=>$arr
+        ];
 
         return $this->view($data, Response::HTTP_OK);
     }

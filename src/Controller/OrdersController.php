@@ -322,26 +322,22 @@ class OrdersController extends AbstractController
             $serial = new SerializerOperation;
             $details = $product->getProductDetailss();
             $array[] = [
-                'details' => $serial->details_toArray($details)
+                'details' => $serial->details_toArray($details),
             ];
             $categories = $product->getCategories();
 
-            $array[] =[
-                'categories' => $serial->categories_toArray($categories)
-            ];
+            
+            
+               $array[] = [
+                   'category'=> function(){
+                       
+                   }
+               ];
+               
+            
+       
 
-            $subcategories = $product->getSubcategories();
-            $array[] = [
-                'subcategories' =>
-                $serial->subcategories_toArray($subcategories)
-            ];
-
-
-            $subtwocategories = $product->getSubtwocategories();
-            $array[] = [
-                'subtwocategories' =>
-                $serial->subtwocategoris_toArray($subtwocategories)
-            ];
+            
             
 
             $orderDetails->setJsondata($array);
@@ -378,89 +374,5 @@ class OrdersController extends AbstractController
     }
 
 
-    private function nothing(){
-        $details = $cart->getProduct()->getProductDetailss();
-        if($details){
-            
-        
-            foreach ($details as $value) {
-                $detail[] =[
-                    'detailname' => $value->getDetailname(),
-                    'datadesc'=>$value->getDatadesc()
-                ]; 
-            }
-        }else{
-            $detail[] =[
-                'detailname' => null,
-                'datadesc'=>null,
-            ]; 
-        }
-
-
-
-        $categories = $cart->getProduct()->getCategories();
-        if($categories)
-        {
-
-            foreach ($categories as $value) {
-                $category[] = [
-                    'category' => $value->getname(),
-                ];
-                
-            }
-        }else{
-            $category[] = [
-                'category' => null
-            ];
-            
-        }
-        
-
-        $subcategories = $cart->getProduct()->getSubcategories();
-        dump($subcategories);
-        if($subcategories)
-        {
-           foreach ($subcategories as $value) {
-            $subcategory[] = [
-                'subcategory' => $value->getSubcategoryname(),
-            ];
-            dump($subcategory);
-        
-            } 
-        }else{
-            $subcategory = uniqid();
-            dump($subcategory);
-        }
-        
-
-        $subtwocategories = $cart->getProduct()->getSubtwocategories();
-        if($subtwocategories)
-        {
-            foreach ($subtwocategories as $value) {
-            $subtwocategory[] = [
-                'subtwocategory' => $value->getSubtwocategoryname(),
-            ];
-        
-        }
-        }else{
-            $subtwocategory[] = [
-                'subtwocategory' => null,
-            ];
-        }
-
-        $data = [
-            'details' => $detail,
-            'categories'=> $category,
-            'subcategories'=>$subcategory,
-            'Subtwocategories'=>$subtwocategory,
-        ];
-
-        $data[] = json_encode($data);
-
-
-
-
-        $orderDetails->setJsondata($data);
-        
-    }
+   
 }

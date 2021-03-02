@@ -57,7 +57,7 @@ class SerializerOperation
         $normalizer = new GetSetMethodNormalizer(null, null, null, null, null, $defaultContext);
 
         $serializer = new Serializer([$normalizer], [$encoder]);
-        
+
         return  $serializer;
     }
 
@@ -89,6 +89,6 @@ class SerializerOperation
 
     public function user_toArray($user)
     {
-        return $this->serializer->normalize($user, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ['password', 'roles']]);
+        return $this->serializer->normalize($user, 'json', [AbstractNormalizer::ATTRIBUTES => ['email', 'firstname','lastname','createdAt']]);
     }
 }

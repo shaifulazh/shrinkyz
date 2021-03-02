@@ -33,15 +33,15 @@ export default class ProductList extends Component {
 
   componentDidMount() {
     this.mounted = true;
-    Axios.post(`/jsondata`)
+    Axios.get(`/api/admin/customer`)
       .then((response) => {
         if (this.mounted) {
           const { data } = response;
-          console.log(data);
+          console.log(data.obj);
           this.setState({
-            defaultData: data,
+            defaultData: data.obj,
           });
-          this.paginateData(data);
+          this.paginateData(data.obj);
         }
       })
       .catch((e) => console.log(e));

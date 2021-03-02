@@ -21,6 +21,8 @@ trait Timestamps
      */
     public function createdAt()
     {
+  
+
         $this->createdAt = new \DateTime();
         $this->updateAt = new \DateTime();
     }

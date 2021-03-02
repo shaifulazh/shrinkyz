@@ -11,7 +11,7 @@ export default function Visitor() {
     axios
       .get("api/admin/test/test")
       .then((res) => {
-        setData(res.data);
+        setData(res.data.data);
         console.log(res.data);
       })
       .catch((e) => console.log(e));

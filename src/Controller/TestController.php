@@ -171,6 +171,8 @@ class TestController extends AbstractController
 
     $admin = $this->getDoctrine()->getRepository(User::class)->findByRole('ROLE_ADMIN');
 
+    dump($orderdetails);
+
     return $this->render('orders/complete_order.html.twig', [
       'order' => $order,
       'orderdetails' => $orderdetails,
@@ -279,18 +281,27 @@ class TestController extends AbstractController
   }
 
    /**
-   * @Route("/jsondata", name="testsd")
+   * @Route("/jsondata", methods="GET")
    */
   public function jsonsdatassssss (){
     $em = $this->getDoctrine()->getManager();
 
-    $data = $em->getRepository(User::class)->findAll();
+    
+
+    $data = $em->getRepository(User::class)->findByRole('ROLE_ADMIN');
+    foreach($data as $ss){
+      dd($ss->getEmail());
+    }
     $serial = new SerializerOperation;
 
     $a = $serial->user_toArray($data);
+    
     $response = new JsonResponse();
+    $b = [
+      'data'=> $a
+    ];
 
-    return $response->setData($a);
+    return $response->setData($b);
     
   }
 
