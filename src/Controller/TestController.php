@@ -21,6 +21,7 @@ use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -283,9 +284,13 @@ class TestController extends AbstractController
   public function jsonsdatassssss (){
     $em = $this->getDoctrine()->getManager();
 
-    $data = $em->getRepository(OrderJson::class)->findAll();
+    $data = $em->getRepository(User::class)->findAll();
+    $serial = new SerializerOperation;
 
-    dd($data);
+    $a = $serial->user_toArray($data);
+    $response = new JsonResponse();
+
+    return $response->setData($a);
     
   }
 
