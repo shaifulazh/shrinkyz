@@ -18,7 +18,8 @@ Encore
    * and one CSS file (e.g. app.css) if you JavaScript imports CSS.
    */
   .addEntry("app", "./assets/js/app.js")
-  // .addEntry('new', './assets/js/new.js')
+  .addEntry('index', './assets/vanilla/home.js')
+  .addEntry('request', './assets/vanilla/request.js')
   .addEntry("email", "./assets/email-app/email-app.js")
   .addEntry("reactApp", "./assets/react-app/react-app.js")
   .addEntry("mobile", "./assets/mobile-dash-app/index.js")

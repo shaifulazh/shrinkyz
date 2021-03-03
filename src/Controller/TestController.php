@@ -172,7 +172,7 @@ class TestController extends AbstractController
     $admin = $this->getDoctrine()->getRepository(User::class)->findByRole('ROLE_ADMIN');
 
  
-    dump($orderdetails);
+
     return $this->render('orders/complete_order.html.twig', [
       'order' => $order,
       'orderdetails' => $orderdetails,

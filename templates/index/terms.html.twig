@@ -35,11 +35,19 @@
 
 </div>
 
+
+
 {% block javascript %}
 
     {{ parent() }}
 
+<script>
+function toanother() {
+var something = "xxx"
+window.location.href = "/about" + something;
+}
 
+</script>
 
 {% endblock %}
 {% endblock %}

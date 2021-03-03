@@ -5,6 +5,7 @@
 
 {% block head %}
     {{ parent() }}
+    {{ encore_entry_link_tags('index') }}
 {% endblock %}
 
 
@@ -19,11 +20,15 @@
     
     </div>
 
-
+{% block javascript %}
+{{parent()}}
+ {{ encore_entry_script_tags('index') }}
+  {{ encore_entry_script_tags('request') }}
+{% endblock %}
   
 
 {% endblock %}
 {% block model %}
   {{ parent() }}
-{% include ('index/email.html.twig') %}
+{% include ('index/welcome_pop.html.twig') %}
 {% endblock %}

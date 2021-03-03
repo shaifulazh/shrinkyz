@@ -37,7 +37,7 @@ class MailController extends AbstractFOSRestController
 
         if(!$product)
         {
-            return $this->view(["message" => "error"], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->view(null, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
         $email = (new Email())
             ->from($this->getParameter('webemail'))
@@ -50,7 +50,7 @@ class MailController extends AbstractFOSRestController
             //code...
             $this->mailer->send($email);
         } catch (\Throwable $th) {
-            return $this->view(["message" => "error fail to send email"], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->view(null, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
         
 

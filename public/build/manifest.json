@@ -1,6 +1,9 @@
 {
   "build/app.css": "/build/app.css",
   "build/app.js": "/build/app.js",
+  "build/index.css": "/build/index.css",
+  "build/index.js": "/build/index.js",
+  "build/request.js": "/build/request.js",
   "build/email.js": "/build/email.js",
   "build/reactApp.css": "/build/reactApp.css",
   "build/reactApp.js": "/build/reactApp.js",

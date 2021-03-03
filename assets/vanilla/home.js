@@ -1,124 +1,4 @@
-
-<style>
-    .email-model{
-        width: 100%;
-        height: 100%;
-        background-color: rgb(0,0,0,0);
-        position: fixed;
-        top :0;
-        display: flex;
-        z-index: 5;
-        -webkit-transition: 1s ease-in;
-        transition: 1s ease-in
-    }
-
-
-    .content-model{
-        position: absolute;
-        top : 50px;
-        left : 20px;
-        width: 0px;
-        height: 0px;
-        border-radius: 20px;
-        background-color: transparent;
-        -webkit-transition: all 0.6s ease;
-        -moz-transition: all 0.6s ease;
-        transition: all 0.6s ease;
-    
-    }
-    
-    .close-model{
-        font-size: 50px;
-        cursor: pointer;
-        z-index: 6;
-        transform: rotate(45deg);
-    }
-
-
-    .open-model{
-       /* top : calc(50vh - 200px);*/
-    
-        width: calc(100vw - 80px);
-        height: calc(100vh - 180px);
-        top : 40px;
-        left : calc(50vw - ((100vw - 80px)/2) ) ;
-    }
-
-    .open-content-model{
-       background-color : rgb(0,0,0,0.7);
-    }
-
-    .center{
-      display: flex;
-      position : absolute;
-      justify-content : center;
-      align-items : center;
-      height : 100%;
-      width : 100%;
-      overflow: hidden
-   
-    }
-
-    
-
-    .midd {
-      height:auto;
-      
-	    max-width :100% ;
-      
-      animation :  shrinkyz 2s linear infinite alternate;
-    }
-
-    @keyframes shrinkyz {
-      100% {
-       transform : scale(0.1);
-
-    }}
-
-    .welcome {
-      max-height : 100%;
-      max-width :100%;
-      border-radius: 20px;
-    }
-
-    .top-bar{
-      position :absolute;
-      display: flex;
-      justify-content : center;
-      
-    }
-
-
-
-
-
-
-    </style>
-
-
-
-
-
-<div onClick="closewelcome()" id="email-model" class="email-model">
-    
-<div  class="content-model">
-<div class="center">
-  <div class="top-bar">
-<div id="close" class="close-model"></div>
-</div>
-  <img class="welcome" src="{{asset('/images/welcome.png')}}" alt="">
-</div>
-
-
-
-
-</div>
-
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script>
-
-
+require ("../vanilla/home.css");
 
 document.addEventListener('touchstart', handleTouchStart, false);        
 document.addEventListener('touchmove', handleTouchMove, false);
@@ -170,7 +50,11 @@ function handleTouchMove(evt) {
     yDown = null;                                             
 };
 
-function closewelcome(){
+window.closeiklan = function() {
+    closebar()
+}
+
+const  closewelcome =()=>{
   closebar()
 }
 
@@ -190,13 +74,7 @@ setTimeout(() => {
 }, 500);
 }
 
-{# document.getElementById('close').addEventListener('click', ()=>{
 
-    console.log('clcked');
-    closebar();
-
-
-}) #}
 
 //disable scroll
 
@@ -241,18 +119,63 @@ function enableScroll() {
   window.removeEventListener('touchmove', preventDefault, wheelOpt);
   window.removeEventListener('keydown', preventDefaultForScrollKeys, false);
 }
-//opening the modal
+
+
+function setCookie(cname,cvalue,exdays) {
+  var d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+ 
+  var expires = "expires=" + d.toGMTString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+
+  for(var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+var sameperson = false;
+function checkCookie() {
+  var uniq = 'id' + (new Date()).getTime();
+  var user=getCookie("iklantime");
+  if (user != "") {
+    sameperson = true;
+  } else {
+     user = uniq;
+     if (user != "" && user != null) {
+       setCookie("iklantime", user, 30);
+     }
+  }
+}
+
 window.onload = function bitch(params) {
+
+    checkCookie();
+    showiklan();
+
+    
+}
+
+
+function showiklan (){
+  if(sameperson){
+      return;
+    }
     disableScroll()
     document.querySelector(".email-model").classList.toggle("open-content-model"); 
    /* document.querySelector("body").style.overflow = "hidden"*/
      var element = document.querySelector(".content-model");
     element.classList.toggle("open-model");
 }
-</script>
-</div>
-
-
-
-
-

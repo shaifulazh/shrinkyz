@@ -12,6 +12,21 @@
         "/build/app.css"
       ]
     },
+    "index": {
+      "js": [
+        "/build/runtime.js",
+        "/build/index.js"
+      ],
+      "css": [
+        "/build/index.css"
+      ]
+    },
+    "request": {
+      "js": [
+        "/build/runtime.js",
+        "/build/request.js"
+      ]
+    },
     "email": {
       "js": [
         "/build/runtime.js",
