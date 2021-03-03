@@ -2,7 +2,12 @@
 
 namespace App\DomainModel;
 
+use App\Entity\ProductModel;
+use Doctrine\Common\Annotations\AnnotationReader;
+
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
+use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -15,22 +20,31 @@ class SerializerOperation
     public function __construct()
 
     {
+        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
         $dateCallback = function ($innerObject, $outerObject, string $attributeName, string $format = null, array $context = []) {
             return $innerObject instanceof \DateTime ? $innerObject->format(\DateTime::ISO8601) : '';
+        };
+        $product = function($innerObject, $outerObject, string $attributeName, string $format = null, array $context = []){
+            return null;
+
         };
 
         $encoder = new JsonEncoder();
         $defaultContext = [
             AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                
                 return $object->getId();
             },
             AbstractNormalizer::CALLBACKS => [
                 'createdAt' => $dateCallback,
                 'updatedAt' => $dateCallback,
-            ]
+            ],
+            
+            
+            
         ];
         
-        $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
+        $normalizer = new ObjectNormalizer($classMetadataFactory, null, null, null, null, null, $defaultContext);
 
         $serializer = new Serializer([$normalizer], [$encoder]);
 
@@ -67,28 +81,28 @@ class SerializerOperation
         return $this->serializer->normalize(
             $details,
             'json',
-            [AbstractNormalizer::IGNORED_ATTRIBUTES => ['product']]
+            ['groups'=>'details']
         );
     }
 
     public function categories_toArray($categories)
     {
-        return $this->serializer->normalize($categories, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ['productModel', 'subcategory']]);
+        return $this->serializer->normalize($categories, 'null', ['groups'=>'category']);
     }
 
     public function subcategories_toArray($subcategories)
     {
 
-        return $this->serializer->normalize($subcategories, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ['product', 'Subtwocategory', 'category']]);
+        return $this->serializer->normalize($subcategories, 'null', [AbstractNormalizer::IGNORED_ATTRIBUTES => ['product', 'Subtwocategory', 'category']]);
     }
 
     public function subtwocategoris_toArray($subtwocategories)
     {
-        return $this->serializer->normalize($subtwocategories, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ['product', 'subcategory']]);
+        return $this->serializer->normalize($subtwocategories, 'null', [AbstractNormalizer::IGNORED_ATTRIBUTES => ['product', 'subcategory']]);
     }
 
     public function user_toArray($user)
     {
-        return $this->serializer->normalize($user, 'json', [AbstractNormalizer::ATTRIBUTES => ['email', 'firstname','lastname','createdAt']]);
+        return $this->serializer->normalize($user, 'null', [AbstractNormalizer::ATTRIBUTES => ['email', 'firstname','lastname','createdAt']]);
     }
 }

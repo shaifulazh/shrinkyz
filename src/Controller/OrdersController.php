@@ -325,20 +325,7 @@ class OrdersController extends AbstractController
                 'details' => $serial->details_toArray($details),
             ];
             $categories = $product->getCategories();
-
-            
-            
-               $array[] = [
-                   'category'=> function(){
-                       
-                   }
-               ];
-               
-            
-       
-
-            
-            
+            $array[] = ['category'=>$serial->categories_toArray($categories)];
 
             $orderDetails->setJsondata($array);
             

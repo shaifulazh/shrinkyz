@@ -22,8 +22,6 @@ class EmailTest extends KernelTestCase
 
         $emailOrder = self::$kernel->getContainer()->get('email-order-test');
 
-        
-
         // $emailOrder->sendAdminPaymentOrder('shaifulazhartalib@gmail.com',md5(uniqid()));
         
         $emailOrder->sendTestTemplate('replacetr@gmail.com');

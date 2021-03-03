@@ -19,10 +19,6 @@ class OrderTest extends KernelTestCase
     }
 
 
-    /**
-     * @test
-     * 
-     */
 
     public function check_json_can_begood(){
         $pattern = "/^((-?[0-9]+)|(-?([0-9]+)?[.][0-9]+))$/";
@@ -30,6 +26,14 @@ class OrderTest extends KernelTestCase
         $c = preg_match($pattern, '246346454565456546532.43676767');
         $b =date_default_timezone_get();
         dd($b);
+    }
+
+    public function testarraymap(){
+   
+        $a = [1, 2, 3, 4, 5];
+        $b = array_map(function($n){return ($n * $n * $n);} , $a);
+        dump($b);
+        
     }
 
     

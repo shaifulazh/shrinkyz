@@ -171,7 +171,7 @@ class TestController extends AbstractController
 
     $admin = $this->getDoctrine()->getRepository(User::class)->findByRole('ROLE_ADMIN');
 
-    dump($orderdetails);
+ 
 
     return $this->render('orders/complete_order.html.twig', [
       'order' => $order,
@@ -248,26 +248,14 @@ class TestController extends AbstractController
       $array[] = [
         'details' => $serial->details_toArray($details)
       ];
-      $categories = $prod->getCategories();
-      $array[] =[
-        'categories' => $serial->categories_toArray($categories)
-    ];
+      $catobj = $prod->getCategories();
 
-      $subcategories = $prod->getSubcategories();
-      $array[] = [
-        'subcategories' =>
-        $serial->subcategories_toArray($subcategories)
-      ];
+      $array[] = ['category'=>$serial->categories_toArray($catobj)];
 
-
-      $subtwocategories = $prod->getSubtwocategories();
-      $array[] = [
-        'subtwocategories' =>
-        $serial->subtwocategoris_toArray($subtwocategories)
-      ];
-      $arr[] = $array;
-      unset($array);
+      
+      
     }
+    dd($array);
     // $jsondata = new OrderJson;
     // $jsondata->setData($array);
     // $em = $this->getDoctrine()->getManager();
@@ -276,7 +264,6 @@ class TestController extends AbstractController
     // dd($jsondata);
 
     // unset($array);
-    dd($arr);
 
   }
 
