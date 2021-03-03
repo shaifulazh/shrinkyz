@@ -12,8 +12,8 @@
 
 
                                  <div class="mr-auto">
-                                        {{app.request.get('_route') == 'app_home' ?  '   <button class="btn btn-primary special-button btn-sm mr-3" id="menu-toggle">Categories </button>' }}
-                                        {{app.request.get('_route') == 'link_category' ?  '    <button class="btn btn-primary special-button btn-sm mr-3" id="menu-toggle">Categories </button>' }}
+                                        {{app.request.get('_route') == 'app_home'  or app.request.get('_route') == 'link_category' or app.request.get('_route') == 'subcategories_link' or app.request.get('_route') == 'subtwocategories_link'? '   <button class="btn btn-primary special-button btn-sm mr-3" id="menu-toggle">Categories </button>' }}
+                                     
                                 </div> 
 
                                 <div class="ml-auto">
