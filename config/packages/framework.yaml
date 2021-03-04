@@ -8,9 +8,10 @@ framework:
     # Remove or comment this section to explicitly disable session support.
     session:
         handler_id: 'session.handler.native_file'
-        cookie_secure: auto
+        cookie_secure: true
         cookie_samesite: lax
         save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
+        cookie_lifetime: 86400
 
     #esi: true
     #fragments: true
