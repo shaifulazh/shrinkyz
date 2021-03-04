@@ -5,6 +5,18 @@
     "braintree/braintreehttp": {
         "version": "0.3.0"
     },
+    "dama/doctrine-test-bundle": {
+        "version": "4.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "4.0",
+            "ref": "56eaa387b5e48ebcc7c95a893b47dfa1ad51449c"
+        },
+        "files": [
+            "./config/packages/test/dama_doctrine_test_bundle.yaml"
+        ]
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -114,6 +126,12 @@
             "./config/packages/fos_rest.yaml"
         ]
     },
+    "gregwar/captcha": {
+        "version": "v1.1.9"
+    },
+    "gregwar/captcha-bundle": {
+        "version": "v2.1.4"
+    },
     "knplabs/knp-components": {
         "version": "v1.3.10"
     },
@@ -198,6 +216,9 @@
     "symfony/asset": {
         "version": "v4.2.4"
     },
+    "symfony/browser-kit": {
+        "version": "v4.4.19"
+    },
     "symfony/cache": {
         "version": "v4.2.4"
     },
@@ -220,6 +241,9 @@
             "./config/bootstrap.php"
         ]
     },
+    "symfony/css-selector": {
+        "version": "v4.4.19"
+    },
     "symfony/debug": {
         "version": "v4.2.4"
     },
@@ -232,8 +256,11 @@
     "symfony/doctrine-bridge": {
         "version": "v4.2.4"
     },
+    "symfony/dom-crawler": {
+        "version": "v4.4.19"
+    },
     "symfony/dotenv": {
-        "version": "v4.2.4"
+        "version": "v4.4.19"
     },
     "symfony/error-handler": {
         "version": "v4.4.18"
@@ -293,6 +320,9 @@
             "ref": "f8fd4ddb9b477510f8f4bce2b9c054ab428c0120"
         }
     },
+    "symfony/http-client": {
+        "version": "v4.4.19"
+    },
     "symfony/http-client-contracts": {
         "version": "v2.3.1"
     },
@@ -339,12 +369,12 @@
         "version": "v1.0.6"
     },
     "symfony/phpunit-bridge": {
-        "version": "4.3",
+        "version": "5.1",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "master",
-            "version": "4.3",
-            "ref": "6d0e35f749d5f4bfe1f011762875275cd3f9874f"
+            "version": "5.1",
+            "ref": "bf16921ef8309a81d9f046e9b6369c46bcbd031f"
         },
         "files": [
             "./.env.test",
@@ -436,6 +466,9 @@
     },
     "symfony/stopwatch": {
         "version": "v4.2.4"
+    },
+    "symfony/test-pack": {
+        "version": "v1.0.7"
     },
     "symfony/translation": {
         "version": "3.3",

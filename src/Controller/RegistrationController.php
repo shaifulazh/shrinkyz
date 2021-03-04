@@ -127,7 +127,10 @@ class RegistrationController extends AbstractController
     public function adminRegister(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
         //for admin only dev should open for registration
-        return $this->redirectToRoute('app_home');
+        if (!$this->getParameter('admin_route'))
+        {
+            return $this->redirectToRoute('app_home');
+        }
         $user = new User();
         $form = $this->createForm(AdminFormType::class);
         $form->handleRequest($request);

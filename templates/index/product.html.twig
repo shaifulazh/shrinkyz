@@ -1,143 +1,83 @@
-      <div class="row ">
-                {% for product in products %}
-                    <div class="col-6 col-xs-6 col-md-6 col-xl-3 my-2 mx-0">
-                        <div class="card border">
-                            <a href="{{ path('app_view', { id: product.getId }) }}">
-                                <div class="img-container mb-2">
-                                    {% for key, picture in product.pictures %}
-                                    {% if key == 0 %}
-                                    <img alt="No Image" class="card-img-top" src="{{asset('/images/' ~ picture.filename)}}"/>
-                                    {% endif %}
-                                    {% endfor %}
-                                    
-                                </div>
-                            </a>
-                            <div class="pl-3" style="height: 60px; ">
-                                
-                                <h6 class="mb-0">
-                                <p class="mb-0 text-capitalize">
-                                    {{product.productName}}
-                                </p>
-                                </h6>                           
-                                
-                                   
-                                    <p class="my-0 font-weight-bold" style="color:black;" > <span class="font-weight-bold mr-1">RM</span>{{ product.productPrice |number_format(2, '.', ',')  }}</p>
-                               
-                               
-                            </div>
-                            <div style="height: 80px;" class="pl-3" >
-                                        {% if product.productStock > 1 %}
+<div class="row ">
+	{% for product in products %}
+		<div class="col-6 col-xs-6 col-md-6 col-xl-3 my-2 mx-0">
+			<div class="card border">
+				<a href="{{ path('app_view', { id: product.getId }) }}">
+					<div class="img-container mb-2">
+						{% for key, picture in product.pictures %}
+							{% if key == 0 %}
+								<img alt="No Image" class="card-img-top" src="{{asset('/images/' ~ picture.filename)}}"/>
+							{% endif %}
+						{% endfor %}
 
-                                    <span style="color:black;font-style:italic"> {{product.productStock}} left!  </span>
-                                    
-                                        {% elseif product.productStock == 1  %}
+					</div>
+				</a>
+				<div class="pl-3" style="height: 60px; ">
 
-                                        <span style="color:black;font-style:italic"> Only {{product.productStock}}  left!  </span>
-                                    
-                                        {% elseif product.productStock < 1 %}
-
-                                        {# <span style="color:black;font-style:italic">No stocks left  </span> #}
-                                    
-                                        {% endif %}
-                                    
-                                        
-                                            <div class="mt-2"> 
-                                            <div class="row pl-3 mb-4">
-                                        {% if product.productStock < 1 %}
-                                            <button onClick="requestprod({{product.id}})" class="btn btn-outline-secondary btn-sm ">Request</button>
-                                            <p style="color:blue; font-size:90%;"class="m-2" >Sold, available upon request.</p>
-                                        {% else %} 
+					<h6 class="mb-0">
+						<p class="mb-0 text-capitalize">
+							{{product.productName}}
+						</p>
+					</h6>
 
 
-                                            <div class="row pl-3 mb-4">
-                                            <a href="{{path('add_cart', {id: product.getId})}}" class="btn btn-primary btn-sm">Add To Cart</a>
-                                            </div>
-                                            {% endif %}
-                                                </div>
-                                                </div>
-                                    
+					<p class="my-0 font-weight-bold" style="color:black;">
+						<span class="font-weight-bold mr-1">RM</span>
+						{{ product.productPrice |number_format(2, '.', ',')  }}</p>
 
 
-                            </div>
-                            {# please remove this in production #}
-                        </div>
-                    </div>
+				</div>
+				<div style="height: 80px;" class="pl-3">
+					{% if product.productStock > 1 %}
 
-                {% endfor %}
-            
-            
-        </div>
-                {{ knp_pagination_render(products) }}
+						<span style="color:black;font-style:italic">
+							{{product.productStock}}
+							left!
+						</span>
+
+					{% elseif product.productStock == 1  %}
+
+						<span style="color:black;font-style:italic">
+							Only
+							{{product.productStock}}
+							left!
+						</span>
+
+						{% elseif product.productStock < 1 %}
+
+						{# <span style="color:black;font-style:italic">No stocks left  </span> #}
+
+					{% endif %}
 
 
-   
+					<div class="mt-2">
+						<div class="row pl-3 mb-4">
+							{% if product.productStock < 1 %}
+								<a onClick="requestprod({{product.id}})" class="btn btn-outline-secondary btn-sm ">Request</a>
+								<p style="color:blue; font-size:90%;" class="m-2">Sold, available upon request.</p>
+							{% else %}
+
+
+								<div class="row pl-3 mb-4">
+									<a href="{{path('add_cart', {id: product.getId})}}" class="btn btn-primary btn-sm">Add To Cart</a>
+								</div>
+							{% endif %}
+						</div>
+					</div>
+
+
+				</div>
+
+			</div>
+		</div>
+
+	{% endfor %}
+
+
+</div>
+{{ knp_pagination_render(products) }}
+
+
 <script>
-function opensesame(params) {
-   document.querySelector(".request-top").style.display = "flex";
-   document.querySelector(".request-top").classList.toggle("open-request"); 
-
-   setTimeout(() => {
-   document.querySelector(".request-content").classList.toggle("open-request-content");
-
-
-   }, 1);
-
-   
-   
-}
-
-var productid = null;
-
-    const requestprod = (e) => {
-        opensesame()
-        productid = e;
-    }
-
-function handleclose (){
-   document.querySelector(".request-top").classList.toggle("open-request"); 
-   document.querySelector(".request-content").classList.toggle("open-request-content");
-   setTimeout(()=>{
-    document.querySelector(".request-top").style.display = "none";
-
-   },300);
-  
-}
-function submitemail () {
-    console.log(productid);
-    var email = document.getElementById('email').value;
-    console.log(email);
-    sendmail(email);
-    handleclose();
-
-}
-
-const sendmail = (emails) =>{
-
-     console.log('sending mail')
-
-     const data = { email: emails, product: productid };
-
-    fetch('/api/email/emails', {
-      method: 'POST', // or 'PUT'
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Success:', data);
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
- }
-   
-
-function onsub(e){
-   e.preventDefault();
-   submitemail();
-}
- 
 
 </script>

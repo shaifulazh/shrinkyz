@@ -16,13 +16,26 @@
         {{ form_label(requestForm.email)}}
         {{ form_widget(requestForm.email,{'attr' : {'class' : 'form-control','placeholder': 'Email','style': 'width : 15em'}}) }}
         
-        </br><div>
+        <br><div>
             <small>
                 Enter your email address and we we will send you a
                 link to reset your password.
             </small>
         </div>
-    </br>
+    <br>
+    <label>Captcha</label>
+    <div class="text-danger">
+        {{form_errors(requestForm.captcha)}}
+    </div>
+    <div>
+
+        {{ form_widget(requestForm.captcha,{'attr' : {'class' : 'form-control mt-3 mb-3','placeholder': 'Type the word on image above','style': 'width : 20em'}})}}
+        <a href="" class="btn btn-sm btn-info m-y"><i class="fas fa-sync"></i>&nbsp;<span>Refresh</span></a>
+        
+    </div>
+    
+    <br>
+    
         <button class="btn btn-primary">Send password reset email</button>
     {{ form_end(requestForm) }}
     </div>

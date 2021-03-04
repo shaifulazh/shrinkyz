@@ -3,6 +3,7 @@ import Axios from "axios";
 import { NavLink, Link } from "react-router-dom";
 import { Table, Spinner, Pagination } from "react-bootstrap";
 import { Col, Row } from "reactstrap";
+import { data } from "jquery";
 
 export default class ProductList extends Component {
   constructor(props) {
@@ -17,6 +18,7 @@ export default class ProductList extends Component {
     };
   }
   formatDate = (date) => {
+
     const year = new Date(date).getFullYear();
     const month = new Date(date).getMonth();
     const day = new Date(date).getDate();
@@ -35,11 +37,11 @@ export default class ProductList extends Component {
       .then((response) => {
         if (this.mounted) {
           const { data } = response;
-          console.log(data);
+          console.log(data.obj);
           this.setState({
-            defaultData: data,
+            defaultData: data.obj,
           });
-          this.paginateData(data);
+          this.paginateData(data.obj);
         }
       })
       .catch((e) => console.log(e));

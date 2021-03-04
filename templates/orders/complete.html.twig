@@ -86,7 +86,14 @@
                 {% for product in carts %}
                     <tbody>
                         <tr>
-                            <td><img height="70" width="70" src="{{ asset( '/images/' ~ product.product.getProductImage) }}"></td>
+
+                        
+                            <td><img height="70" width="70"
+                            {% for key, picture in product.product.pictures %}
+                            {% if key == 0 %}
+                          src="{{ asset( '/images/' ~ picture.filename ) }}" alt="Sample">
+                        {% endif %}
+                        {% endfor %} </td>
                             <td>{{product.product.getProductName}}</td>
                             <td>
                                 {{product.qty}}

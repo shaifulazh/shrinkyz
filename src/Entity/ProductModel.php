@@ -4,6 +4,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProductModelRepository")
@@ -21,11 +22,13 @@ class ProductModel
 
     /**
      * @ORM\Column(type="string", length=255)
+     * 
      */
     private $product_name;
 
     /**
      * @ORM\Column(type="float")
+     * 
      */
     private $product_price;
 
@@ -39,36 +42,43 @@ class ProductModel
 
     /**
      * @ORM\Column(type="integer")
+     * 
      */
     private $product_stock;
 
    /**
      * @ORM\OneToMany(targetEntity="App\Entity\CartModel", mappedBy="product", cascade={"REMOVE"})
+     * 
      */
     private $cart;
 
     /**
      * @ORM\OneToMany(targetEntity=ProductDetails::class, mappedBy="product")
+     * 
      */
     private $productDetailss;
 
     /**
      * @ORM\ManyToMany(targetEntity=Category::class, mappedBy="product_model")
+     * 
      */
     private $categories;
 
     /**
      * @ORM\ManyToMany(targetEntity=ImageFile::class, inversedBy="productModels")
+     * 
      */
     private $pictures;
 
     /**
      * @ORM\ManyToMany(targetEntity=Subcategory::class, mappedBy="product")
+     * 
      */
     private $subcategories;
 
     /**
      * @ORM\ManyToMany(targetEntity=Subtwocategory::class, mappedBy="product")
+     * 
      */
     private $subtwocategories;
 
@@ -324,6 +334,13 @@ class ProductModel
             $this->view = 0;
         }
         $this->view = $this->view + 1;
+        return $this;
+    }
+
+    public function setView(?int $view): self
+    {
+        $this->view = $view;
+
         return $this;
     }
 

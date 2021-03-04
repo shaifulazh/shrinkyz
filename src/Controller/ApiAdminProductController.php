@@ -90,7 +90,7 @@ class ApiAdminProductController extends AbstractFOSRestController
      
      * @param ParamFetcher $paramFetcher
      */
-
+   //todo vulnerable
     public function postProductAction(ParamFetcher $paramFetcher)
     {
         //add something
@@ -282,18 +282,18 @@ class ApiAdminProductController extends AbstractFOSRestController
         }
 
 
-
+   //todo vulnerable
         return $this->view($product, Response::HTTP_OK);
     }
 
 
-
+   //todo vulnerable
     public function getProductAction(ProductModel $product)
     {
 
         return $this->view($product, Response::HTTP_OK);
     }
-
+   //todo vulnerable
     public function getProductCategoriesAction()
     {       
         // $categories = $this->getDoctrine()->getRepository(Category::class)->findAll();
@@ -315,19 +315,19 @@ class ApiAdminProductController extends AbstractFOSRestController
 
         return $this->view($categories, Response::HTTP_OK);
     }
-
+   //todo vulnerable
     public function getProductAllcategoriesAction(){
         $categories = $this->getDoctrine()->getRepository(Category::class)->findAll();
         return $this->view($categories, Response::HTTP_OK);
     }
-
+   //todo vulnerable
     public function getProductSubcategoriesAction(Category $category){
        
         $subcategory =  $this->getDoctrine()->getRepository(Subcategory::class)->findSubcategoryByCategory($category);
         return $this->view($subcategory, Response::HTTP_OK);
     }
 
-
+   //todo vulnerable
     public function getProductSubtwocategoriesAction(Subcategory $subcategory){
         $subtwocategory =  $this->getDoctrine()->getRepository(Subtwocategory::class)->findBySubtwo($subcategory);
         return $this->view($subtwocategory, Response::HTTP_OK);
@@ -379,6 +379,7 @@ class ApiAdminProductController extends AbstractFOSRestController
         return $this->view(['message' => 'something went wrong'], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
+
     public function deleteProductImageAction(ImageFile $imageFile)
     {
         $filesystem = new Filesystem();
@@ -400,7 +401,7 @@ class ApiAdminProductController extends AbstractFOSRestController
         return $this->view(['message' => 'something went wrong'], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
-
+    //todo
     public function getProductsAction()
     {
         // Query manual using doctrine orm DESC for order model
@@ -481,7 +482,7 @@ class ApiAdminProductController extends AbstractFOSRestController
         return $this->view($productModel, Response::HTTP_OK);
     }
 
-
+    //todo vulnerable
     public function getImagesAction()
     {
         $imageFile = $this->entityManager->getRepository(ImageFile::class)->findAll();

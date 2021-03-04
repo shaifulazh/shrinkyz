@@ -60,7 +60,8 @@
   
         <!-- /#sidebar-wrapper -->
         <!-- Page Content -->
-            <div id="page-content-wrapper"> <div class="container-fluid">
+        <div id="page-content-wrapper"> 
+            <div class="container-fluid">
                 <div class="">
                     {% block main %}{% endblock %}
                 </div>
@@ -69,6 +70,17 @@
 
         <!-- /#page-content-wrapper -->
     </div>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+
+
+           
+
+    </script>
 
 
 {% endblock %}

@@ -21,16 +21,19 @@
     {% block head %}
 
         <style>
-        .body {
-
+        html,body { 
+           overflow-x: hidden;
+           
+        
         }
+        body {
+            overflow-y: hidden;
+        }
+
+        
        
         .superdiv {
-            overflow-x: hidden !important;
-            position : relative; 
-            min-height: 100vh;
-           
-            /* height :100vh;; */
+        
 
         }
       
@@ -95,6 +98,9 @@
    
     {% block javascript %}
     {{ encore_entry_script_tags('app') }}
+
+
+
     {% endblock %}
 
 

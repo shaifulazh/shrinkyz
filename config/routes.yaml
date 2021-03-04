@@ -30,3 +30,11 @@ email_api:
 user_:
   resource: App\Controller\UserController
   prefix: user
+
+apporder_:
+  resource: App\Controller\ShippingController
+  prefix: shipping
+
+testing_:
+  resource: App\Controller\TestController
+  prefix: testing

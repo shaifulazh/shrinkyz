@@ -41,14 +41,10 @@ class OrderModel
      */
     private $status;
 
-
-
     /**
      * @ORM\Column(type="string", length=255)
      */
     private $payment_method;
-
-
 
     /**
      * @ORM\OneToOne(targetEntity=PaypalModel::class, cascade={"persist", "remove"})
@@ -56,10 +52,31 @@ class OrderModel
     private $paypal;
 
     /**
-     * @ORM\OneToOne(targetEntity=AddressModel::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity=AddressModel::class, inversedBy="order", cascade={"persist", "remove"})
      */
     private $address;
+
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $reference_id;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $shipping;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $amount;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $subtotal;
+
+
 
 
 
@@ -171,10 +188,60 @@ class OrderModel
         return $this->address;
     }
 
-    public function setAddress(AddressModel $address): self
+    public function setAddress(?AddressModel $address): self
     {
         $this->address = $address;
 
         return $this;
     }
+
+    public function getReferenceId(): ?string
+    {
+        return $this->reference_id;
+    }
+
+    public function setReferenceId(string $reference_id): self
+    {
+        $this->reference_id = $reference_id;
+
+        return $this;
+    }
+
+    public function getShipping(): ?float
+    {
+        return $this->shipping;
+    }
+
+    public function setShipping(?float $shipping): self
+    {
+        $this->shipping = $shipping;
+
+        return $this;
+    }
+
+    public function getAmount(): ?float
+    {
+        return $this->amount;
+    }
+
+    public function setAmount(?float $amount): self
+    {
+        $this->amount = $amount;
+
+        return $this;
+    }
+
+    public function getSubtotal(): ?float
+    {
+        return $this->subtotal;
+    }
+
+    public function setSubtotal(?float $subtotal): self
+    {
+        $this->subtotal = $subtotal;
+
+        return $this;
+    }
+
+
 }

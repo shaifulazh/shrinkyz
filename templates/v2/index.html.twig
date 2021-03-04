@@ -2,43 +2,11 @@
 
 {% block title %}Dashboard!{% endblock %}
 
-{% block stylesheets %}
 
-{{ parent() }}
-   {{ encore_entry_link_tags('email') }}
-
-
-{% endblock %}
 
 
 {% block body %}
 
-<div class="container">
-<div class="row justify-content-md-center">
-<div class="col-md-6 m-3">
-<div class="d-flex justify-content-center">
-  <p><i class="fas fa-wrench fa-10x"></i></p>
-</div>
-</div>
-<div class="col-md-6 m-3">
+{{render(controller('App\\Controller\\UserController::request_product'))}}
 
-<h2 style="text-align: center;">
-Our website is currently under construction. <br/></br>We sincerely apologise for the inconvenience!<br/> Please visit us on instagram for further inquiries.<br/> thank you. 
-<a href="https://www.instagram.com/shrinkyz/">
-          <img src="{{asset('/images/insta.png')}}" class="img-fluid" style="widht : 50%;" alt="">
-        </a>
-          </h2>
-</div>
-<pre>
-</pre>
-</div>
-</div>
-
-{% block javascript %}
-
-    {{ parent() }}
-
-
-
-{% endblock %}
 {% endblock %}

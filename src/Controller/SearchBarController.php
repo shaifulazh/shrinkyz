@@ -48,7 +48,7 @@ class SearchBarController extends AbstractController
         );
 
         return $this->render('index/index.html.twig', [
-            'products' => $pagination, 'category' => null
+            'products' => $pagination, 'category' => null, 'active' => null
         ]);
     }
 }

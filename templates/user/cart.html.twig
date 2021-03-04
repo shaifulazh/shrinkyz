@@ -1,12 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Dashboard!{% endblock %}
+{% block title %}Cart{% endblock %}
 
 {% block stylesheets %}
 
 {{ parent() }}
-   {{ encore_entry_link_tags('email') }}
+   
 
+
+ <style>
+ 
+ .price-right {
+   position : absolute;
+   right : 0px;
+   top : 10px;
+ }
+
+ </style>
 
 {% endblock %}
 
@@ -31,17 +41,17 @@
 
             {% set total = 0 %}{% set i = 0 %}{% set notEnoughStock = 0 %}
                 {% for product in products %}
-          
                   <div class="row mb-4">
                     <div class="col-md-5 col-lg-3 col-xl-3">
                       <div class="view zoom overlay z-depth-1 rounded mb-3 mb-md-0">
+          <a href="{{path('app_view', {'id': product.product.getId })}}" class="">
                         <img class="img-fluid w-100"
                         {% for key, picture in product.product.pictures %}
                             {% if key == 0 %}
                           src="{{ asset( '/images/' ~ picture.filename ) }}" alt="Sample">
                         {% endif %}
                         {% endfor %}
-                      </div>
+                      </div> </a>
                     </div>
                     <div class="col-md-7 col-lg-9 col-xl-9">
                       <div>
@@ -82,6 +92,7 @@
                   {# to calculate the cart total #}
                    {% set total = total + (product.product.getProductPrice * product.qty ) %}
                   {% set i = i + 1 %}
+                 
                 {% endfor %}
           <p class="text-primary mb-0"><i class="fas fa-info-circle mr-1"></i> Do not delay the purchase, adding
             items to your cart does not mean booking them.</p>
@@ -137,25 +148,26 @@
           <h5 class="mb-3">The total amount of</h5>
 
           <ul class="list-group list-group-flush">
-            <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+            {# <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
               Temporary amount
               <span>{{total |number_format(2, '.', ',')}}</span>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-              Shipping
-              <span>Gratis</span>
-            </li>
+              
+
+         
+            </li> #}
             <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
               <div>
-                <strong>The total amount of</strong>
+                <strong>Total Amount</strong>
                 {# <strong>
                   <p class="mb-0">(including VAT)</p>
                 </strong> #}
               </div>
-              <span><strong>{{total |number_format(2, '.', ',')}}</strong></span>
+              <span><strong>RM {{total |number_format(2, '.', ',')}}</strong></span>
             </li>
           </ul>
-           <a class="btn btn-warning btn-block" href="{{path('maintenance')}}">go to checkout</a>
+           <a class="btn btn-warning btn-block" href="{{path('chekingout')}}">go to checkout</a>
 
           {# <button type="button" class="btn btn-primary btn-block">go to checkout</button> #}
           
@@ -200,8 +212,6 @@
 {% block javascript %}
 
     {{ parent() }}
-
-
 
 {% endblock %}
 {% endblock %}

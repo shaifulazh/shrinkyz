@@ -117,6 +117,7 @@ export default class ProductAdd extends Component {
               <input
                 required
                 type="number"
+                step=".01"
                 onChange={(e) => this.setState({ price: e.target.value })}
                 className="form-control"
                 style={{ width: "10em" }}

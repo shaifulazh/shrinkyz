@@ -20,7 +20,7 @@ class MailController extends AbstractFOSRestController
 
     public function __construct(MailerInterface $mailer){
         $this->mailer = $mailer;
-    }
+}
 
 
     /**
@@ -31,8 +31,14 @@ class MailController extends AbstractFOSRestController
      */
     public function postEmailAction(ParamFetcher $paramFetcher)
     {
+        
 
         $product = $this->getDoctrine()->getRepository(ProductModel::class)->find($paramFetcher->get('product'));
+
+        if(!$product)
+        {
+            return $this->view(null, Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
         $email = (new Email())
             ->from($this->getParameter('webemail'))
             ->to($this->getParameter('requestemail'))
@@ -44,11 +50,11 @@ class MailController extends AbstractFOSRestController
             //code...
             $this->mailer->send($email);
         } catch (\Throwable $th) {
-            return $this->view(["message" => "error fail to send email"], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->view(null, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-        $data = $paramFetcher->get('email');
+        
 
-        return $this->view($data, Response::HTTP_OK);
+        return $this->view(null, Response::HTTP_OK);
     }
 
 

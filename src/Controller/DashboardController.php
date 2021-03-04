@@ -8,12 +8,16 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DashboardController extends AbstractController
 {
+    public function __construct()
+    {
+        
+    }
     /**
      * @Route("/admin", name="dashboard")
      */
     public function index(Request $request)
     {
-
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $device = $this->isMobile($request);
         if($device && false){
             return $this->render('dashboard/mobile.html.twig');
@@ -31,6 +35,7 @@ class DashboardController extends AbstractController
      */
     public function mobiledashboard(Request $request)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $device = $this->isMobile($request);
         // dump($device);
 
@@ -44,6 +49,7 @@ class DashboardController extends AbstractController
 
     public function isMobile(Request $request)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
     $useragent = $request->headers->get('User-Agent');
     if (!$useragent) {
         return false;

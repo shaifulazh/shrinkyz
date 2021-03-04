@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -55,6 +57,31 @@ class AddressModel
      * @ORM\Column(type="string", length=255)
      */
     private $phone_number;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Country::class)
+     */
+    private $countrydata;
+
+    /**
+     * @ORM\OneToOne(targetEntity=User::class)
+     */
+    private $user;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $address_line_2;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\OrderModel", mappedBy="address", cascade={"REMOVE"})
+     */
+    private $order;
+
+    public function __construct()
+    {
+        $this->order = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -153,6 +180,72 @@ class AddressModel
     public function setPhoneNumber(string $phone_number): self
     {
         $this->phone_number = $phone_number;
+
+        return $this;
+    }
+
+    public function getCountrydata(): ?Country
+    {
+        return $this->countrydata;
+    }
+
+    public function setCountrydata(?Country $countrydata): self
+    {
+        $this->countrydata = $countrydata;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getAddressLine2(): ?string
+    {
+        return $this->address_line_2;
+    }
+
+    public function setAddressLine2(?string $address_line_2): self
+    {
+        $this->address_line_2 = $address_line_2;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|OrderModel[]
+     */
+    public function getOrder(): Collection
+    {
+        return $this->order;
+    }
+
+    public function addOrder(OrderModel $order): self
+    {
+        if (!$this->order->contains($order)) {
+            $this->order[] = $order;
+            $order->setAddress($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(OrderModel $order): self
+    {
+        if ($this->order->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getAddress() === $this) {
+                $order->setAddress(null);
+            }
+        }
 
         return $this;
     }

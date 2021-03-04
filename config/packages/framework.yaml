@@ -13,6 +13,7 @@ framework:
         save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
         cookie_lifetime: 86400
 
+
     #esi: true
     #fragments: true
     php_errors:
@@ -21,3 +22,5 @@ framework:
     serializer:
         circular_reference_handler: App\Serializer\CircularReferenceHandler
         enabled: true
+
+    

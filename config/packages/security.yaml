@@ -15,8 +15,9 @@ security:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
     main:
-      # form_login:
-      #   login_path: app_login
+      form_login:
+        login_path: app_login
+        check_path: login
       logout:
         path: app_logout
         target: app_home
@@ -26,6 +27,14 @@ security:
       guard:
         authenticators:
           - App\Security\LoginFormAuthAuthenticator
+
+      remember_me:
+        secret:   '%kernel.secret%'
+        lifetime: 604800 # 1 week in seconds
+        path: /
+        secure : true
+        samesite : strict
+        
       # access_denied_handler: App\Security\AccessDeniedHandler
       # activate different ways to authenticate
       # http_basic: true
@@ -36,9 +45,11 @@ security:
   # Easy way to control access for large sections of your site
   # Note: Only the *first* access control that matches will be used
   access_control:
-    - { path: ^/api/admin, roles: ROLE_ADMIN }
-    - { path: ^/admin, roles: ROLE_ADMIN }
-    - { path: ^/user, roles: ROLE_USER }
-    - { path: ^/orders, roles: ROLE_USER }
-    - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-    - { path: ^/api/email, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: '^/api/email', roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: '^/api/admin', roles: ROLE_ADMIN }
+    - { path: '^/admin', roles: ROLE_ADMIN }
+    - { path: '^/orders', roles: ROLE_USER }
+    - { path: '^/shipping', roles: ROLE_USER }
+    - { path: '^/user', roles: ROLE_USER }
+    - { path: '^/testing', roles: ROLE_ADMIN, ip: 127.0.0.1 }
+    - { path: '^/', roles: IS_AUTHENTICATED_ANONYMOUSLY }

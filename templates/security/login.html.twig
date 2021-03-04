@@ -12,24 +12,50 @@
                 {% if error %}
                     <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                 {% endif %}
-                <br>
+
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %} 
+                <h1 class="h3 mb-3 font-weight-normal">Re-Login</h1>
+
+                {% else %}
+                   <br>
                 <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-                <br>
+                <br> 
+             
+
+                
+                {% endif %}
                 <label class="sr-only" for="inputEmail">Email</label>
                 <br>
-                <input style="width: 20em" type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus>
+             
+                
+                
+               
+                <input style="width: 20em" type="email" value="{{ is_granted('IS_AUTHENTICATED_REMEMBERED')? app.user.email : last_username }}" name="email" id="inputEmail" class="form-control" placeholder="Email" {{ is_granted('IS_AUTHENTICATED_REMEMBERED')? 'required': 'required autofocus'}}>
                 <br>
+                
                 <label class="sr-only" for="inputPassword">Password</label>
                 <br>
-                <input class="form-control" id="inputPassword" name="password" placeholder="Password" required style="width: 20em" type="password">
+                <input class="form-control" id="inputPassword" name="password" placeholder="Password"   style="width: 20em" type="password" {{ is_granted('IS_AUTHENTICATED_REMEMBERED')? 'required autofocus': 'required'}}>
                 <br>
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                
+         
+        
+                <input type="checkbox" id="remember_me" name="_remember_me"  checked />
+                <label for="remember_me">Keep me logged in</label>
+                <br>
+          
 
-
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                <button class="btn btn-primary" style="width: 24em" type="submit">
+                    Submit</button><br>
+                {% else %}
+                    
                 <button class="btn btn-primary" style="width: 10em" type="submit">
                     Sign in</button>
-                <a style="width: 10em" href="{{ path('app_register') }}" class="btn btn-primary ">Register</a>
-</br> <p></p>
+                    <a style="width: 10em" href="{{ path('app_register') }}" class="btn btn-primary ">Register</a>
+                </br>
+               {% endif %}
                 <a style="width: 10em" href="{{ path('app_forgot_password_request') }}" class="">Forgot Password</a>
                 
             </form>

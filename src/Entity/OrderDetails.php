@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\OrderDetailsRepository")
@@ -15,6 +16,7 @@ class OrderDetails
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"show_product"})
      */
     private $id;
 
@@ -43,6 +45,18 @@ class OrderDetails
      * @ORM\Column(type="string", length=255)
      */
     private $product_image;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $description;
+
+    /**
+     * @ORM\Column(type="json")
+     */
+    private $jsondata = [];
+
+ 
 
     public function getId(): ?int
     {
@@ -108,6 +122,35 @@ class OrderDetails
 
         return $this;
     }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getJsondata(): ?array
+    {
+        return $this->jsondata;
+    }
+
+    public function setJsondata(array $jsondata): self
+    {
+        $this->jsondata = $jsondata;
+
+        return $this;
+    }
+
+
+
+
+ 
 
 
 }
