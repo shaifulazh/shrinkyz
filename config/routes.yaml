@@ -34,3 +34,7 @@ user_:
 apporder_:
   resource: App\Controller\ShippingController
   prefix: shipping
+
+testing_:
+  resource: App\Controller\TestController
+  prefix: testing

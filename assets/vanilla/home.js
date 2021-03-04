@@ -126,7 +126,7 @@ function setCookie(cname,cvalue,exdays) {
   d.setTime(d.getTime() + (exdays*24*60*60*1000));
  
   var expires = "expires=" + d.toGMTString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/" + ";SameSite=Lax" + "; Secure";
 }
 
 function getCookie(cname) {
@@ -171,11 +171,15 @@ window.onload = function bitch(params) {
 
 function showiklan (){
   if(sameperson){
+    document.querySelector(".email-model").style.display = "none";
       return;
     }
-    disableScroll()
+    disableScroll();
+    document.querySelector(".email-model").style.display = "flex";
+    
+  
+
     document.querySelector(".email-model").classList.toggle("open-content-model"); 
-   /* document.querySelector("body").style.overflow = "hidden"*/
      var element = document.querySelector(".content-model");
     element.classList.toggle("open-model");
 }

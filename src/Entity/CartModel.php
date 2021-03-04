@@ -27,7 +27,7 @@ class CartModel
     private $customer;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\ProductModel")
+     * @ORM\ManyToOne(targetEntity="App\Entity\ProductModel", inversedBy="cart")
      * @ORM\JoinColumn(nullable=false)
      */
     private $product;

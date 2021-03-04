@@ -43,6 +43,7 @@ class TestController extends AbstractController
   public function __construct(CountryData $countryData)
   {
     $this->countryData = $countryData;
+    
   }
 
 
@@ -268,27 +269,10 @@ class TestController extends AbstractController
   }
 
    /**
-   * @Route("/jsondata", methods="GET")
+   * @Route("/req", methods="GET")
    */
   public function jsonsdatassssss (){
-    $em = $this->getDoctrine()->getManager();
-
-    
-
-    $data = $em->getRepository(User::class)->findByRole('ROLE_ADMIN');
-    foreach($data as $ss){
-      dd($ss->getEmail());
-    }
-    $serial = new SerializerOperation;
-
-    $a = $serial->user_toArray($data);
-    
-    $response = new JsonResponse();
-    $b = [
-      'data'=> $a
-    ];
-
-    return $response->setData($b);
+    return $this->render('v2/index.html.twig');
     
   }
 

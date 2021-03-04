@@ -16,10 +16,13 @@ use App\Entity\OrderDetails;
 use App\Entity\OrderModel;
 use App\Entity\User;
 use App\Form\ChangePassType;
+use App\Form\RequestProductType;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mime\Address;
 use App\Security\EmailVerifier;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 class UserController extends AbstractController
 {
@@ -80,7 +83,7 @@ class UserController extends AbstractController
     public function cartView(Request $request)
     {
 
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        
         $user = $this->getUser();
         $carts = $this->getDoctrine()->getRepository(CartModel::class)->findby(['customer' => $user]);
         $i = 0;
@@ -189,6 +192,7 @@ class UserController extends AbstractController
      */
     public function userProfile()
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $user = $this->getUser();
         return $this->render('user/profile.html.twig', ['user' => $user]);
     }
@@ -199,6 +203,7 @@ class UserController extends AbstractController
      */
     public function userVerificationProfile(EmailVerifier $emailVerifier)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $user = $this->getUser();
 
         if($user->isVerified())
@@ -258,6 +263,8 @@ class UserController extends AbstractController
      */
 
     public function changeUserPasswordProfile(Request $request, UserPasswordEncoderInterface $passenc){
+
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $form = $this->createForm(ChangePassType::class);
 
 
@@ -283,5 +290,43 @@ class UserController extends AbstractController
         return $this->render('user/changepwd.html.twig', ['form' => $form->createView()]);
 
     }
+
+    /**
+     * @Route("/requestprod" , name="req_prod")
+     */
+
+     public function request_product(Request $request, MailerInterface $mailer )
+        {
+        $form = $this->createForm(RequestProductType::class);
+         
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+            $email = $form->get('email')->getData();
+
+            $product = $this->getDoctrine()->getRepository(ProductModel::class)->find($form->get('product')->getData());
+
+            
+            $email = (new Email())
+                ->from($this->getParameter('webemail'))
+                ->to($this->getParameter('requestemail'))
+                ->subject('Special Request For Shrinkyz')
+                ->html('<p>There is new Request from customer !!</p><p> Email : ' .$email .' </p> <p> Requested product : 
+                    '. $product->getProductName() .' </p> 
+                    <p>Notes : this is automated mail, do not reply</p>');
+            try {
+                //code...
+                $this->mailer->send($email);
+            } catch (\Throwable $th) {
+                
+            }
+            
+
+            }
+
+        return $this->render('request_product/email_request.html.twig',['form'=> $form->createView()]);
+     }
+
+
     
 }

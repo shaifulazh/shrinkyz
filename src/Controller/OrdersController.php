@@ -62,7 +62,7 @@ class OrdersController extends AbstractController
 
     public function confirmOrder_create_order(Session $session, Request $r)
     {
-
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $carts = $this->getDoctrine()->getRepository(CartModel::class)->findBy(['customer' => $this->getUser()]);
         if (empty($carts)) {
             $this->addFlash('warning', 'Cart Empty');
@@ -154,6 +154,9 @@ class OrdersController extends AbstractController
 
     public function registerOrder(Session $session, Request $request, MailerInterface $mailer)
     {
+        
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        
         $paymentSession = $session->get('payment');
 
         $session->clear();

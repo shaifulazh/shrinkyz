@@ -20,6 +20,7 @@ use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticato
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class LoginFormAuthAuthenticator extends AbstractFormLoginAuthenticator
 {
@@ -39,6 +40,7 @@ class LoginFormAuthAuthenticator extends AbstractFormLoginAuthenticator
         $this->passwordEncoder = $passwordEncoder;
         $this->flash = $flash;
     }
+   
 
     public function supports(Request $request)
     {
@@ -46,8 +48,28 @@ class LoginFormAuthAuthenticator extends AbstractFormLoginAuthenticator
             && $request->isMethod('POST');
     }
 
+    public function supportsRememberMe()
+    {
+        return true;
+    }
+
+
+    
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
+    {
+        if ($request->hasSession()) {
+            $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
+        }
+
+        $url = $this->getLoginUrl();
+
+
+        return new RedirectResponse($url);
+    }
+
     public function getCredentials(Request $request)
     {
+
         $credentials = [
             'email' => $request->request->get('email'),
             'password' => $request->request->get('password'),
@@ -60,6 +82,8 @@ class LoginFormAuthAuthenticator extends AbstractFormLoginAuthenticator
 
         return $credentials;
     }
+
+    
 
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
@@ -79,12 +103,18 @@ class LoginFormAuthAuthenticator extends AbstractFormLoginAuthenticator
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-        return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
+        
+        $status = $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
+        if (!$status) {
+            throw new CustomUserMessageAuthenticationException('Wrong Email or Password. Please try again.');
+        }
+        return $status;
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
+            
             return new RedirectResponse($targetPath);
         }
 

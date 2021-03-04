@@ -31,7 +31,7 @@ class ShippingController extends AbstractController
      */
 
     public function user_is_cheking_out(Request $request){
-
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $carts = $this->cartOperation->getProductFromCart($this->getUser());
         if (!$carts) {
 
@@ -74,6 +74,7 @@ class ShippingController extends AbstractController
      */
 
     public function customer_doing_payment(Request $request, Session $session){
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $carts = $this->cartOperation->getProductFromCart($this->getUser());
         if (!$carts) {
             return $this->redirectToRoute('view_cart');
