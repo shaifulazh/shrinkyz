@@ -5,7 +5,7 @@ import { MemoryRouter as Router } from "react-router-dom";
 
 
 ReactDOM.render(
-  <Router>
+  <Router initialEntries={['/admin']}>
     <App />
   </Router>,
   document.getElementById("root")
