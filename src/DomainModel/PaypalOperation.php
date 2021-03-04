@@ -6,6 +6,7 @@ use App\Entity\AddressModel;
 use App\Entity\CheckOutData;
 use Doctrine\ORM\EntityManagerInterface;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
+use PayPalCheckoutSdk\Core\ProductionEnvironment;
 use PayPalCheckoutSdk\Core\SandboxEnvironment;
 use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -30,7 +31,7 @@ class PaypalOperation
         $clientId =  $this->params->get('clientid');
         $clientSecret = $this->params->get('csecret');
 
-        $environment = new SandboxEnvironment($clientId, $clientSecret);
+        $environment = new ProductionEnvironment($clientId, $clientSecret);
         $client = new PayPalHttpClient($environment);
         return  $client;
     }
