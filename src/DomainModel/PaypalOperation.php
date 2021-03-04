@@ -4,6 +4,7 @@ namespace App\DomainModel;
 
 use App\Entity\AddressModel;
 use App\Entity\CheckOutData;
+use App\Entity\ProductModel;
 use Doctrine\ORM\EntityManagerInterface;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalCheckoutSdk\Core\ProductionEnvironment;

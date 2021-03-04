@@ -11,7 +11,7 @@ framework:
         cookie_secure: true
         cookie_samesite: lax
         save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
-        cookie_lifetime: 86400
+        cookie_lifetime: 0
 
 
     #esi: true
