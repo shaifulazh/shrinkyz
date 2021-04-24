@@ -113,14 +113,14 @@ class IndexController extends AbstractController
 
         $repository = $this->getDoctrine()->getRepository(ProductModel::class)->findBy([], ['view' => 'DESC']);
 
-        $pagination = $this->paginator->paginate(
-            $repository, /* query NOT result */
-            $request->query->getInt('page', 1),
-            8 /*limit per page*/
-        );
+        // $pagination = $this->paginator->paginate(
+        //     $repository, /* query NOT result */
+        //     $request->query->getInt('page', 1),
+        //     8 /*limit per page*/
+        // );
 
         return $this->render('index/index.html.twig', [
-            'products' => $pagination, 'active' => 'home'
+            'products' => $repository, 'active' => 'home'
         ]);
 
     }
@@ -186,13 +186,13 @@ class IndexController extends AbstractController
             // dump($subtwocategory);
             
             
-            $pagination = $this->paginator->paginate(
-                $repository, /* query NOT result */
-                $request->query->getInt('page', 1),
-                8 /*limit per page*/
-            );
+            // $pagination = $this->paginator->paginate(
+            //     $repository, /* query NOT result */
+            //     $request->query->getInt('page', 1),
+            //     8 /*limit per page*/
+            // );
             return $this->render('index/category.html.twig',[
-                'products' => $pagination,
+                'products' => $repository,
                 'subcategories'=> $subcategory ,
                 'active' => $id,
                 ]);
@@ -214,13 +214,13 @@ class IndexController extends AbstractController
                 $subtwocategories = $this->getDoctrine()->getRepository(Subtwocategory::class)->findBySubCategory($subtwocategory->getSubcategory()->getId());
                 $subcategories= $this->getDoctrine()->getRepository(Subcategory::class)->findByCategory($cat->getId());
             }
-            $pagination = $this->paginator->paginate(
-                $repository, /* query NOT result */
-                $request->query->getInt('page', 1),
-                8 /*limit per page*/
-            );
+            // $pagination = $this->paginator->paginate(
+            //     $repository, /* query NOT result */
+            //     $request->query->getInt('page', 1),
+            //     8 /*limit per page*/
+            // );
             return $this->render('index/subtwocategory.html.twig',[
-                'products' => $pagination,
+                'products' => $repository,
                 'active' => $cat->getId(),
                 'subtwocategory'=> $subtwocategory,
                 'subtwocategories'=> $subtwocategories,
@@ -249,15 +249,15 @@ class IndexController extends AbstractController
 
                 
             }
-            $pagination = $this->paginator->paginate(
-                $repository, /* query NOT result */
-                $request->query->getInt('page', 1),
-                8 /*limit per page*/
-            );
+            // $pagination = $this->paginator->paginate(
+            //     $repository, /* query NOT result */
+            //     $request->query->getInt('page', 1),
+            //     8 /*limit per page*/
+            // );
             return $this->render('index/subcategory.html.twig',[
                 'subcategory' => $subcategory,
                 'subcategories' => $subcategories,
-                'products' => $pagination,
+                'products' => $repository,
                 'subtwocategories'=> $subtwocategory ,
                 'active' => $cat->getId(),
                 ]);
