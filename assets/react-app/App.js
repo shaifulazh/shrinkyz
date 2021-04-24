@@ -110,6 +110,7 @@ export default class App extends Component {
               path="/newproduct"
               render={(props) => (
                 <AddProduct
+                
                   {...props}
                   showCrop={this.handleShowCrop}
                   closeCrop={this.handleCloseCrop}

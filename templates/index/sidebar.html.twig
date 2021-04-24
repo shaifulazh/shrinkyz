@@ -1,7 +1,11 @@
 {# <div class="bg-primary " id="sidebar-wrapper"> #}
 <div class="bg-light  " id="sidebar-wrapper">
     <div class="list-group list-group-flush">
-
+<a class="list-group-item list-group-item-action {{active == 'home' ? 'active'}}" href="{{path('app_home')}}">
+                <h6 class="text-capitalize">
+                    All Categories
+                </h6>
+            </a>
             {% for category in categories %}
             <a class="list-group-item list-group-item-action {{active == category.id ? 'active'}} " href="{{path('link_category', {id: category.id})}}">
                 <h6 class="text-capitalize">

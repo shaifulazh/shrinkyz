@@ -120,7 +120,7 @@ class IndexController extends AbstractController
         );
 
         return $this->render('index/index.html.twig', [
-            'products' => $pagination, 'active' => null
+            'products' => $pagination, 'active' => 'home'
         ]);
 
     }
