@@ -66,3 +66,6 @@ DUMP SQL USING SSH
 ssh -i key.pem root@ipaddress "mysqldump -u dbuser -p dbname | gzip -9" > dblocal.sql.gz
 
 ssh -i shaiful.pem ubuntu@13.228.29.11 "mysqldump -u sepol -pShaiful53*5 database " > dblocal.sql
+
+
+sudo php bin/console cache:clear
