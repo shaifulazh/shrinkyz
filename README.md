@@ -16,7 +16,7 @@ Setup
             extension=fileinfo
 
 	1.5 Test php by running command
-		
+
 		php -v
 
 
@@ -24,7 +24,7 @@ Setup
 2. Download and install Composer at https://getcomposer.org/download/
         Setup php directory into C:\php as installed before
 
-3. Download and Install MariaDB 
+3. Download and Install MariaDB
         Set the root password : 1234
         Other option leave it default.
 
@@ -47,12 +47,12 @@ Use CMD or power shell and go to source file directory
 
 		npm run build
 
-5. Run the webserver by 
+5. Run the webserver by
 
 		php bin/console server:run
-		
 
-UPDATE 1 AUGUST 2020 
+
+UPDATE 1 AUGUST 2020
 1. Paypal SDK integration Sucess // add capture integration
 2. Udated to symfony 4.4
 3. Future Development
@@ -60,3 +60,9 @@ UPDATE 1 AUGUST 2020
    - view order need to repair
    - add paypal detail and status review
    - important !!!! admin need to release payment
+
+
+DUMP SQL USING SSH
+ssh -i key.pem root@ipaddress "mysqldump -u dbuser -p dbname | gzip -9" > dblocal.sql.gz
+
+ssh -i shaiful.pem ubuntu@13.228.29.11 "mysqldump -u sepol -pShaiful53*5 database " > dblocal.sql
